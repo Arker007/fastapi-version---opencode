@@ -22,7 +22,10 @@
     logout,
     showLoader,
     hideLoader,
+    closeAllModals, // ← NEW helper to close all open modals
+    setupLocalDropdown, // ← Unified reusable dropdown handler
   };
+
 
   // Run initial theme configuration
   applyTheme();
@@ -34,7 +37,6 @@
     const isLoginPage = path.includes('login');
 
     if (isLoginPage) {
-      // Login page doesn't get decorated
       if (APP.STATE.token) {
         window.location.href = '/dashboard';
       }
@@ -46,7 +48,6 @@
       return;
     }
 
-    // Hide page content and show loader during auth verification
     const pageContent = document.getElementById('page-content');
     if (pageContent) pageContent.classList.add('hidden');
     showLoader();
@@ -57,13 +58,11 @@
   async function hydrateSession() {
     try {
       APP.STATE.user = await api('/api/auth/me');
-      
-      // Load settings
+
       try {
         APP.STATE.settings = await api('/api/settings');
       } catch (_) { /* non-critical */ }
 
-      // Decorate page content
       const path = window.location.pathname.toLowerCase();
       let activeView = 'dashboard';
       if (path.includes('billing')) activeView = 'billing';
@@ -74,7 +73,6 @@
       else if (path.includes('admin-panel')) activeView = 'admin-panel';
       else if (path.includes('logs')) activeView = 'logs';
 
-      // Ensure staff can't bypass admin pages
       if ((activeView === 'admin-panel' || activeView === 'logs') && APP.STATE.user?.role !== 'admin') {
         window.location.href = '/dashboard';
         return;
@@ -87,8 +85,6 @@
       bindShellEvents();
 
       hideLoader();
-
-      // Trigger page-specific JS initialization
       document.dispatchEvent(new CustomEvent('page-ready'));
     } catch (err) {
       hideLoader();
@@ -115,7 +111,7 @@
             <i class="fa-solid fa-chevron-left"></i>
           </button>
         </div>
-        
+
         <nav class="sidebar-nav">
           <div class="sidebar-section-title">Main Menu</div>
           <a href="/dashboard" class="nav-item ${activeViewName === 'dashboard' ? 'active' : ''}" data-view="dashboard">
@@ -127,7 +123,7 @@
           <a href="/invoices" class="nav-item ${activeViewName === 'invoices' ? 'active' : ''}" data-view="invoices">
             <i class="fa-solid fa-clock-rotate-left"></i> <span>Invoices List</span>
           </a>
-          
+
           <div class="sidebar-section-title">Inventory & CRM</div>
           <a href="/products" class="nav-item ${activeViewName === 'products' ? 'active' : ''}" data-view="products">
             <i class="fa-solid fa-boxes-stacked"></i> <span>Products & Stock</span>
@@ -135,12 +131,12 @@
           <a href="/customers" class="nav-item ${activeViewName === 'customers' ? 'active' : ''}" data-view="customers">
             <i class="fa-solid fa-users"></i> <span>Customers</span>
           </a>
-          
+
           <div class="sidebar-section-title">Analysis</div>
           <a href="/reports" class="nav-item ${activeViewName === 'reports' ? 'active' : ''}" data-view="reports">
             <i class="fa-solid fa-chart-column"></i> <span>Reports Directory</span>
           </a>
-          
+
           <div class="sidebar-section-title admin-only hidden">Administration</div>
           <a href="/admin-panel" class="nav-item admin-only hidden ${activeViewName === 'admin-panel' ? 'active' : ''}" data-view="admin-panel">
             <i class="fa-solid fa-screwdriver-wrench"></i> <span>Admin Panel</span>
@@ -196,7 +192,7 @@
     `;
 
     appContainer.innerHTML = sidebarHtml;
-    
+
     const mainWrapper = document.createElement('main');
     mainWrapper.className = 'main-content';
     mainWrapper.innerHTML = headerHtml;
@@ -226,13 +222,11 @@
     const settings = APP.STATE.settings;
     if (!settings) return;
 
-    // Sidebar brand title
     const brandTitle = document.getElementById('sidebar-brand-title');
     if (brandTitle && settings.company_name) {
       brandTitle.textContent = settings.company_name.split(' ')[0] || 'InvoiceFlow';
     }
 
-    // Sidebar logo
     const sidebarLogo = document.getElementById('sidebar-logo-container');
     if (sidebarLogo && settings.company_logo) {
       sidebarLogo.classList.remove('hidden');
@@ -244,7 +238,8 @@
     const fullnameEl = document.getElementById('user-fullname');
     const roleEl = document.getElementById('user-role');
     if (fullnameEl) fullnameEl.textContent = APP.STATE.user?.fullname || 'User';
-    if (roleEl) roleEl.textContent = APP.STATE.user?.role === 'admin' ? 'Administrator' : 'Sales Staff';
+    if (roleEl) roleEl.textContent = APP.STATE.user?.role === 'admin' ? 'Administrator' : 'Staff';
+
 
     const isAdmin = APP.STATE.user?.role === 'admin';
     document.querySelectorAll('.admin-only').forEach(el => {
@@ -262,15 +257,12 @@
   }
 
   function bindShellEvents() {
-    // Logout
     const logoutBtn = document.getElementById('btn-logout');
     if (logoutBtn) logoutBtn.addEventListener('click', () => logout(false));
 
-    // Theme toggle
     const themeBtn = document.getElementById('theme-toggle');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
 
-    // Sidebar toggle
     const sidebarToggle = document.getElementById('sidebar-toggle');
     if (sidebarToggle) {
       sidebarToggle.addEventListener('click', () => {
@@ -280,11 +272,18 @@
       });
     }
 
-    // Global Modal Closers
+    // Modal close listeners – using closest() to handle nested clicks
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('btn-close-modal') || e.target.classList.contains('modal-overlay')) {
-        const overlay = e.target.closest('.modal-overlay');
+      const closeBtn = e.target.closest('.btn-close-modal');
+      if (closeBtn) {
+        const overlay = closeBtn.closest('.modal-overlay');
         if (overlay) overlay.classList.add('hidden');
+        return;
+      }
+
+      const overlay = e.target.closest('.modal-overlay');
+      if (overlay && e.target === overlay) {
+        overlay.classList.add('hidden');
       }
     });
   }
@@ -347,7 +346,9 @@
     }
   }
 
-  // API Request Wrapper
+  // ===========================================================================
+  // API Request Wrapper (handles non-JSON errors)
+  // ===========================================================================
   async function api(path, options = {}) {
     const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
     if (APP.STATE.token) headers.Authorization = `Bearer ${APP.STATE.token}`;
@@ -367,21 +368,41 @@
       throw new Error('Session expired');
     }
 
-    const ct = res.headers.get('content-type') || '';
-    const data = ct.includes('application/json') ? await res.json() : await res.text();
+    let data;
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      try {
+        data = await res.json();
+      } catch (e) {
+        const text = await res.text();
+        throw new Error(text || 'Request failed with invalid response');
+      }
+    } else {
+      const text = await res.text();
+      if (!res.ok) {
+        throw new Error(text || 'Request failed');
+      }
+      return text;
+    }
 
-    if (!res.ok) throw new Error(data?.detail || data?.error || 'Request failed');
+    if (!res.ok) {
+      throw new Error(data?.detail || data?.error || 'Request failed');
+    }
     return data;
   }
 
+  // ===========================================================================
   // Toast Notifications
+  // ===========================================================================
   function showToast(msg, type = 'success') {
     const container = document.getElementById('toast-container');
     if (!container) return;
 
+    const message = String(msg);
+
     const toast = document.createElement('div');
     toast.className = `toast-item toast-${type}`;
-    
+
     const icons = {
       success: 'fa-circle-check',
       error: 'fa-circle-exclamation',
@@ -389,23 +410,23 @@
     };
 
     toast.innerHTML = `
-      <i class="fa-solid ${icons[type]}"></i>
-      <span class="toast-message">${esc(msg)}</span>
+      <i class="fa-solid ${icons[type] || icons.info}"></i>
+      <span class="toast-message">${esc(message)}</span>
     `;
 
     container.appendChild(toast);
 
-    // Slide in
     setTimeout(() => toast.classList.add('show'), 10);
 
-    // Slide out and remove
     setTimeout(() => {
       toast.classList.remove('show');
       toast.addEventListener('transitionend', () => toast.remove());
     }, 3500);
   }
 
+  // ===========================================================================
   // Formatter helpers
+  // ===========================================================================
   function formatCurrency(val) {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency', currency: 'INR',
@@ -414,26 +435,39 @@
 
   function formatDate(isoStr) {
     if (!isoStr) return '-';
-    // Replace space with T to make it ISO compliant for Firefox/Safari
-    const cleanStr = isoStr.replace(' ', 'T');
-    const date = new Date(cleanStr.endsWith('Z') ? cleanStr : cleanStr + 'Z');
-    return date.toLocaleDateString('en-IN', {
-      year: 'numeric', month: 'short', day: 'numeric',
-    });
+    try {
+      const cleanStr = isoStr.replace(' ', 'T');
+      const date = new Date(cleanStr.endsWith('Z') ? cleanStr : cleanStr + 'Z');
+      if (isNaN(date.getTime())) return '-';
+      return date.toLocaleDateString('en-IN', {
+        year: 'numeric', month: 'short', day: 'numeric',
+      });
+    } catch (_) {
+      return '-';
+    }
   }
 
   function formatDateTime(isoStr) {
     if (!isoStr) return '-';
-    const cleanStr = isoStr.replace(' ', 'T');
-    const date = new Date(cleanStr.endsWith('Z') ? cleanStr : cleanStr + 'Z');
-    return date.toLocaleString('en-IN', {
-      year: 'numeric', month: 'short', day: 'numeric',
-      hour: '2-digit', minute: '2-digit', hour12: true
-    });
+    try {
+      const cleanStr = isoStr.replace(' ', 'T');
+      const date = new Date(cleanStr.endsWith('Z') ? cleanStr : cleanStr + 'Z');
+      if (isNaN(date.getTime())) return '-';
+      return date.toLocaleString('en-IN', {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', hour12: true
+      });
+    } catch (_) {
+      return '-';
+    }
   }
 
+  // ===========================================================================
+  // Escaping
+  // ===========================================================================
   function esc(str) {
-    if (typeof str !== 'string') return str;
+    if (str == null) return '';
+    if (typeof str !== 'string') str = String(str);
     return str
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
@@ -443,7 +477,40 @@
   }
 
   // ===========================================================================
-  // Reusable Web Components (Custom Elements)
+  // Helper: close all open modals (used to prevent duplicates)
+  // ===========================================================================
+  function closeAllModals() {
+    document.querySelectorAll('.modal-overlay:not(.hidden)').forEach(m => m.classList.add('hidden'));
+  }
+
+  // Helper: setup local dropdown menu and toggler triggers
+  function setupLocalDropdown(toggleId, menuId, onSelect) {
+    const toggle = document.getElementById(toggleId);
+    const menu = document.getElementById(menuId);
+    if (!toggle || !menu) return;
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('hidden');
+    });
+
+    menu.addEventListener('click', (e) => {
+      const item = e.target.closest('.dropdown-item');
+      if (!item) return;
+      menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      menu.classList.add('hidden');
+      if (onSelect) onSelect(item);
+    });
+
+    document.addEventListener('click', () => {
+      menu.classList.add('hidden');
+    });
+  }
+
+
+  // ===========================================================================
+  // Reusable Web Components
   // ===========================================================================
 
   class KpiCard extends HTMLElement {
@@ -452,10 +519,10 @@
       const label = this.getAttribute('label') || '';
       const valueId = this.getAttribute('value-id') || '';
       const variant = this.getAttribute('variant') || '';
-      
+
       this.className = `kpi-card ${variant}`;
       this.style.display = 'flex';
-      
+
       this.innerHTML = `
         <div class="kpi-icon ${variant}"><i class="fa-solid ${icon}"></i></div>
         <div class="kpi-info">
@@ -470,16 +537,28 @@
   class ModalDialog extends HTMLElement {
     connectedCallback() {
       const modalId = this.getAttribute('modal-id') || '';
+
+      // Prevent duplicate modals with the same ID
+      const existing = document.getElementById(modalId);
+      if (existing && existing !== this) {
+        existing.remove();
+      }
+
+      // Prevent double-wrapping / double-header bug when detached and re-attached to the DOM
+      if (this.querySelector('.modal-card')) {
+        return;
+      }
+
       const title = this.getAttribute('title') || '';
       const icon = this.getAttribute('icon') || 'fa-circle-info';
       const cardClass = this.getAttribute('card-class') || '';
       const titleId = this.getAttribute('title-id') || '';
-      
+
       const bodyContent = this.innerHTML;
-      
+
       this.className = 'modal-overlay hidden';
       this.id = modalId;
-      
+
       this.innerHTML = `
         <div class="modal-card ${cardClass}">
           <div class="modal-header">
@@ -493,6 +572,7 @@
       `;
     }
   }
+
   customElements.define('modal-dialog', ModalDialog);
 
   class SearchBar extends HTMLElement {
@@ -500,13 +580,13 @@
       const inputId = this.getAttribute('input-id') || '';
       const placeholder = this.getAttribute('placeholder') || 'Search...';
       const styleAttr = this.getAttribute('style') || '';
-      
+
       this.className = 'search-bar';
       this.style.display = 'flex';
       if (styleAttr) {
         this.setAttribute('style', this.getAttribute('style') + '; display: flex;');
       }
-      
+
       this.innerHTML = `
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="${inputId}" placeholder="${placeholder}">

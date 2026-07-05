@@ -26,9 +26,9 @@
                 <th>Fullname</th>
                 <th>Username</th>
                 <th>Role</th>
-                <th>Joined</th>
                 <th>Action</th>
               </tr>
+
             </thead>
             <tbody id="admin-users-tbody">
               <!-- Dynamic staff accounts -->
@@ -52,25 +52,22 @@
             <div class="input-group">
               <label>Role</label>
               <div class="dropdown-wrapper w-full">
-                <div class="button-split-group">
-                  <button type="button" class="split-btn-main" id="btn-admin-role-indicator">
-                    <i class="fa-solid fa-user"></i> <span id="active-admin-role-label">Sales Staff</span>
-                  </button>
-                  <button type="button" class="split-btn-arrow" id="admin-role-dropdown-toggle">
-                    <i class="fa-solid fa-chevron-down"></i>
-                  </button>
-                </div>
                 <input type="hidden" id="admin-user-role-id" value="staff">
-                <div class="dropdown-menu hidden" id="admin-role-dropdown-menu">
+                <button type="button" class="dropdown-select-btn" id="admin-role-dropdown-toggle">
+                  <div class="select-btn-left">
+                    <i class="fa-solid fa-user"></i>
+                    <span id="active-admin-role-label">Staff</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-down select-btn-arrow"></i>
+                </button>
+                <div class="dropdown-menu hidden" id="admin-role-dropdown-menu" style="width: 100%;">
                   <button type="button" class="dropdown-item active" data-role="staff">
-                    <i class="fa-solid fa-user"></i> Sales Staff
-                  </button>
-                  <button type="button" class="dropdown-item" data-role="admin">
-                    <i class="fa-solid fa-user-shield"></i> System Administrator
+                    <i class="fa-solid fa-user"></i> Staff
                   </button>
                 </div>
               </div>
             </div>
+
           </div>
            <div class="input-group">
             <label for="admin-user-password">Password</label>
@@ -110,9 +107,33 @@
             </div>
           </div>
           <div class="input-group">
-            <label for="settings-default-gst">Default GST Tax Rate (%) *</label>
-            <input type="number" id="settings-default-gst" min="0" required placeholder="e.g. 18">
+            <label>Default GST Tax Rate (%) *</label>
+            <div class="dropdown-wrapper w-full">
+              <select id="settings-default-gst" class="hidden" required>
+                <option value="0">0% (Exempted)</option>
+                <option value="5">5%</option>
+                <option value="12">12%</option>
+                <option value="18">18%</option>
+                <option value="28">28%</option>
+              </select>
+              <button type="button" class="dropdown-select-btn" id="settings-default-gst-toggle">
+                <div class="select-btn-left">
+                  <i class="fa-solid fa-percent"></i>
+                  <span id="active-default-gst-label">18%</span>
+                </div>
+                <i class="fa-solid fa-chevron-down select-btn-arrow"></i>
+              </button>
+              <div class="dropdown-menu hidden" id="settings-default-gst-menu" style="width: 100%;">
+                <button type="button" class="dropdown-item" data-gst="0">0% (Exempted)</button>
+                <button type="button" class="dropdown-item" data-gst="5">5%</button>
+                <button type="button" class="dropdown-item" data-gst="12">12%</button>
+                <button type="button" class="dropdown-item active" data-gst="18">18%</button>
+                <button type="button" class="dropdown-item" data-gst="28">28%</button>
+              </div>
+            </div>
           </div>
+
+
           <div class="input-group">
             <label>Company Logo (Optional)</label>
             <div style="display: flex; gap: 16px; align-items: center; margin-top: 8px;">

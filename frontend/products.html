@@ -20,35 +20,25 @@
       <button class="tab-btn" data-tab="categories-tab-content"><i class="fa-solid fa-tags"></i> Category Management</button>
     </div>
 
+
+
     <!-- Tab Content 1: Products List -->
     <div id="products-tab-content" class="tab-content">
       <div class="card products-list-card">
         <div class="card-header-actions">
           <h3><i class="fa-solid fa-boxes-stacked"></i> Products Directory</h3>
           <div class="header-buttons" style="display: flex; gap: 12px; align-items: center;">
-            <!-- Dropdown filter component -->
-            <div class="dropdown-wrapper">
-              <button type="button" class="btn btn-outline" id="location-dropdown-toggle" style="display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-filter"></i>
-                <span id="active-location-label">All Items</span>
-                <i class="fa-solid fa-chevron-down"></i>
+            <!-- Dropdown category filter component -->
+            <div class="dropdown-wrapper" style="min-width: 180px;">
+              <button type="button" class="dropdown-select-btn" id="category-filter-dropdown-toggle">
+                <div class="select-btn-left">
+                  <i class="fa-solid fa-filter"></i>
+                  <span id="active-category-filter-label">All Categories</span>
+                </div>
+                <i class="fa-solid fa-chevron-down select-btn-arrow"></i>
               </button>
-
-              <div class="dropdown-menu hidden" id="location-dropdown-menu">
-                <div class="dropdown-menu-section-title">Filter by Location</div>
-                <button type="button" class="dropdown-item active" data-filter="all">
-                  <i class="fa-solid fa-globe"></i> All Items
-                </button>
-                <button type="button" class="dropdown-item" data-filter="storefront">
-                  <i class="fa-solid fa-shop"></i> Storefront
-                </button>
-                <button type="button" class="dropdown-item" data-filter="warehouse">
-                  <i class="fa-solid fa-warehouse"></i> Warehouse
-                </button>
-                <hr class="dropdown-divider">
-                <button type="button" class="dropdown-item text-danger" id="btn-toggle-out-of-stock" data-active="false">
-                  <i class="fa-solid fa-eye-slash"></i> Hide Out of Stock
-                </button>
+              <div class="dropdown-menu hidden" id="category-filter-dropdown-menu" style="min-width: 180px; max-height: 250px; overflow-y: auto;">
+                <!-- Dynamically populated categories -->
               </div>
             </div>
 
@@ -56,6 +46,7 @@
               <i class="fa-solid fa-plus"></i> New Product
             </button>
           </div>
+
         </div>
         <div class="table-container large-viewport" style="overflow: visible;">
           <table>
@@ -212,7 +203,9 @@
         </div>
       </form>
     </modal-dialog>
+
   </div>
+
 
   <script src="common.js?v=2.0.6"></script>
   <script src="products.js?v=2.0.6"></script>

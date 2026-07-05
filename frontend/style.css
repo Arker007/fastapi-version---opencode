@@ -406,20 +406,44 @@ h1, h2, h3, h4, h5, h6 {
 input[type="text"],
 input[type="password"],
 input[type="number"],
-input[type="tel"],
 input[type="email"],
-select,
 textarea {
   width: 100%;
   padding: 8px 12px; /* standard Shadcn padding */
   background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-md);
   color: var(--text-main);
   font-family: var(--font-sans);
   font-size: 0.875rem; /* 14px */
   transition: var(--transition);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--card-shadow);
+}
+
+select {
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-md);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  transition: var(--transition);
+  box-shadow: var(--card-shadow);
+
+
+  
+  /* Custom chevron arrow layout */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 14px;
+  padding-right: 40px;
+  cursor: pointer;
 }
 
 .input-field input {
@@ -436,9 +460,10 @@ textarea:focus {
 }
 
 select option {
-  background-color: var(--glass-bg);
+  background-color: var(--bg-secondary);
   color: var(--text-main);
 }
+
 
 /* PLACEHOLDER COLOR ADJUSTMENT */
 input::placeholder,
@@ -1702,12 +1727,12 @@ form#category-edit-form {
   width: 100%;
   background: transparent;
   border: 0;
-  color: var(--text-muted);
+  color: var(--text-main);
   font-family: var(--font-sans);
-  font-size: 0.88rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
   text-align: left;
-  padding: 10px 16px;
+  padding: 11px 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1723,14 +1748,17 @@ form#category-edit-form {
 
 .dropdown-item:hover {
   background: var(--row-hover);
-  color: var(--text-main);
+  color: var(--primary);
 }
 
 .dropdown-item.active {
   background: var(--nav-active-bg);
   color: var(--primary);
-  font-weight: 600;
+  font-weight: 700;
+  border-left: 3px solid var(--primary);
+  padding-left: 13px;
 }
+
 
 .dropdown-item.text-danger {
   color: #f87171;
@@ -2122,3 +2150,51 @@ form#category-edit-form {
   opacity: 0;
   transform: scale(0.95);
 }
+
+/* ===========================================================================
+   Unified Select Button Style (For Reports Selector)
+   =========================================================================== */
+.dropdown-select-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-md);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+}
+
+.dropdown-select-btn:hover {
+  border-color: var(--glass-border-focus);
+  background: var(--row-hover);
+}
+
+.select-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.select-btn-left i {
+  color: var(--primary);
+  font-size: 1rem;
+}
+
+.select-btn-arrow {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-wrapper.w-full .dropdown-select-btn {
+  width: 100%;
+}
+

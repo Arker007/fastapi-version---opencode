@@ -21,11 +21,24 @@
         
         <div class="product-selector-group">
           <div class="input-group">
-            <label for="billing-product-select">Product</label>
-            <select id="billing-product-select">
-              <option value="">-- Choose Product --</option>
-            </select>
+            <label>Product</label>
+            <div class="dropdown-wrapper w-full">
+              <select id="billing-product-select" class="hidden">
+                <option value="">-- Choose Product --</option>
+              </select>
+              <button type="button" class="dropdown-select-btn" id="billing-product-dropdown-toggle">
+                <div class="select-btn-left">
+                  <i class="fa-solid fa-box" id="btn-reports-icon"></i>
+                  <span id="active-product-label">-- Choose Product --</span>
+                </div>
+                <i class="fa-solid fa-chevron-down select-btn-arrow"></i>
+              </button>
+              <div class="dropdown-menu hidden" id="billing-product-dropdown-menu" style="width: 100%; max-height: 250px; overflow-y: auto;">
+                <button type="button" class="dropdown-item active" data-product="">-- Choose Product --</button>
+              </div>
+            </div>
           </div>
+
           
           <div class="billing-selectors-row">
             <div class="input-group">
@@ -53,11 +66,24 @@
         <h3><i class="fa-solid fa-user-tag"></i> Customer Details</h3>
         <div class="customer-selection-group">
           <div class="input-group">
-            <label for="billing-customer-select">Select Customer</label>
-            <select id="billing-customer-select">
-              <option value="">-- Guest Customer --</option>
-            </select>
+            <label>Select Customer</label>
+            <div class="dropdown-wrapper w-full">
+              <select id="billing-customer-select" class="hidden">
+                <option value="">-- Guest Customer --</option>
+              </select>
+              <button type="button" class="dropdown-select-btn" id="billing-customer-dropdown-toggle">
+                <div class="select-btn-left">
+                  <i class="fa-solid fa-user-tag"></i>
+                  <span id="active-customer-label">-- Guest Customer --</span>
+                </div>
+                <i class="fa-solid fa-chevron-down select-btn-arrow"></i>
+              </button>
+              <div class="dropdown-menu hidden" id="billing-customer-dropdown-menu" style="width: 100%; max-height: 200px; overflow-y: auto;">
+                <button type="button" class="dropdown-item active" data-customer="">-- Guest Customer --</button>
+              </div>
+            </div>
           </div>
+
           <div class="center-text">or</div>
           <button id="btn-quick-add-customer" class="btn btn-outline btn-block">
             <i class="fa-solid fa-user-plus"></i> Create New Customer
@@ -129,7 +155,11 @@
                 <button type="button" class="dropdown-item" data-payment="card">
                   <i class="fa-solid fa-credit-card"></i> Debit/Credit Card
                 </button>
+                <button type="button" class="dropdown-item" data-payment="credit">
+                  <i class="fa-solid fa-handshake"></i> Credit (Pay Later)
+                </button>
               </div>
+
             </div>
           </div>
           <div class="input-group hidden" id="transaction-ref-group">

@@ -94,7 +94,7 @@ class CustomerCreate(BaseModel):
 
 class CustomerUpdate(BaseModel):
     name: str | None = None
-    phone: str | None = None
+    phone: str | None = Field(default=None, min_length=10)
     email: str | None = None
     address: str | None = None
 
@@ -347,6 +347,28 @@ def init_database() -> None:
                 key TEXT UNIQUE NOT NULL,
                 value TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS inventory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                product_id INTEGER UNIQUE NOT NULL,
+                stock INTEGER NOT NULL DEFAULT 0,
+                min_stock INTEGER NOT NULL DEFAULT 5,
+                location TEXT CHECK(location IN ('storefront', 'warehouse')) NOT NULL DEFAULT 'storefront',
+                last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+            );
+
+            CREATE TABLE IF NOT EXISTS stock_transactions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                product_id INTEGER NOT NULL,
+                quantity INTEGER NOT NULL,
+                transaction_type TEXT CHECK(transaction_type IN ('restock', 'sale', 'adjustment')) NOT NULL,
+                user_id INTEGER,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                notes TEXT,
+                FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+            );
             """
         )
         
@@ -358,6 +380,22 @@ def init_database() -> None:
         except sqlite3.OperationalError:
             # Column already exists, ignore
             pass
+
+        # Migrate stock from products to inventory if inventory table is empty
+        try:
+            inv_count = conn.execute("SELECT COUNT(*) as count FROM inventory").fetchone()
+            if inv_count and inv_count["count"] == 0:
+                conn.execute(
+                    """
+                    INSERT INTO inventory (product_id, stock, min_stock, location)
+                    SELECT id, stock, min_stock, location FROM products
+                    """
+                )
+                conn.commit()
+                print("Migrated existing product stocks to the inventory table.")
+        except Exception as e:
+            print(f"Error migrating stock to inventory: {e}")
+
 
     # Seed Users
     user_count = fetch_one("SELECT COUNT(*) as count FROM users")
@@ -484,7 +522,7 @@ def dashboard_summary(current_user: dict[str, Any] = Depends(get_current_user)) 
     total_sales = fetch_one("SELECT COALESCE(SUM(total), 0) as total FROM invoices") or {"total": 0}
     invoice_count = fetch_one("SELECT COUNT(*) as count FROM invoices") or {"count": 0}
     product_count = fetch_one("SELECT COUNT(*) as count FROM products") or {"count": 0}
-    low_stock = fetch_one("SELECT COUNT(*) as count FROM products WHERE stock <= min_stock") or {"count": 0}
+    low_stock = fetch_one("SELECT COUNT(*) as count FROM inventory WHERE stock <= min_stock") or {"count": 0}
 
     return {
         "totalSales": total_sales["total"],
@@ -505,10 +543,10 @@ def dashboard_sales_chart(current_user: dict[str, Any] = Depends(get_current_use
         ORDER BY date ASC
         """
     )
-    # Fill in missing dates
+    # Fill in missing dates using UTC time
     result = []
     for i in range(6, -1, -1):
-        d = (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d")
+        d = (datetime.now(timezone.utc) - timedelta(days=i)).strftime("%Y-%m-%d")
         found = next((r for r in rows if r["date"] == d), None)
         result.append({"date": d, "total": found["total"] if found else 0})
     return result
@@ -532,9 +570,13 @@ def dashboard_category_chart(current_user: dict[str, Any] = Depends(get_current_
 def dashboard_top_products(current_user: dict[str, Any] = Depends(get_current_user)) -> list[dict[str, Any]]:
     return fetch_all(
         """
-        SELECT COALESCE(p.name, ii.product_name) as name, SUM(ii.quantity) as qty_sold, SUM(ii.total_price) as revenue
+        SELECT COALESCE(p.name, ii.product_name) as name,
+               MAX(COALESCE(c.name, 'Uncategorized')) as category_name,
+               SUM(ii.quantity) as qty_sold,
+               SUM(ii.total_price) as revenue
         FROM invoice_items ii
         LEFT JOIN products p ON p.id = ii.product_id
+        LEFT JOIN categories c ON c.id = p.category_id
         GROUP BY COALESCE(p.name, ii.product_name)
         ORDER BY qty_sold DESC
         LIMIT 5
@@ -563,10 +605,12 @@ def dashboard_recent_invoices(current_user: dict[str, Any] = Depends(get_current
 def list_products(current_user: dict[str, Any] = Depends(get_current_user)) -> list[dict[str, Any]]:
     return fetch_all(
         """
-        SELECT p.id, p.name, p.sku, p.price, p.stock, p.min_stock, p.gst_rate, p.location, p.description, p.created_at,
-               c.name AS category_name, p.category_id
+        SELECT p.id, p.name, p.sku, p.price, p.gst_rate, p.description, p.created_at,
+               c.name AS category_name, p.category_id,
+               i.stock, i.min_stock, i.location
         FROM products p
         LEFT JOIN categories c ON c.id = p.category_id
+        LEFT JOIN inventory i ON i.product_id = p.id
         ORDER BY p.name ASC
         """
     )
@@ -574,8 +618,8 @@ def list_products(current_user: dict[str, Any] = Depends(get_current_user)) -> l
 
 @app.post("/api/products")
 def create_product(payload: ProductCreate, current_user: dict[str, Any] = Depends(require_admin)) -> dict[str, Any]:
-    sku = payload.sku.strip() if payload.sku else f"SKU-{secrets.token_hex(4).upper()}"
-    # Check duplicate SKU
+    sku = payload.sku.strip() if (payload.sku and payload.sku.strip()) else f"SKU-{secrets.token_hex(4).upper()}"
+    # Check duplicate SKU (using stripped SKU)
     existing = fetch_one("SELECT id FROM products WHERE sku = ?", (sku,))
     if existing:
         raise HTTPException(status_code=400, detail=f"SKU '{sku}' already exists")
@@ -585,6 +629,22 @@ def create_product(payload: ProductCreate, current_user: dict[str, Any] = Depend
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (payload.name.strip(), sku, payload.category_id, payload.price, payload.stock, payload.min_stock, payload.gst_rate, payload.location, payload.description or ""),
     )
+    
+    # Also write to new inventory table
+    execute_write(
+        """INSERT INTO inventory (product_id, stock, min_stock, location)
+           VALUES (?, ?, ?, ?)""",
+        (product_id, payload.stock, payload.min_stock, payload.location),
+    )
+
+    # Log initial stock transaction if stock is greater than 0
+    if payload.stock > 0:
+        execute_write(
+            """INSERT INTO stock_transactions (product_id, quantity, transaction_type, user_id, notes)
+               VALUES (?, ?, 'restock', ?, 'Initial stock import')""",
+            (product_id, payload.stock, current_user["id"])
+        )
+
     add_log(current_user["id"], "PRODUCT_CREATE", f"Created product '{payload.name}' (SKU: {sku})")
     return {"message": "Product created", "id": product_id}
 
@@ -595,26 +655,24 @@ def update_product(product_id: int, payload: ProductUpdate, current_user: dict[s
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
 
+    # Update products table
     updates = {}
     if payload.name is not None:
         updates["name"] = payload.name.strip()
     if payload.sku is not None:
-        existing = fetch_one("SELECT id FROM products WHERE sku = ? AND id != ?", (payload.sku, product_id))
+        sku_stripped = payload.sku.strip()
+        if not sku_stripped:
+            raise HTTPException(status_code=400, detail="SKU cannot be empty")
+        existing = fetch_one("SELECT id FROM products WHERE sku = ? AND id != ?", (sku_stripped, product_id))
         if existing:
-            raise HTTPException(status_code=400, detail=f"SKU '{payload.sku}' already exists")
-        updates["sku"] = payload.sku.strip()
+            raise HTTPException(status_code=400, detail=f"SKU '{sku_stripped}' already exists")
+        updates["sku"] = sku_stripped
     if payload.category_id is not None:
         updates["category_id"] = payload.category_id
     if payload.price is not None:
         updates["price"] = payload.price
-    if payload.stock is not None:
-        updates["stock"] = payload.stock
-    if payload.min_stock is not None:
-        updates["min_stock"] = payload.min_stock
     if payload.gst_rate is not None:
         updates["gst_rate"] = payload.gst_rate
-    if payload.location is not None:
-        updates["location"] = payload.location
     if payload.description is not None:
         updates["description"] = payload.description
 
@@ -622,6 +680,47 @@ def update_product(product_id: int, payload: ProductUpdate, current_user: dict[s
         set_clause = ", ".join(f"{k} = ?" for k in updates)
         values = list(updates.values()) + [product_id]
         execute_write(f"UPDATE products SET {set_clause} WHERE id = ?", tuple(values))
+
+    # Update inventory table
+    inv_updates = {}
+    if payload.stock is not None:
+        inv_updates["stock"] = payload.stock
+    if payload.min_stock is not None:
+        inv_updates["min_stock"] = payload.min_stock
+    if payload.location is not None:
+        inv_updates["location"] = payload.location
+
+    if inv_updates:
+        # Fetch current stock to calculate difference for transactions
+        curr = fetch_one("SELECT stock FROM inventory WHERE product_id = ?", (product_id,))
+        curr_stock = curr["stock"] if curr else 0
+
+        set_clause = ", ".join(f"{k} = ?" for k in inv_updates)
+        values = list(inv_updates.values()) + [product_id]
+        execute_write(f"UPDATE inventory SET {set_clause}, last_updated = CURRENT_TIMESTAMP WHERE product_id = ?", tuple(values))
+
+        # Log manual stock transaction if stock level changed
+        if payload.stock is not None and payload.stock != curr_stock:
+            diff = payload.stock - curr_stock
+            tx_type = "restock" if diff > 0 else "adjustment"
+            execute_write(
+                """INSERT INTO stock_transactions (product_id, quantity, transaction_type, user_id, notes)
+                   VALUES (?, ?, ?, ?, ?)""",
+                (product_id, diff, tx_type, current_user["id"], f"Manual stock adjustment from {curr_stock} to {payload.stock}")
+            )
+
+        # Sync values back into legacy product columns for complete database compatibility
+        sync_updates = {}
+        if payload.stock is not None:
+            sync_updates["stock"] = payload.stock
+        if payload.min_stock is not None:
+            sync_updates["min_stock"] = payload.min_stock
+        if payload.location is not None:
+            sync_updates["location"] = payload.location
+        if sync_updates:
+            set_clause = ", ".join(f"{k} = ?" for k in sync_updates)
+            values = list(sync_updates.values()) + [product_id]
+            execute_write(f"UPDATE products SET {set_clause} WHERE id = ?", tuple(values))
 
     add_log(current_user["id"], "PRODUCT_UPDATE", f"Updated product ID {product_id}")
     return {"message": "Product updated"}
@@ -635,6 +734,7 @@ def delete_product(product_id: int, current_user: dict[str, Any] = Depends(requi
     execute_write("DELETE FROM products WHERE id = ?", (product_id,))
     add_log(current_user["id"], "PRODUCT_DELETE", f"Deleted product '{product['name']}'")
     return {"message": f"Deleted {product['name']}"}
+
 
 
 # ---------------------------------------------------------------------------
@@ -791,8 +891,8 @@ def list_invoices(current_user: dict[str, Any] = Depends(get_current_user)) -> l
 def create_invoice(payload: InvoiceCreate, current_user: dict[str, Any] = Depends(get_current_user)) -> dict[str, Any]:
     invoice_number = generate_invoice_number()
 
-    # Validate payment method
-    if payload.payment_method not in ("cash", "card", "upi"):
+    # Validate payment method (allow 'credit' as a valid type)
+    if payload.payment_method not in ("cash", "card", "upi", "credit"):
         raise HTTPException(status_code=400, detail="Invalid payment method")
 
     with connect_db() as conn:
@@ -801,10 +901,19 @@ def create_invoice(payload: InvoiceCreate, current_user: dict[str, Any] = Depend
         items_data = []
 
         for item in payload.items:
-            product = conn.execute("SELECT * FROM products WHERE id = ?", (item.product_id,)).fetchone()
-            if not product:
+            # Query product details and current stock from the inventory table
+            product_row = conn.execute(
+                """
+                SELECT p.id, p.name, p.sku, p.price, i.stock, i.min_stock, i.location
+                FROM products p
+                LEFT JOIN inventory i ON i.product_id = p.id
+                WHERE p.id = ?
+                """,
+                (item.product_id,)
+            ).fetchone()
+            if not product_row:
                 raise HTTPException(status_code=400, detail=f"Product ID {item.product_id} not found")
-            product = dict(product)
+            product = dict(product_row)
 
             if product["stock"] < item.quantity:
                 raise HTTPException(
@@ -827,18 +936,22 @@ def create_invoice(payload: InvoiceCreate, current_user: dict[str, Any] = Depend
                 "gst_rate": item.gst_rate,
             })
 
-        discount = min(payload.discount, subtotal)
-        grand_total = round(subtotal - discount + total_gst, 2)
+        # Discount cap allows covering subtotal + GST
+        discount = min(payload.discount, round(subtotal + total_gst, 2))
+        grand_total = round(subtotal + total_gst - discount, 2)
+        
+        is_credit = (payload.payment_method == "credit")
+        payment_status = "unpaid" if is_credit else "paid"
 
         # Create invoice
         invoice_id = execute_write_conn(
             conn,
             """INSERT INTO invoices (invoice_number, customer_id, user_id, subtotal, discount, gst, total, payment_status)
-               VALUES (?, ?, ?, ?, ?, ?, ?, 'paid')""",
-            (invoice_number, payload.customer_id, current_user["id"], round(subtotal, 2), round(discount, 2), round(total_gst, 2), grand_total),
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (invoice_number, payload.customer_id, current_user["id"], round(subtotal, 2), round(discount, 2), round(total_gst, 2), grand_total, payment_status),
         )
 
-        # Create invoice items & deduct stock
+        # Create invoice items, deduct stock, and log transactions
         for item_data in items_data:
             execute_write_conn(
                 conn,
@@ -847,22 +960,39 @@ def create_invoice(payload: InvoiceCreate, current_user: dict[str, Any] = Depend
                 (invoice_id, item_data["product_id"], item_data["product_name"], item_data["product_sku"],
                  item_data["quantity"], item_data["unit_price"], item_data["total_price"], item_data["gst_rate"]),
             )
+            
+            # Deduct stock from the inventory table
+            conn.execute(
+                "UPDATE inventory SET stock = stock - ?, last_updated = CURRENT_TIMESTAMP WHERE product_id = ?",
+                (item_data["quantity"], item_data["product_id"]),
+            )
+            
+            # Sync stock back to legacy products table column for compatibility
             conn.execute(
                 "UPDATE products SET stock = stock - ? WHERE id = ?",
                 (item_data["quantity"], item_data["product_id"]),
             )
 
-        # Create payment record
-        execute_write_conn(
-            conn,
-            "INSERT INTO payments (invoice_id, amount, payment_method, transaction_reference) VALUES (?, ?, ?, ?)",
-            (invoice_id, grand_total, payload.payment_method, payload.transaction_reference or ""),
-        )
+            # Log stock transaction
+            conn.execute(
+                """INSERT INTO stock_transactions (product_id, quantity, transaction_type, user_id, notes)
+                   VALUES (?, ?, 'sale', ?, ?)""",
+                (item_data["product_id"], -item_data["quantity"], current_user["id"], f"Invoice {invoice_number}")
+            )
+
+        # Create payment record (only if it is NOT a credit sale)
+        if not is_credit:
+            execute_write_conn(
+                conn,
+                "INSERT INTO payments (invoice_id, amount, payment_method, transaction_reference) VALUES (?, ?, ?, ?)",
+                (invoice_id, grand_total, payload.payment_method, payload.transaction_reference or ""),
+            )
 
         conn.commit()
 
-    add_log(current_user["id"], "INVOICE_CREATE", f"Generated invoice {invoice_number} — ₹{grand_total}")
+    add_log(current_user["id"], "INVOICE_CREATE", f"Generated invoice {invoice_number} — ₹{grand_total} ({payment_status.upper()})")
     return {"message": "Invoice created", "invoice_number": invoice_number, "id": invoice_id, "total": grand_total}
+
 
 
 @app.get("/api/invoices/{invoice_id}")
@@ -903,94 +1033,93 @@ def get_invoice(invoice_id: int, current_user: dict[str, Any] = Depends(get_curr
 
 @app.get("/api/reports/{report_type}")
 def get_report(report_type: str, current_user: dict[str, Any] = Depends(get_current_user)) -> dict[str, Any]:
+
     if report_type == "daily_sales":
         rows = fetch_all(
             """
-            SELECT DATE(i.created_at) as date, COUNT(*) as invoice_count,
-                   SUM(i.subtotal) as subtotal, SUM(i.discount) as discount,
-                   SUM(i.gst) as gst, SUM(i.total) as total
+            SELECT i.invoice_number, COALESCE(c.name, 'Guest') as customer_name,
+                   DATE(i.created_at) as date, i.total as total_amount, i.gst, i.payment_status
             FROM invoices i
-            GROUP BY DATE(i.created_at)
-            ORDER BY date DESC
-            LIMIT 30
+            LEFT JOIN customers c ON c.id = i.customer_id
+            ORDER BY i.created_at DESC
             """
         )
-        return {"title": "Daily Sales Report", "headers": ["Date", "Invoices", "Subtotal", "Discount", "GST", "Total"], "rows": rows}
+        return {"title": "Daily Sales Report", "headers": ["Invoice No.", "Customer Name", "Date", "Total Amount", "GST", "Payment Status"], "rows": rows}
 
     elif report_type == "monthly_sales":
         rows = fetch_all(
             """
-            SELECT strftime('%Y-%m', i.created_at) as month, COUNT(*) as invoice_count,
-                   SUM(i.subtotal) as subtotal, SUM(i.discount) as discount,
-                   SUM(i.gst) as gst, SUM(i.total) as total
+            SELECT strftime('%Y-%m', i.created_at) as month,
+                   SUM(i.subtotal) as total_sales,
+                   SUM(i.gst) as total_gst,
+                   COUNT(i.id) as invoice_count,
+                   SUM(i.total) as revenue
             FROM invoices i
             GROUP BY strftime('%Y-%m', i.created_at)
             ORDER BY month DESC
             """
         )
-        return {"title": "Monthly Sales Report", "headers": ["Month", "Invoices", "Subtotal", "Discount", "GST", "Total"], "rows": rows}
+        return {"title": "Monthly Sales Report", "headers": ["Month", "Total Sales", "Total GST", "Number of Invoices", "Revenue"], "rows": rows}
 
     elif report_type == "gst_report":
         rows = fetch_all(
             """
-            SELECT ii.gst_rate as gst_rate,
-                   SUM(ii.total_price) as taxable_amount,
-                   SUM(ii.total_price * ii.gst_rate / 100.0) as gst_amount,
-                   COUNT(DISTINCT ii.invoice_id) as invoice_count
-            FROM invoice_items ii
-            GROUP BY ii.gst_rate
-            ORDER BY ii.gst_rate ASC
+            SELECT i.invoice_number, i.subtotal - i.discount as taxable_amount,
+                   ROUND(i.gst / 2.0, 2) as cgst,
+                   ROUND(i.gst / 2.0, 2) as sgst,
+                   0.0 as igst,
+                   i.gst as total_gst
+            FROM invoices i
+            ORDER BY i.created_at DESC
             """
         )
-        return {"title": "GST Tax Report", "headers": ["GST Rate (%)", "Taxable Amount", "GST Amount", "Invoices"], "rows": rows}
+        return {"title": "GST Tax Report", "headers": ["Invoice No.", "Taxable Amount", "CGST", "SGST", "IGST", "Total GST"], "rows": rows}
 
     elif report_type == "stock_availability":
         rows = fetch_all(
             """
-            SELECT p.sku, p.name, COALESCE(c.name, 'Uncategorized') as category,
-                   p.stock, p.min_stock, p.price,
-                   CASE WHEN p.stock = 0 THEN 'Out of Stock'
-                        WHEN p.stock <= p.min_stock THEN 'Low Stock'
-                        ELSE 'In Stock' END as status
+            SELECT p.name as product_name, COALESCE(c.name, 'Uncategorized') as category,
+                   i.stock, p.price, ROUND(i.stock * p.price, 2) as stock_value
             FROM products p
             LEFT JOIN categories c ON c.id = p.category_id
-            ORDER BY p.stock ASC
+            LEFT JOIN inventory i ON i.product_id = p.id
+            ORDER BY p.name ASC
             """
         )
-        return {"title": "Stock Availability Report", "headers": ["SKU", "Product", "Category", "Stock", "Min Stock", "Price", "Status"], "rows": rows}
+        return {"title": "Stock Availability Report", "headers": ["Product Name", "Category", "Current Stock", "Price", "Stock Value"], "rows": rows}
 
     elif report_type == "low_stock_alert":
         rows = fetch_all(
             """
-            SELECT p.sku, p.name, COALESCE(c.name, 'Uncategorized') as category,
-                   p.stock, p.min_stock
+            SELECT p.name as product, i.stock as current_quantity,
+                   i.min_stock as minimum_quantity,
+                   CASE WHEN i.stock = 0 THEN 'Out of Stock' ELSE 'Low Stock' END as alert_status
             FROM products p
-            LEFT JOIN categories c ON c.id = p.category_id
-            WHERE p.stock <= p.min_stock
-            ORDER BY p.stock ASC
+            LEFT JOIN inventory i ON i.product_id = p.id
+            WHERE i.stock <= i.min_stock
+            ORDER BY i.stock ASC
             """
         )
-        return {"title": "Low Stock Alert Report", "headers": ["SKU", "Product", "Category", "Current Stock", "Min Stock"], "rows": rows}
+        return {"title": "Low Stock Alert Report", "headers": ["Product", "Current Quantity", "Minimum Quantity", "Alert Status"], "rows": rows}
 
     elif report_type == "invoice_report":
         rows = fetch_all(
             """
             SELECT i.invoice_number, COALESCE(c.name, 'Guest') as customer,
-                   i.subtotal, i.discount, i.gst, i.total,
-                   i.payment_status, COALESCE(u.fullname, 'System') as billed_by, i.created_at
+                   DATE(i.created_at) as date, i.total as amount, i.payment_status
             FROM invoices i
             LEFT JOIN customers c ON c.id = i.customer_id
-            LEFT JOIN users u ON u.id = i.user_id
             ORDER BY i.created_at DESC
             """
         )
-        return {"title": "Invoice Report", "headers": ["Invoice #", "Customer", "Subtotal", "Discount", "GST", "Total", "Status", "Billed By", "Date"], "rows": rows}
+        return {"title": "Invoice Report", "headers": ["Invoice Number", "Customer", "Date", "Amount", "Payment Status"], "rows": rows}
 
     else:
         raise HTTPException(status_code=400, detail=f"Unknown report type: {report_type}")
 
 
 # ---------------------------------------------------------------------------
+
 # Admin — Users
 # ---------------------------------------------------------------------------
 
@@ -1027,7 +1156,31 @@ def delete_user(user_id: int, current_user: dict[str, Any] = Depends(require_adm
     return {"message": f"Deleted user '{user['username']}'"}
 
 
+class PasswordResetRequest(BaseModel):
+    new_password: str = Field(min_length=4)
+
+
+@app.post("/api/admin/users/{user_id}/reset-password")
+def reset_user_password(
+    user_id: int,
+    payload: PasswordResetRequest,
+    current_user: dict[str, Any] = Depends(require_admin)
+) -> dict[str, Any]:
+    user = fetch_one("SELECT id, username FROM users WHERE id = ?", (user_id,))
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    salt, digest = hash_password(payload.new_password)
+    execute_write(
+        "UPDATE users SET password_salt = ?, password_hash = ?, password_plaintext = ? WHERE id = ?",
+        (salt, digest, payload.new_password, user_id)
+    )
+    add_log(current_user["id"], "PASSWORD_RESET", f"Reset password for user '{user['username']}'")
+    return {"message": f"Password reset for user '{user['username']}' successful"}
+
+
 # ---------------------------------------------------------------------------
+
 # Admin — Logs
 # ---------------------------------------------------------------------------
 
@@ -1064,3 +1217,111 @@ def update_settings(payload: SettingsUpdate, current_user: dict[str, Any] = Depe
             execute_write("INSERT INTO settings (key, value) VALUES (?, ?)", (key, value))
     add_log(current_user["id"], "SETTINGS_UPDATE", f"Updated settings: {', '.join(payload.settings.keys())}")
     return {"message": "Settings updated"}
+
+
+# ---------------------------------------------------------------------------
+# Late Payments and Stock Transactions (BCA Module Extras)
+# ---------------------------------------------------------------------------
+
+class RecordPaymentRequest(BaseModel):
+    amount: float = Field(gt=0)
+    payment_method: str = Field(min_length=1)
+    transaction_reference: str | None = None
+
+
+class StockAdjustmentRequest(BaseModel):
+    product_id: int
+    quantity: int
+    location: str | None = None
+    notes: str | None = None
+
+
+@app.post("/api/invoices/{invoice_id}/pay")
+def record_late_payment(
+    invoice_id: int,
+    payload: RecordPaymentRequest,
+    current_user: dict[str, Any] = Depends(get_current_user)
+) -> dict[str, Any]:
+    invoice = fetch_one("SELECT * FROM invoices WHERE id = ?", (invoice_id,))
+    if not invoice:
+        raise HTTPException(status_code=404, detail="Invoice not found")
+        
+    if invoice["payment_status"] == "paid":
+        raise HTTPException(status_code=400, detail="Invoice is already fully paid")
+        
+    if payload.payment_method not in ("cash", "card", "upi"):
+        raise HTTPException(status_code=400, detail="Invalid payment method")
+        
+    # Create payment record
+    execute_write(
+        "INSERT INTO payments (invoice_id, amount, payment_method, transaction_reference) VALUES (?, ?, ?, ?)",
+        (invoice_id, payload.amount, payload.payment_method, payload.transaction_reference or "")
+    )
+    
+    # Update invoice payment status to paid
+    execute_write(
+        "UPDATE invoices SET payment_status = 'paid' WHERE id = ?",
+        (invoice_id,)
+    )
+    
+    add_log(current_user["id"], "PAYMENT_RECORD", f"Recorded payment of ₹{payload.amount} for Invoice {invoice['invoice_number']}")
+    return {"message": "Payment recorded successfully", "invoice_number": invoice["invoice_number"]}
+
+
+@app.post("/api/inventory/adjust")
+def adjust_inventory(
+    payload: StockAdjustmentRequest,
+    current_user: dict[str, Any] = Depends(get_current_user)
+) -> dict[str, Any]:
+    product = fetch_one("SELECT id, name FROM products WHERE id = ?", (payload.product_id,))
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+        
+    curr = fetch_one("SELECT stock, location FROM inventory WHERE product_id = ?", (payload.product_id,))
+    if not curr:
+        raise HTTPException(status_code=404, detail="Inventory record not found")
+        
+    new_stock = curr["stock"] + payload.quantity
+    if new_stock < 0:
+        raise HTTPException(status_code=400, detail=f"Stock adjustment results in negative stock: {new_stock}")
+        
+    loc = payload.location or curr["location"]
+    
+    # Update inventory table
+    execute_write(
+        "UPDATE inventory SET stock = ?, location = ?, last_updated = CURRENT_TIMESTAMP WHERE product_id = ?",
+        (new_stock, loc, payload.product_id)
+    )
+    
+    # Sync stock back to legacy products table column for compatibility
+    execute_write(
+        "UPDATE products SET stock = ?, location = ? WHERE id = ?",
+        (new_stock, loc, payload.product_id)
+    )
+    
+    tx_type = "restock" if payload.quantity > 0 else "adjustment"
+    
+    # Log to stock_transactions
+    execute_write(
+        """INSERT INTO stock_transactions (product_id, quantity, transaction_type, user_id, notes)
+           VALUES (?, ?, ?, ?, ?)""",
+        (payload.product_id, payload.quantity, tx_type, current_user["id"], payload.notes or "Manual stock adjustment")
+    )
+    
+    add_log(current_user["id"], "STOCK_ADJUST", f"Adjusted stock for product '{product['name']}' by {payload.quantity}")
+    return {"message": "Stock adjusted successfully", "new_stock": new_stock}
+
+
+@app.get("/api/inventory/transactions")
+def get_inventory_transactions(current_user: dict[str, Any] = Depends(get_current_user)) -> list[dict[str, Any]]:
+    return fetch_all(
+        """
+        SELECT t.id, t.quantity, t.transaction_type, t.created_at, t.notes,
+               p.name as product_name, p.sku as product_sku,
+               COALESCE(u.fullname, 'System') as user_fullname
+        FROM stock_transactions t
+        LEFT JOIN products p ON p.id = t.product_id
+        LEFT JOIN users u ON u.id = t.user_id
+        ORDER BY t.created_at DESC
+        """
+    )

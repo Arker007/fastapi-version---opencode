@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const { api, formatCurrency, showToast, esc } = window.APP;
+  const { api, formatCurrency, showToast, esc, setupLocalDropdown } = window.APP;
 
   const STATE = {
     currentReportType: 'daily_sales',
@@ -21,15 +21,14 @@
     // Dropdown selection trigger
     setupLocalDropdown('reports-dropdown-toggle', 'reports-dropdown-menu', (item) => {
       STATE.currentReportType = item.dataset.report;
-      document.getElementById('active-report-label').textContent = item.textContent.trim();
-      
-      const indicator = document.getElementById('btn-reports-indicator');
-      if (indicator) {
-        indicator.innerHTML = `<i class="fa-solid fa-chart-line"></i> <span id="active-report-label">${item.textContent.trim()}</span>`;
+      const label = document.getElementById('active-report-label');
+      if (label) {
+        label.textContent = item.textContent.trim();
       }
       
       loadReport(STATE.currentReportType);
     });
+
 
     const reportSearch = document.getElementById('report-search');
     if (reportSearch) reportSearch.addEventListener('input', filterReportTable);
@@ -146,27 +145,6 @@
     URL.revokeObjectURL(url);
   }
 
-  // Local Dropdown Helper
-  function setupLocalDropdown(toggleId, menuId, onSelect) {
-    const toggle = document.getElementById(toggleId);
-    const menu = document.getElementById(menuId);
-    if (!toggle || !menu) return;
 
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      menu.classList.toggle('hidden');
-    });
-
-    menu.addEventListener('click', (e) => {
-      const item = e.target.closest('.dropdown-item');
-      if (!item) return;
-      menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      menu.classList.add('hidden');
-      if (onSelect) onSelect(item);
-    });
-
-    document.addEventListener('click', () => menu.classList.add('hidden'));
-  }
 
 })();

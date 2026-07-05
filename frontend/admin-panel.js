@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const { api, showToast, esc } = window.APP;
+  const { api, showToast, esc, setupLocalDropdown } = window.APP;
 
   document.addEventListener('page-ready', () => {
     initAdminPanel();
@@ -35,6 +35,20 @@
       document.getElementById('active-admin-role-label').textContent = item.textContent.trim();
       document.getElementById('admin-user-role-id').value = item.dataset.role;
     });
+
+    // Dropdown for Default GST slab select
+    setupLocalDropdown('settings-default-gst-toggle', 'settings-default-gst-menu', (item) => {
+      const select = document.getElementById('settings-default-gst');
+      if (select) {
+        select.value = item.dataset.gst;
+        select.dispatchEvent(new Event('change'));
+      }
+      const label = document.getElementById('active-default-gst-label');
+      if (label) {
+        label.textContent = item.textContent.trim();
+      }
+    });
+
 
     // Password visibility toggle
     const togglePwBtn = document.getElementById('toggle-create-password');
@@ -70,9 +84,18 @@
       });
     }
 
+    // Close action dropdowns on clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.actions-dropdown-wrapper')) {
+        document.querySelectorAll('.actions-dropdown-menu').forEach(m => m.classList.add('hidden'));
+      }
+    });
+
     // Expose helpers globally
     window._deleteUser = (id) => deleteUser(id);
+    window._resetPassword = (id, username) => resetPassword(id, username);
   }
+
 
   function renderAdminUsers(users) {
     const tbody = document.getElementById('admin-users-tbody');
@@ -83,17 +106,27 @@
         <td>${esc(u.fullname)}</td>
         <td><code>${esc(u.username)}</code></td>
         <td><span class="status-badge ${u.role === 'admin' ? 'paid' : 'pending'}">${u.role}</span></td>
-        <td>${u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN') : '-'}</td>
         <td>
-          ${u.id !== window.APP.STATE.user?.id ? `
-            <button class="btn btn-action delete-action btn-sm" onclick="window._deleteUser(${u.id})" title="Delete">
-              <i class="fa-solid fa-trash-can"></i>
+          <div class="actions-dropdown-wrapper">
+            <button type="button" class="btn-dots" onclick="event.stopPropagation(); this.nextElementSibling.classList.toggle('hidden')">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
-          ` : '<span style="color:var(--text-muted);font-size:0.8rem">Current</span>'}
+            <div class="actions-dropdown-menu hidden">
+              <button class="actions-dropdown-item" onclick="window._resetPassword(${u.id}, '${esc(u.username)}')">
+                <i class="fa-solid fa-key"></i> Reset Password
+              </button>
+              ${u.id !== window.APP.STATE.user?.id ? `
+                <button class="actions-dropdown-item text-danger" onclick="window._deleteUser(${u.id})">
+                  <i class="fa-solid fa-trash-can"></i> Delete
+                </button>
+              ` : ''}
+            </div>
+          </div>
         </td>
       </tr>
     `).join('');
   }
+
 
   async function handleCreateUser(e) {
     e.preventDefault();
@@ -108,7 +141,8 @@
       await api('/api/admin/users', { method: 'POST', body });
       document.getElementById('admin-create-user-form')?.reset();
       document.getElementById('admin-user-role-id').value = 'staff';
-      document.getElementById('active-admin-role-label').textContent = 'Sales Staff';
+      document.getElementById('active-admin-role-label').textContent = 'Staff';
+
       initAdminPanel();
       showToast('User created successfully!');
     } catch (err) {
@@ -136,7 +170,21 @@
     setVal('settings-company-address', 'company_address');
     setVal('settings-company-phone', 'company_phone');
     setVal('settings-company-email', 'company_email');
+    
+    const defaultGst = settings.default_gst || '18';
     setVal('settings-default-gst', 'default_gst');
+    const label = document.getElementById('active-default-gst-label');
+    if (label) {
+      const slabLabels = { '0': '0% (Exempted)', '5': '5%', '12': '12%', '18': '18%', '28': '28%' };
+      label.textContent = slabLabels[defaultGst] || `${defaultGst}%`;
+    }
+    const menu = document.getElementById('settings-default-gst-menu');
+    if (menu) {
+      menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      const activeItem = menu.querySelector(`[data-gst="${defaultGst}"]`);
+      if (activeItem) activeItem.classList.add('active');
+    }
+
 
     // Logo preview
     if (settings.company_logo) {
@@ -193,27 +241,21 @@
     reader.readAsDataURL(file);
   }
 
-  // Local Dropdown Helper
-  function setupLocalDropdown(toggleId, menuId, onSelect) {
-    const toggle = document.getElementById(toggleId);
-    const menu = document.getElementById(menuId);
-    if (!toggle || !menu) return;
-
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      menu.classList.toggle('hidden');
-    });
-
-    menu.addEventListener('click', (e) => {
-      const item = e.target.closest('.dropdown-item');
-      if (!item) return;
-      menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      menu.classList.add('hidden');
-      if (onSelect) onSelect(item);
-    });
-
-    document.addEventListener('click', () => menu.classList.add('hidden'));
+  async function resetPassword(userId, username) {
+    const newPass = prompt(`Enter new password for user '${username}':`);
+    if (newPass === null) return;
+    if (newPass.trim().length < 4) {
+      return showToast('Password must be at least 4 characters long', 'error');
+    }
+    
+    try {
+      await api(`/api/admin/users/${userId}/reset-password`, {
+        method: 'POST',
+        body: { new_password: newPass.trim() }
+      });
+      showToast(`Password for '${username}' reset successfully!`);
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
   }
-
 })();

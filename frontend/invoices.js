@@ -10,40 +10,53 @@
 
   async function initInvoicesView() {
     await loadInvoicesList();
-
-    // Check if query param ?view=ID is present
     const params = new URLSearchParams(window.location.search);
     const invoiceId = params.get('view');
-    if (invoiceId) {
-      viewInvoice(invoiceId);
-    }
+    if (invoiceId) viewInvoice(invoiceId);
   }
 
   function bindInvoicesEvents() {
-    const invoiceSearch = document.getElementById('invoice-search');
-    if (invoiceSearch) invoiceSearch.addEventListener('input', filterInvoiceList);
+    document.getElementById('invoice-search')?.addEventListener('input', filterInvoiceList);
+    document.getElementById('btn-print-invoice')?.addEventListener('click', printInvoice);
+    document.getElementById('btn-collect-payment')?.addEventListener('click', handleCollectPayment);
+    window._viewInvoice = (id) => viewInvoice(id);
+  }
 
-    // Print button
-    const printInvoiceBtn = document.getElementById('btn-print-invoice');
-    if (printInvoiceBtn) {
-      printInvoiceBtn.addEventListener('click', () => {
-        const content = document.getElementById('printable-invoice-content');
-        if (!content) return;
-        const w = window.open('', '_blank');
-        w.document.write(`<html><head><title>Invoice</title>
-          <link rel="stylesheet" href="style.css">
-          <style>body{background:#fff;color:#000;padding:40px;font-family:'Inter',sans-serif}
-          .print-area{max-width:800px;margin:auto} @media print{body{padding:0}}</style>
-          </head><body>${content.outerHTML}<script>setTimeout(()=>window.print(),400)<\/script></body></html>`);
-        w.document.close();
-      });
+  async function handleCollectPayment() {
+
+
+    const btn = document.getElementById('btn-collect-payment');
+    const invoiceId = btn.dataset.invoiceId;
+    const total = parseFloat(btn.dataset.total) || 0;
+
+    const method = prompt(`Collect payment of ${formatCurrency(total)}. Enter payment method (cash, card, upi):`, "cash");
+    if (!method) return;
+
+    const cleanMethod = method.trim().toLowerCase();
+    if (!['cash', 'card', 'upi'].includes(cleanMethod)) {
+      alert("Invalid payment method! Please enter cash, card, or upi.");
+      return;
     }
 
-    // Expose viewInvoice helper globally so inline buttons can click it
-    window._viewInvoice = (id) => {
-      viewInvoice(id);
-    };
+    const ref = prompt("Enter transaction reference (Optional):", "");
+
+    try {
+      await api(`/api/invoices/${invoiceId}/pay`, {
+        method: 'POST',
+        body: {
+          amount: total,
+          payment_method: cleanMethod,
+          transaction_reference: ref || null
+        }
+      });
+      showToast("Payment recorded successfully!");
+      document.getElementById('invoice-modal')?.classList.add('hidden');
+      loadInvoicesList();
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
   }
+
 
   async function loadInvoicesList() {
     try {
@@ -95,19 +108,31 @@
     try {
       const data = await api(`/api/invoices/${invoiceId}`);
       const inv = data.invoice;
-      const items = data.items;
-      const payment = data.payment;
+      const items = data.items || [];
+      const payment = data.payment || null;
 
       const settings = window.APP.STATE.settings || {};
 
-      // Fill print template
       setText('p-invoice-num', inv.invoice_number);
       setText('p-invoice-date', formatDate(inv.created_at));
       const statusEl = document.getElementById('p-invoice-status');
       if (statusEl) {
-        statusEl.textContent = inv.payment_status;
+        statusEl.textContent = inv.payment_status.toUpperCase();
         statusEl.className = `status-badge ${inv.payment_status}`;
       }
+
+      // Show or hide the Collect Payment button based on invoice status
+      const collectBtn = document.getElementById('btn-collect-payment');
+      if (collectBtn) {
+        if (inv.payment_status === 'unpaid' || inv.payment_status === 'pending') {
+          collectBtn.classList.remove('hidden');
+          collectBtn.dataset.invoiceId = invoiceId;
+          collectBtn.dataset.total = inv.total;
+        } else {
+          collectBtn.classList.add('hidden');
+        }
+      }
+
 
       setText('p-customer-name', inv.customer_name || 'Guest Customer');
       setText('p-customer-phone', inv.customer_phone || '-');
@@ -115,14 +140,12 @@
       setText('p-customer-address', inv.customer_address || '-');
       setText('p-billed-by', inv.billed_by);
 
-      // Company info in print header
       const companyH2 = document.querySelector('.print-company h2');
       const companyPs = document.querySelectorAll('.print-company p');
       if (companyH2) companyH2.textContent = (settings.company_name || 'INVOICEFLOW').toUpperCase();
       if (companyPs[0]) companyPs[0].textContent = 'Billing and Inventory Management Solutions';
       if (companyPs[1]) companyPs[1].textContent = settings.company_address || '';
 
-      // Logo
       const logoContainer = document.getElementById('print-logo-container');
       if (logoContainer && settings.company_logo) {
         logoContainer.classList.remove('hidden');
@@ -131,7 +154,6 @@
         logoContainer.classList.add('hidden');
       }
 
-      // Items table
       const itemsTbody = document.getElementById('p-items-tbody');
       if (itemsTbody) {
         itemsTbody.innerHTML = items.map(item => `
@@ -145,21 +167,18 @@
         `).join('');
       }
 
-      // Payment info
-      setText('p-payment-method', payment?.payment_method?.toUpperCase() || '-');
+      const paymentMethod = payment?.payment_method ? payment.payment_method.toUpperCase() : '-';
+      setText('p-payment-method', paymentMethod);
       setText('p-payment-ref', payment?.transaction_reference || '-');
 
-      // Totals
       setText('p-subtotal', formatCurrency(inv.subtotal));
       setText('p-discount', formatCurrency(inv.discount));
       setText('p-gst', formatCurrency(inv.gst));
       setText('p-total', formatCurrency(inv.total));
 
-      // Print footer
       const footerPs = document.querySelectorAll('.print-footer p');
       if (footerPs[1]) footerPs[1].textContent = `For support, contact ${settings.company_email || 'support@invoiceflow.com'}`;
 
-      // Show modal
       document.getElementById('invoice-modal')?.classList.remove('hidden');
     } catch (err) {
       showToast('Error loading invoice: ' + err.message, 'error');
@@ -171,4 +190,13 @@
     if (el) el.textContent = val || '-';
   }
 
+  function printInvoice() {
+    const content = document.getElementById('printable-invoice-content');
+    if (!content) return;
+    const w = window.open('print-invoice.html', '_blank');
+    w.addEventListener('load', () => {
+      w.document.getElementById('invoice-slot').innerHTML = content.outerHTML;
+      setTimeout(() => w.print(), 500);
+    });
+  }
 })();

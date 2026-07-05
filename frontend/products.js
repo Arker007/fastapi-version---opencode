@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const { api, formatCurrency, showToast, esc } = window.APP;
+  const { api, formatCurrency, showToast, esc, setupLocalDropdown } = window.APP;
 
   const STATE = {
     products: [],
@@ -37,25 +37,15 @@
     const productForm = document.getElementById('product-form');
     if (productForm) productForm.addEventListener('submit', handleSaveProduct);
 
-    // Location filter dropdown
-    setupLocalDropdown('location-dropdown-toggle', 'location-dropdown-menu', (item) => {
-      document.getElementById('active-location-label').textContent = item.textContent.trim();
-      document.getElementById('location-dropdown-toggle').dataset.filter = item.dataset.filter;
+    // Category filter dropdown
+    setupLocalDropdown('category-filter-dropdown-toggle', 'category-filter-dropdown-menu', (item) => {
+      const label = document.getElementById('active-category-filter-label');
+      if (label) label.textContent = item.textContent.trim();
+      document.getElementById('category-filter-dropdown-toggle').dataset.filter = item.dataset.categoryFilter;
       renderProductsTable();
     });
 
-    // Hide out of stock toggle
-    const oosToggle = document.getElementById('btn-toggle-out-of-stock');
-    if (oosToggle) {
-      oosToggle.addEventListener('click', () => {
-        const active = oosToggle.dataset.active === 'true';
-        oosToggle.dataset.active = (!active).toString();
-        oosToggle.innerHTML = active
-          ? '<i class="fa-solid fa-eye-slash"></i> Hide Out of Stock'
-          : '<i class="fa-solid fa-eye"></i> Show Out of Stock';
-        renderProductsTable();
-      });
-    }
+
 
     // Category Add Form Submit
     const categoryForm = document.getElementById('category-form');
@@ -106,30 +96,30 @@
       renderProductsTable();
       renderCategoriesTable();
       populateCategorySelector();
+      populateCategoryFilter();
     } catch (err) {
       console.error('Failed to load products/categories:', err);
     }
   }
+
+
+
+
 
   function renderProductsTable() {
     const tbody = document.getElementById('products-tbody');
     if (!tbody) return;
     const isAdmin = window.APP.STATE.user?.role === 'admin';
 
-    // Get active location filter
-    const activeLocation = document.getElementById('location-dropdown-toggle')?.dataset.filter || 'all';
-
-    // Get active out-of-stock visibility toggle
-    const hideOos = document.getElementById('btn-toggle-out-of-stock')?.dataset.active === 'true';
+    // Get active category filter
+    const activeCategoryFilter = document.getElementById('category-filter-dropdown-toggle')?.dataset.filter || 'all';
 
     // Filter products
     let filtered = STATE.products;
-    if (activeLocation !== 'all') {
-      filtered = filtered.filter(p => p.location === activeLocation);
+    if (activeCategoryFilter !== 'all') {
+      filtered = filtered.filter(p => p.category_id == activeCategoryFilter);
     }
-    if (hideOos) {
-      filtered = filtered.filter(p => p.stock > 0);
-    }
+
 
     if (!filtered.length) {
       tbody.innerHTML = `<tr><td colspan="${isAdmin ? 8 : 7}" style="text-align:center;color:var(--text-muted)">No products found</td></tr>`;
@@ -142,18 +132,14 @@
         ? `<span class="stock-badge low-stock">${p.stock} (Low)</span>`
         : `<span class="stock-badge in-stock">${p.stock} In Stock</span>`;
 
-      // Render location tag in category column
-      const locationLabels = { storefront: 'Storefront', warehouse: 'Warehouse' };
-      const locText = locationLabels[p.location] || 'Storefront';
-      const locBadge = `<span class="stock-badge" style="margin-left: 8px; font-size: 0.68rem; padding: 2px 6px; border: 0; background: var(--secondary); color: var(--text-muted); font-weight:600;">${locText}</span>`;
-
       return `
         <tr>
           <td><code>${esc(p.sku)}</code></td>
           <td><strong>${esc(p.name)}</strong></td>
-          <td>${esc(p.category_name || '-')}${locBadge}</td>
+          <td>${esc(p.category_name || '-')}</td>
           <td>${formatCurrency(p.price)}</td>
           <td>${p.gst_rate}%</td>
+
           <td>${stockStatusHtml}</td>
           <td>${p.min_stock}</td>
           ${isAdmin ? `
@@ -218,17 +204,18 @@
     });
   }
 
-  function populateCategorySelector() {
-    const menu = document.getElementById('category-dropdown-menu');
+  function populateCategoryFilter() {
+    const menu = document.getElementById('category-filter-dropdown-menu');
     if (!menu) return;
-
-    menu.innerHTML = '<button type="button" class="dropdown-item active" data-cat-id="">-- No Category --</button>' +
+    
+    menu.innerHTML = '<button type="button" class="dropdown-item active" data-category-filter="all"><i class="fa-solid fa-globe"></i> All Categories</button>' +
       STATE.categories.map(c =>
-        `<button type="button" class="dropdown-item" data-cat-id="${c.id}">${esc(c.name)}</button>`
+        `<button type="button" class="dropdown-item" data-category-filter="${c.id}">${esc(c.name)}</button>`
       ).join('');
   }
 
   function openProductModal(product = null) {
+
     const modal = document.getElementById('product-modal');
     const title = document.getElementById('product-modal-title');
     if (!modal) return;
@@ -355,27 +342,13 @@
     }
   }
 
-  // Local Dropdown Helper
-  function setupLocalDropdown(toggleId, menuId, onSelect) {
-    const toggle = document.getElementById(toggleId);
-    const menu = document.getElementById(menuId);
-    if (!toggle || !menu) return;
+  function populateCategorySelector() {
+    const menu = document.getElementById('category-dropdown-menu');
+    if (!menu) return;
 
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      menu.classList.toggle('hidden');
-    });
-
-    menu.addEventListener('click', (e) => {
-      const item = e.target.closest('.dropdown-item');
-      if (!item) return;
-      menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      menu.classList.add('hidden');
-      if (onSelect) onSelect(item);
-    });
-
-    document.addEventListener('click', () => menu.classList.add('hidden'));
+    menu.innerHTML = '<button type="button" class="dropdown-item active" data-cat-id="">-- No Category --</button>' +
+      STATE.categories.map(c =>
+        `<button type="button" class="dropdown-item" data-cat-id="${c.id}">${esc(c.name)}</button>`
+      ).join('');
   }
-
 })();

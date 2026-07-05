@@ -27,17 +27,18 @@
         <div class="input-group">
           <label>Choose Report Type</label>
           <div class="dropdown-wrapper w-full">
-            <div class="button-split-group">
-              <button type="button" class="split-btn-main" id="btn-reports-indicator">
-                <i class="fa-solid fa-chart-line"></i> <span id="active-report-label">1. Daily Sales Report</span>
-              </button>
-              <button type="button" class="split-btn-arrow" id="reports-dropdown-toggle">
-                <i class="fa-solid fa-chevron-down"></i>
-              </button>
-            </div>
+            <button type="button" class="dropdown-select-btn" id="reports-dropdown-toggle">
+              <div class="select-btn-left">
+                <i class="fa-solid fa-chart-line"></i>
+                <span id="active-report-label">1. Daily Sales Report</span>
+              </div>
+              <i class="fa-solid fa-chevron-down select-btn-arrow"></i>
+            </button>
 
-            <div class="dropdown-menu hidden" id="reports-dropdown-menu">
+
+            <div class="dropdown-menu hidden" id="reports-dropdown-menu" style="width: 100%;">
               <button type="button" class="dropdown-item active" data-report="daily_sales">1. Daily Sales Report</button>
+
               <button type="button" class="dropdown-item" data-report="monthly_sales">2. Monthly Sales Report</button>
               <button type="button" class="dropdown-item" data-report="gst_report">3. GST Report</button>
               <button type="button" class="dropdown-item" data-report="stock_availability">4. Stock Availability Report</button>

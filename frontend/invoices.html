@@ -42,10 +42,13 @@
     </div>
 
     <!-- DETAILED INVOICE MODAL (FOR VIEW & PRINTING) -->
-    <modal-dialog modal-id="invoice-modal" title="" icon="fa-file-invoice" card-class="invoice-print-modal no-modal-header">
-      <div class="no-print" style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
+    <modal-dialog modal-id="invoice-modal" title="Invoice Details" icon="fa-file-invoice" card-class="invoice-print-modal">
+
+      <div class="no-print" style="margin-bottom: 20px; display: flex; justify-content: flex-end; gap: 12px;">
+        <button id="btn-collect-payment" class="btn btn-secondary btn-sm hidden" style="background-color: var(--success); color: white; border-color: var(--success);"><i class="fa-solid fa-indian-rupee-sign"></i> Collect Payment</button>
         <button id="btn-print-invoice" class="btn btn-primary btn-sm"><i class="fa-solid fa-print"></i> Print Invoice</button>
       </div>
+
 
       <!-- Printable area start -->
       <div class="print-area" id="printable-invoice-content">

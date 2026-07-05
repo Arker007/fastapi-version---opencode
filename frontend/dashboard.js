@@ -3,7 +3,6 @@
 
   const { api, formatCurrency, esc } = window.APP;
 
-  // Local chart instances
   let salesChart = null;
   let categoryChart = null;
 
@@ -13,7 +12,7 @@
 
   async function loadDashboard() {
     try {
-      const [summary, salesData, categoryData, topProducts, recentInvoices] = await Promise.all([
+      const results = await Promise.allSettled([
         api('/api/dashboard/summary'),
         api('/api/dashboard/sales-chart'),
         api('/api/dashboard/category-chart'),
@@ -21,28 +20,31 @@
         api('/api/dashboard/recent-invoices'),
       ]);
 
-      // KPIs
+      const summary = results[0].status === 'fulfilled' ? results[0].value : { totalSales: 0, invoiceCount: 0, productCount: 0, lowStockCount: 0 };
+      const salesData = results[1].status === 'fulfilled' ? results[1].value : [];
+      const categoryData = results[2].status === 'fulfilled' ? results[2].value : [];
+      const topProducts = results[3].status === 'fulfilled' ? results[3].value : [];
+      const recentInvoices = results[4].status === 'fulfilled' ? results[4].value : [];
+
       document.getElementById('kpi-sales').textContent = formatCurrency(summary.totalSales);
       document.getElementById('kpi-bills').textContent = summary.invoiceCount;
       document.getElementById('kpi-products').textContent = summary.productCount;
       document.getElementById('kpi-low-stock').textContent = summary.lowStockCount;
 
-      // Low stock warning card
       const lowCard = document.getElementById('kpi-low-stock-card');
       if (lowCard) {
         lowCard.classList.toggle('warning-card', summary.lowStockCount > 0);
-        // Clicking low stock KPI redirects to products tab/page
         lowCard.style.cursor = 'pointer';
         lowCard.onclick = () => window.location.href = '/products';
       }
 
-      // Render charts
       renderSalesChart(salesData);
       renderCategoryChart(categoryData);
       renderTopProducts(topProducts);
       renderRecentInvoices(recentInvoices);
     } catch (err) {
       console.error('Dashboard load error:', err);
+      window.APP.showToast('Failed to load dashboard data', 'error');
     }
   }
 
@@ -123,7 +125,6 @@
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted)">No sales data yet</td></tr>';
       return;
     }
-    // Fixed columns alignment matching header: Product, Category, Sold Qty, Revenue
     tbody.innerHTML = data.map(p => `
       <tr>
         <td><strong>${esc(p.name)}</strong></td>
@@ -154,5 +155,4 @@
       </tr>
     `).join('');
   }
-
 })();
