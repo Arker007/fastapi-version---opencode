@@ -42,82 +42,82 @@
     </div>
 
     <!-- DETAILED INVOICE MODAL (FOR VIEW & PRINTING) -->
-    <modal-dialog modal-id="invoice-modal" title="Invoice Details" icon="fa-file-invoice" card-class="invoice-print-modal">
+    <modal-dialog modal-id="invoice-modal" title="" icon="fa-file-invoice" card-class="invoice-print-modal no-modal-header">
       <div class="no-print" style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
         <button id="btn-print-invoice" class="btn btn-primary btn-sm"><i class="fa-solid fa-print"></i> Print Invoice</button>
       </div>
 
-        <!-- Printable area start -->
-        <div class="print-area" id="printable-invoice-content">
-          <div class="print-header">
-            <div class="print-brand-wrapper">
-              <div id="print-logo-container" class="print-logo-box hidden"></div>
-              <div class="print-company">
-                <h2>INVOICEFLOW</h2>
-                <p>Billing and Inventory Management Solutions</p>
-                <p>Dehradun, Uttarakhand, India</p>
-              </div>
-            </div>
-            <div class="print-invoice-meta">
-              <h1>INVOICE</h1>
-              <p><strong>Invoice #:</strong> <span id="p-invoice-num">-</span></p>
-              <p><strong>Date:</strong> <span id="p-invoice-date">-</span></p>
-              <p><strong>Payment Status:</strong> <span id="p-invoice-status" class="status-badge">-</span></p>
+      <!-- Printable area start -->
+      <div class="print-area" id="printable-invoice-content">
+        <div class="print-header">
+          <div class="print-brand-wrapper">
+            <div id="print-logo-container" class="print-logo-box hidden"></div>
+            <div class="print-company">
+              <h2>INVOICEFLOW</h2>
+              <p>Billing and Inventory Management Solutions</p>
+              <p>Dehradun, Uttarakhand, India</p>
             </div>
           </div>
-
-          <hr class="print-divider">
-
-          <div class="print-billing-details">
-            <div class="bill-to">
-              <h3>Billed To:</h3>
-              <p><strong>Name:</strong> <span id="p-customer-name">-</span></p>
-              <p><strong>Phone:</strong> <span id="p-customer-phone">-</span></p>
-              <p><strong>Email:</strong> <span id="p-customer-email">-</span></p>
-              <p><strong>Address:</strong> <span id="p-customer-address">-</span></p>
-            </div>
-            <div class="bill-from">
-              <h3>Issued By:</h3>
-              <p><strong>System Admin:</strong> <span id="p-billed-by">-</span></p>
-              <p><strong>Billing Terminal:</strong> Dehradun Main Store</p>
-            </div>
-          </div>
-
-          <table class="print-items-table">
-            <thead>
-              <tr>
-                <th>SKU</th>
-                <th>Product / Description</th>
-                <th>Qty</th>
-                <th>Unit Price</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody id="p-items-tbody">
-              <!-- Dynamic rows -->
-            </tbody>
-          </table>
-
-          <div class="print-totals-box">
-            <div class="totals-col">
-              <p><strong>Payment Method:</strong> <span id="p-payment-method">-</span></p>
-              <p><strong>Ref / Transaction ID:</strong> <span id="p-payment-ref">-</span></p>
-            </div>
-            <div class="totals-col text-right">
-              <p>Subtotal: <span id="p-subtotal">₹0.00</span></p>
-              <p>Discount: <span id="p-discount">₹0.00</span></p>
-              <p>GST Amount: <span id="p-gst">₹0.00</span></p>
-              <hr>
-              <h2>Total: <span id="p-total">₹0.00</span></h2>
-            </div>
-          </div>
-
-          <div class="print-footer">
-            <p>Thank you for your business!</p>
-            <p>For support, contact support@invoiceflow.com</p>
+          <div class="print-invoice-meta">
+            <h1>INVOICE</h1>
+            <p><strong>Invoice #:</strong> <span id="p-invoice-num">-</span></p>
+            <p><strong>Date:</strong> <span id="p-invoice-date">-</span></p>
+            <p><strong>Payment Status:</strong> <span id="p-invoice-status" class="status-badge">-</span></p>
           </div>
         </div>
-        <!-- Printable area end -->
+
+        <hr class="print-divider">
+
+        <div class="print-billing-details">
+          <div class="bill-to">
+            <h3>Billed To:</h3>
+            <p><strong>Name:</strong> <span id="p-customer-name">-</span></p>
+            <p><strong>Phone:</strong> <span id="p-customer-phone">-</span></p>
+            <p><strong>Email:</strong> <span id="p-customer-email">-</span></p>
+            <p><strong>Address:</strong> <span id="p-customer-address">-</span></p>
+          </div>
+          <div class="bill-from">
+            <h3>Issued By:</h3>
+            <p><strong>System Admin:</strong> <span id="p-billed-by">-</span></p>
+            <p><strong>Billing Terminal:</strong> Dehradun Main Store</p>
+          </div>
+        </div>
+
+        <table class="print-items-table">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Product / Description</th>
+              <th>Qty</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="p-items-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+
+        <div class="print-totals-box">
+          <div class="totals-col">
+            <p><strong>Payment Method:</strong> <span id="p-payment-method">-</span></p>
+            <p><strong>Ref / Transaction ID:</strong> <span id="p-payment-ref">-</span></p>
+          </div>
+          <div class="totals-col text-right">
+            <p>Subtotal: <span id="p-subtotal">₹0.00</span></p>
+            <p>Discount: <span id="p-discount">₹0.00</span></p>
+            <p>GST Amount: <span id="p-gst">₹0.00</span></p>
+            <hr>
+            <h2>Total: <span id="p-total">₹0.00</span></h2>
+          </div>
+        </div>
+
+        <div class="print-footer">
+          <p>Thank you for your business!</p>
+          <p>For support, contact support@invoiceflow.com</p>
+        </div>
+      </div>
+      <!-- Printable area end -->
     </modal-dialog>
   </div>
 

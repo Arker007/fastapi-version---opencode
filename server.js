@@ -41,8 +41,16 @@ app.use('/api', async (req, res) => {
   }
 });
 
+// Route HTML pages — strip leading slash, look up corresponding .html file
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+  const route = req.path.replace(/^\//, '') || 'index';
+  const filePath = path.join(__dirname, 'frontend', route + '.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      // Fallback to index.html (SPA-style) for unknown routes
+      res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+    }
+  });
 });
 
 app.listen(PORT, () => {
