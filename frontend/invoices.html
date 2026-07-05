@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoices List - InvoiceFlow</title>
+  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+  <div id="page-content" class="hidden">
+    <div class="card table-card">
+      <div class="card-header-actions">
+        <h3><i class="fa-solid fa-clock-rotate-left"></i> Historical Invoices</h3>
+        <search-bar input-id="invoice-search" placeholder="Search Invoice # or Customer..."></search-bar>
+      </div>
+      <div class="table-container scrollable-table large-viewport">
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice No</th>
+              <th>Customer</th>
+              <th>Subtotal</th>
+              <th>Discount</th>
+              <th>GST</th>
+              <th>Total</th>
+              <th>Billed By</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="invoices-list-tbody">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DETAILED INVOICE MODAL (FOR VIEW & PRINTING) -->
+    <modal-dialog modal-id="invoice-modal" title="Invoice Details" icon="fa-file-invoice" card-class="invoice-print-modal">
+      <div class="no-print" style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
+        <button id="btn-print-invoice" class="btn btn-primary btn-sm"><i class="fa-solid fa-print"></i> Print Invoice</button>
+      </div>
+
+        <!-- Printable area start -->
+        <div class="print-area" id="printable-invoice-content">
+          <div class="print-header">
+            <div class="print-brand-wrapper">
+              <div id="print-logo-container" class="print-logo-box hidden"></div>
+              <div class="print-company">
+                <h2>INVOICEFLOW</h2>
+                <p>Billing and Inventory Management Solutions</p>
+                <p>Dehradun, Uttarakhand, India</p>
+              </div>
+            </div>
+            <div class="print-invoice-meta">
+              <h1>INVOICE</h1>
+              <p><strong>Invoice #:</strong> <span id="p-invoice-num">-</span></p>
+              <p><strong>Date:</strong> <span id="p-invoice-date">-</span></p>
+              <p><strong>Payment Status:</strong> <span id="p-invoice-status" class="status-badge">-</span></p>
+            </div>
+          </div>
+
+          <hr class="print-divider">
+
+          <div class="print-billing-details">
+            <div class="bill-to">
+              <h3>Billed To:</h3>
+              <p><strong>Name:</strong> <span id="p-customer-name">-</span></p>
+              <p><strong>Phone:</strong> <span id="p-customer-phone">-</span></p>
+              <p><strong>Email:</strong> <span id="p-customer-email">-</span></p>
+              <p><strong>Address:</strong> <span id="p-customer-address">-</span></p>
+            </div>
+            <div class="bill-from">
+              <h3>Issued By:</h3>
+              <p><strong>System Admin:</strong> <span id="p-billed-by">-</span></p>
+              <p><strong>Billing Terminal:</strong> Dehradun Main Store</p>
+            </div>
+          </div>
+
+          <table class="print-items-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Product / Description</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="p-items-tbody">
+              <!-- Dynamic rows -->
+            </tbody>
+          </table>
+
+          <div class="print-totals-box">
+            <div class="totals-col">
+              <p><strong>Payment Method:</strong> <span id="p-payment-method">-</span></p>
+              <p><strong>Ref / Transaction ID:</strong> <span id="p-payment-ref">-</span></p>
+            </div>
+            <div class="totals-col text-right">
+              <p>Subtotal: <span id="p-subtotal">₹0.00</span></p>
+              <p>Discount: <span id="p-discount">₹0.00</span></p>
+              <p>GST Amount: <span id="p-gst">₹0.00</span></p>
+              <hr>
+              <h2>Total: <span id="p-total">₹0.00</span></h2>
+            </div>
+          </div>
+
+          <div class="print-footer">
+            <p>Thank you for your business!</p>
+            <p>For support, contact support@invoiceflow.com</p>
+          </div>
+        </div>
+        <!-- Printable area end -->
+    </modal-dialog>
+  </div>
+
+  <script src="common.js?v=2.0.6"></script>
+  <script src="invoices.js?v=2.0.6"></script>
+</body>
+</html>

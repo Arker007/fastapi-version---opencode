@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Billing and Inventory Management System</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js for reports -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- LOGIN CONTAINER -->
+  <div id="login-container" class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <div id="login-logo-container" class="login-logo-box hidden"></div>
+        <h2>Welcome Back</h2>
+        <p>Login to access your billing & inventory portal</p>
+      </div>
+      <form id="login-form">
+        <div class="input-group">
+          <label for="login-username">Username</label>
+          <div class="input-field">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" id="login-username" placeholder="Enter username" required autocomplete="username">
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="login-password">Password</label>
+          <div class="input-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="login-password" placeholder="Enter password" required autocomplete="current-password">
+          </div>
+        </div>
+        <div id="login-error" class="error-msg hidden">
+          <i class="fa-solid fa-triangle-exclamation"></i> <span id="error-text">Invalid username or password</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>Log In</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
+      </form>
+      <div class="login-footer">
+        <p>BCA Final Project - Vishal Sharma</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION CONTAINER -->
+  <div id="app-container" class="app-wrapper hidden">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div id="sidebar-logo-container" class="sidebar-logo-box hidden"></div>
+          <span class="brand-title" id="sidebar-brand-title">InvoiceFlow</span>
+        </div>
+        <button id="sidebar-toggle" class="btn-sidebar-toggle" title="Collapse Sidebar">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-title">Main Menu</div>
+        <a href="#" class="nav-item active" data-view="dashboard">
+          <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-view="billing">
+          <i class="fa-solid fa-file-invoice"></i> <span>Create Invoice</span>
+        </a>
+        <a href="#" class="nav-item" data-view="invoices">
+          <i class="fa-solid fa-clock-rotate-left"></i> <span>Invoices List</span>
+        </a>
+        
+        <div class="sidebar-section-title">Inventory & CRM</div>
+        <a href="#" class="nav-item" data-view="products">
+          <i class="fa-solid fa-boxes-stacked"></i> <span>Products & Stock</span>
+        </a>
+        <a href="#" class="nav-item" data-view="customers">
+          <i class="fa-solid fa-users"></i> <span>Customers</span>
+        </a>
+        
+        <div class="sidebar-section-title">Analysis</div>
+        <a href="#" class="nav-item" data-view="reports">
+          <i class="fa-solid fa-chart-column"></i> <span>Reports Directory</span>
+        </a>
+        
+        <div class="sidebar-section-title admin-only hidden">Administration</div>
+        <a href="#" class="nav-item admin-only hidden" data-view="admin-panel">
+          <i class="fa-solid fa-screwdriver-wrench"></i> <span>Admin Panel</span>
+        </a>
+        <a href="#" class="nav-item admin-only hidden" data-view="logs">
+          <i class="fa-solid fa-shield-halved"></i> <span>System Logs</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">
+            <i class="fa-solid fa-circle-user"></i>
+          </div>
+          <div class="user-details">
+            <h4 id="user-fullname">Loading...</h4>
+            <p id="user-role">Role</p>
+          </div>
+        </div>
+        <button id="btn-logout" class="btn btn-logout">
+          <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- HEADER -->
+      <header class="main-header">
+        <div class="header-left">
+          <h1 id="view-title">Dashboard</h1>
+        </div>
+        <div class="header-right" style="display: flex; gap: 12px; align-items: center;">
+          <button id="theme-toggle" class="btn btn-action" title="Toggle Light/Dark Theme" style="padding: 10px 14px;">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <div class="date-badge">
+            <i class="fa-regular fa-calendar-days"></i>
+            <span id="current-date">June 23, 2026</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- VIEWS -->
+      <div class="view-viewport">
+
+        <!-- 1. DASHBOARD VIEW -->
+        <section id="view-dashboard" class="app-view">
+          <!-- KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon sales"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+              <div class="kpi-info">
+                <h3>Total Sales</h3>
+                <h2 id="kpi-sales">₹0.00</h2>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon bills"><i class="fa-solid fa-receipt"></i></div>
+              <div class="kpi-info">
+                <h3>Invoices Issued</h3>
+                <h2 id="kpi-bills">0</h2>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon products"><i class="fa-solid fa-box"></i></div>
+              <div class="kpi-info">
+                <h3>Total Products</h3>
+                <h2 id="kpi-products">0</h2>
+              </div>
+            </div>
+            <div class="kpi-card warning-card" id="kpi-low-stock-card">
+              <div class="kpi-icon low-stock"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              <div class="kpi-info">
+                <h3>Low Stock Items</h3>
+                <h2 id="kpi-low-stock">0</h2>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHARTS & RECENT -->
+          <div class="dashboard-grid">
+            <div class="card chart-card">
+              <h3><i class="fa-solid fa-chart-line"></i> Sales Performance (Last 7 Days)</h3>
+              <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+              </div>
+            </div>
+
+            <div class="card recent-card">
+              <h3><i class="fa-solid fa-list"></i> Recent Invoices</h3>
+              <div class="table-container scrollable-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Invoice #</th>
+                      <th>Customer</th>
+                      <th>Total</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recent-invoices-tbody">
+                    <!-- Dynamic Rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- REPORTS & BREAKDOWN -->
+          <div class="dashboard-grid second-row">
+            <div class="card chart-card">
+              <h3><i class="fa-solid fa-chart-pie"></i> Sales by Category</h3>
+              <div class="chart-container pie-container">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+
+            <div class="card top-selling-card">
+              <h3><i class="fa-solid fa-ranking-star"></i> Top Selling Products</h3>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Qty Sold</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody id="top-products-tbody">
+                    <!-- Dynamic Rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. BILLING VIEW -->
+        <section id="view-billing" class="app-view hidden">
+          <div class="billing-grid">
+            <!-- Left Side: Add Items Form -->
+            <div class="card billing-form-card">
+              <h3><i class="fa-solid fa-cart-plus"></i> Select Products</h3>
+              
+              <div class="product-selector-group">
+                <div class="input-group">
+                  <label for="billing-product-select">Product</label>
+                  <select id="billing-product-select">
+                    <option value="">-- Choose Product --</option>
+                  </select>
+                </div>
+                
+                <div class="billing-selectors-row">
+                  <div class="input-group">
+                    <label for="billing-qty">Quantity</label>
+                    <input type="number" id="billing-qty" value="1" min="1">
+                  </div>
+                  <div class="input-group">
+                    <label>Stock Available</label>
+                    <div class="info-badge" id="billing-stock-display">-</div>
+                  </div>
+                  <div class="input-group">
+                    <label>Price</label>
+                    <div class="info-badge" id="billing-price-display">₹0.00</div>
+                  </div>
+                </div>
+
+                <button id="btn-add-item" class="btn btn-secondary btn-block">
+                  <i class="fa-solid fa-plus"></i> Add Item
+                </button>
+              </div>
+
+              <hr class="divider">
+
+              <!-- Customer Selection / Add -->
+              <h3><i class="fa-solid fa-user-tag"></i> Customer Details</h3>
+              <div class="customer-selection-group">
+                <div class="input-group">
+                  <label for="billing-customer-select">Select Customer</label>
+                  <select id="billing-customer-select">
+                    <option value="">-- Guest Customer --</option>
+                  </select>
+                </div>
+                <div class="center-text">or</div>
+                <button id="btn-quick-add-customer" class="btn btn-outline btn-block">
+                  <i class="fa-solid fa-user-plus"></i> Create New Customer
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Side: Invoice Calculator -->
+            <div class="card billing-cart-card">
+              <h3><i class="fa-solid fa-file-invoice"></i> New Invoice</h3>
+              
+              <div class="cart-items-table scrollable-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Qty</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="cart-tbody">
+                    <!-- Dynamic Rows -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="billing-summary">
+                <div class="summary-line">
+                  <span>Subtotal</span>
+                  <span id="bill-subtotal">₹0.00</span>
+                </div>
+                <div class="summary-line inline-input">
+                  <span>Discount (₹)</span>
+                  <input type="number" id="bill-discount" value="0" min="0">
+                </div>
+                <div class="summary-line inline-input">
+                  <span>GST Tax (Computed)</span>
+                  <input type="text" id="bill-gst" readonly value="₹0.00" style="text-align: right; background: transparent; border: none; box-shadow: none; pointer-events: none; width: 120px; font-weight: 500; color: var(--text-main);">
+                </div>
+                <hr class="summary-divider">
+                <div class="summary-line total-line">
+                  <span>Total Amount</span>
+                  <span id="bill-total">₹0.00</span>
+                </div>
+              </div>
+
+              <div class="payment-setup">
+                <div class="input-group">
+                  <label>Payment Method</label>
+                  <div class="dropdown-wrapper w-full">
+                    <div class="button-split-group">
+                      <button type="button" class="split-btn-main" id="btn-payment-indicator">
+                        <i class="fa-solid fa-money-bill-wave"></i> <span id="active-payment-label">Cash</span>
+                      </button>
+                      <button type="button" class="split-btn-arrow" id="payment-dropdown-toggle">
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </button>
+                    </div>
+
+                    <div class="dropdown-menu hidden" id="payment-dropdown-menu">
+                      <button type="button" class="dropdown-item active" data-payment="cash">
+                        <i class="fa-solid fa-money-bill-wave"></i> Cash
+                      </button>
+                      <button type="button" class="dropdown-item" data-payment="upi">
+                        <i class="fa-solid fa-qrcode"></i> UPI / QR Code
+                      </button>
+                      <button type="button" class="dropdown-item" data-payment="card">
+                        <i class="fa-solid fa-credit-card"></i> Debit/Credit Card
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group hidden" id="transaction-ref-group">
+                  <label for="bill-ref">Transaction ID / Ref</label>
+                  <input type="text" id="bill-ref" placeholder="Enter Ref #">
+                </div>
+              </div>
+
+              <button id="btn-checkout" class="btn btn-primary btn-block btn-lg">
+                <i class="fa-solid fa-file-invoice-dollar"></i> Generate Invoice & Pay
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. INVOICES LIST VIEW -->
+        <section id="view-invoices" class="app-view hidden">
+          <div class="card table-card">
+            <div class="card-header-actions">
+              <h3><i class="fa-solid fa-clock-rotate-left"></i> Historical Invoices</h3>
+              <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="invoice-search" placeholder="Search Invoice # or Customer...">
+              </div>
+            </div>
+            <div class="table-container scrollable-table large-viewport">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Invoice No</th>
+                    <th>Customer</th>
+                    <th>Subtotal</th>
+                    <th>Discount</th>
+                    <th>GST</th>
+                    <th>Total</th>
+                    <th>Billed By</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="invoices-list-tbody">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. PRODUCTS & INVENTORY VIEW -->
+        <section id="view-products" class="app-view hidden">
+          <!-- Tab Navigation Headers -->
+          <div class="tabs-header">
+            <button class="tab-btn active" data-tab="products-tab-content"><i class="fa-solid fa-boxes-stacked"></i> Products List</button>
+            <button class="tab-btn" data-tab="categories-tab-content"><i class="fa-solid fa-tags"></i> Category Management</button>
+          </div>
+
+          <!-- Tab Content 1: Products List -->
+          <div id="products-tab-content" class="tab-content">
+            <div class="card products-list-card">
+              <div class="card-header-actions">
+                <h3><i class="fa-solid fa-boxes-stacked"></i> Products Directory</h3>
+                <div class="header-buttons" style="display: flex; gap: 12px; align-items: center;">
+                  <!-- Dropdown filter component -->
+                  <div class="dropdown-wrapper">
+                    <div class="button-split-group">
+                      <button type="button" class="split-btn-main" id="btn-location-indicator">
+                        <i class="fa-solid fa-warehouse"></i> <span id="active-location-label">All Inventory</span>
+                      </button>
+                      <button type="button" class="split-btn-arrow" id="location-dropdown-toggle">
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </button>
+                    </div>
+
+                    <div class="dropdown-menu hidden" id="location-dropdown-menu">
+                      <div class="dropdown-menu-section-title">Filter Stocks</div>
+                      <button type="button" class="dropdown-item active" data-filter="all">
+                        <i class="fa-solid fa-globe"></i> Show All Items
+                      </button>
+                      <button type="button" class="dropdown-item" data-filter="storefront">
+                        <i class="fa-solid fa-shop"></i> Storefront Retail
+                      </button>
+                      <button type="button" class="dropdown-item" data-filter="warehouse">
+                        <i class="fa-solid fa-warehouse"></i> Warehouse Stock
+                      </button>
+                      <hr class="dropdown-divider">
+                      <button type="button" class="dropdown-item text-danger" id="btn-toggle-out-of-stock" data-active="false">
+                        <i class="fa-solid fa-eye-slash"></i> Hide Out of Stock
+                      </button>
+                    </div>
+                  </div>
+
+                  <button id="btn-add-product-modal" class="btn btn-secondary admin-only hidden">
+                    <i class="fa-solid fa-plus"></i> New Product
+                  </button>
+                </div>
+              </div>
+              <div class="table-container large-viewport" style="overflow: visible;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>Name</th>
+                      <th>Category</th>
+                      <th>Price</th>
+                      <th>GST</th>
+                      <th>Stock Status</th>
+                      <th>Min Alert</th>
+                      <th class="admin-only hidden">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="products-tbody">
+                    <!-- Dynamic Rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Content 2: Category Management -->
+          <div id="categories-tab-content" class="tab-content hidden">
+            <div class="inventory-row">
+              <!-- Left: Category Add Form (Admin Only) -->
+              <div class="card category-card admin-only hidden">
+                <h3><i class="fa-solid fa-tags"></i> Add Category</h3>
+                <form id="category-form">
+                  <div class="input-group">
+                    <label for="cat-name">Category Name</label>
+                    <input type="text" id="cat-name" required placeholder="e.g. Peripherals">
+                  </div>
+                  <div class="input-group">
+                    <label for="cat-desc">Description</label>
+                    <textarea id="cat-desc" rows="3" placeholder="Category details..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-secondary btn-block">Add Category</button>
+                </form>
+              </div>
+
+              <!-- Right: Categories List Table -->
+              <div class="card categories-list-card">
+                <h3><i class="fa-solid fa-tags"></i> Existing Categories</h3>
+                <div class="table-container" style="overflow: visible;">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th class="admin-only hidden">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="categories-tbody">
+                      <!-- Dynamic Rows -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. CUSTOMERS VIEW -->
+        <section id="view-customers" class="app-view hidden">
+          <div class="card table-card">
+            <div class="card-header-actions">
+              <h3><i class="fa-solid fa-users"></i> Customers Registry</h3>
+              <button id="btn-add-customer-modal" class="btn btn-secondary">
+                <i class="fa-solid fa-user-plus"></i> Register Customer
+              </button>
+            </div>
+            <div class="table-container" style="overflow: visible;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Reg Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="customers-tbody">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. SYSTEM LOGS VIEW (Admin Only) -->
+        <section id="view-logs" class="app-view hidden">
+          <div class="card table-card">
+            <h3><i class="fa-solid fa-shield-halved"></i> Security & Operations Audit Logs</h3>
+            <div class="table-container scrollable-table large-viewport">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody id="logs-tbody">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. REPORTS DIRECTORY VIEW -->
+        <section id="view-reports" class="app-view hidden">
+          <div class="card reports-filter-card">
+            <div class="card-header-actions">
+              <h3><i class="fa-solid fa-chart-column"></i> Select Report</h3>
+              <div class="reports-action-buttons">
+                <button id="btn-export-report" class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                <button id="btn-print-report" class="btn btn-outline btn-sm"><i class="fa-solid fa-print"></i> Print Report</button>
+              </div>
+            </div>
+            
+            <div class="reports-selector-row">
+              <div class="input-group">
+                <label>Choose Report Type</label>
+                <div class="dropdown-wrapper w-full">
+                  <div class="button-split-group">
+                    <button type="button" class="split-btn-main" id="btn-reports-indicator">
+                      <i class="fa-solid fa-chart-line"></i> <span id="active-report-label">1. Daily Sales Report</span>
+                    </button>
+                    <button type="button" class="split-btn-arrow" id="reports-dropdown-toggle">
+                      <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                  </div>
+
+                  <div class="dropdown-menu hidden" id="reports-dropdown-menu">
+                    <button type="button" class="dropdown-item active" data-report="daily_sales">1. Daily Sales Report</button>
+                    <button type="button" class="dropdown-item" data-report="monthly_sales">2. Monthly Sales Report</button>
+                    <button type="button" class="dropdown-item" data-report="gst_report">3. GST Report</button>
+                    <button type="button" class="dropdown-item" data-report="stock_availability">4. Stock Availability Report</button>
+                    <button type="button" class="dropdown-item" data-report="low_stock_alert">5. Low Stock Alert Report</button>
+                    <button type="button" class="dropdown-item" data-report="product_sales">6. Product Sales Report</button>
+                    <button type="button" class="dropdown-item" data-report="customer_purchase">7. Customer Purchase History Report</button>
+                    <button type="button" class="dropdown-item" data-report="payment_transaction">8. Payment Transaction Report</button>
+                    <button type="button" class="dropdown-item" data-report="invoice_report">9. Invoice Report</button>
+                    <button type="button" class="dropdown-item" data-report="profit_revenue">10. Profit and Revenue Report</button>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="report-search">Search/Filter Grid</label>
+                <input type="text" id="report-search" placeholder="Type to filter rows...">
+              </div>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <h3 id="report-table-title">Report Title</h3>
+            <div class="table-container scrollable-table large-viewport" id="report-print-area">
+              <table id="reports-table">
+                <thead id="reports-thead">
+                  <!-- Dynamic Headers -->
+                </thead>
+                <tbody id="reports-tbody">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. ADMIN PANEL VIEW (Admin Only) -->
+        <section id="view-admin-panel" class="app-view hidden admin-only">
+          <div class="admin-grid">
+            <!-- Left Side: User / Staff Accounts Administration -->
+            <div class="card admin-users-card">
+              <h3><i class="fa-solid fa-user-gear"></i> User Accounts (Staff)</h3>
+              
+              <div class="table-container" style="margin-bottom: 20px; overflow: visible;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Fullname</th>
+                      <th>Username</th>
+                      <th>Login Password</th>
+                      <th>Role</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-users-tbody">
+                    <!-- Dynamic staff accounts -->
+                  </tbody>
+                </table>
+              </div>
+
+              <hr class="divider">
+
+              <h4>Create New User Account</h4>
+              <form id="admin-create-user-form" style="margin-top: 15px;">
+                <div class="input-group">
+                  <label for="admin-user-fullname">Full Name</label>
+                  <input type="text" id="admin-user-fullname" required placeholder="e.g. Ramesh Kumar">
+                </div>
+                <div class="grid-2-col">
+                  <div class="input-group">
+                    <label for="admin-user-username">Username</label>
+                    <input type="text" id="admin-user-username" required placeholder="e.g. ramesh">
+                  </div>
+                  <div class="input-group">
+                    <label>Role</label>
+                    <div class="dropdown-wrapper w-full">
+                      <div class="button-split-group">
+                        <button type="button" class="split-btn-main" id="btn-admin-role-indicator">
+                          <i class="fa-solid fa-user"></i> <span id="active-admin-role-label">Sales Staff</span>
+                        </button>
+                        <button type="button" class="split-btn-arrow" id="admin-role-dropdown-toggle">
+                          <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                      </div>
+                      <input type="hidden" id="admin-user-role-id" value="staff">
+                      <div class="dropdown-menu hidden" id="admin-role-dropdown-menu">
+                        <button type="button" class="dropdown-item active" data-role="staff">
+                          <i class="fa-solid fa-user"></i> Sales Staff
+                        </button>
+                        <button type="button" class="dropdown-item" data-role="admin">
+                          <i class="fa-solid fa-user-shield"></i> System Administrator
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                 <div class="input-group">
+                  <label for="admin-user-password">Password</label>
+                  <div class="input-field">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="admin-user-password" required placeholder="Password" style="padding-right: 42px;">
+                    <button type="button" id="toggle-create-password" class="input-field-action-btn" title="Show Password">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-block" style="margin-top: 15px;">Create Account</button>
+              </form>
+            </div>
+
+            <!-- Right Side: System Settings and Defaults -->
+            <div class="card admin-settings-card">
+              <h3><i class="fa-solid fa-sliders"></i> Global System Settings</h3>
+              
+              <form id="admin-settings-form">
+                <div class="input-group">
+                  <label for="settings-company-name">Company / Store Name *</label>
+                  <input type="text" id="settings-company-name" required placeholder="e.g. SuperMart Ltd">
+                </div>
+                <div class="input-group">
+                  <label for="settings-company-address">Store Address *</label>
+                  <textarea id="settings-company-address" rows="3" required placeholder="Full billing address..."></textarea>
+                </div>
+                <div class="grid-2-col">
+                  <div class="input-group">
+                    <label for="settings-company-phone">Contact Phone *</label>
+                    <input type="text" id="settings-company-phone" required placeholder="e.g. +91 98765...">
+                  </div>
+                  <div class="input-group">
+                    <label for="settings-company-email">Billing Email *</label>
+                    <input type="email" id="settings-company-email" required placeholder="e.g. bill@shop.com">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="settings-default-gst">Default GST Tax Rate (%) *</label>
+                  <input type="number" id="settings-default-gst" min="0" required placeholder="e.g. 18">
+                </div>
+                <div class="input-group">
+                  <label>Company Logo (Optional)</label>
+                  <div style="display: flex; gap: 16px; align-items: center; margin-top: 8px;">
+                    <input type="file" id="settings-company-logo-input" accept="image/*" style="display: none;">
+                    
+                    <!-- Square Logo Uploader Button (Preview is rendered inside this button) -->
+                    <button type="button" id="btn-upload-logo-trigger" class="logo-uploader-btn" title="Upload/Change Company Logo">
+                      <div id="settings-logo-preview" class="logo-uploader-content">
+                        <i class="fa-solid fa-cloud-arrow-up uploader-icon"></i>
+                        <span class="uploader-text">Upload</span>
+                      </div>
+                    </button>
+                    
+                    <button type="button" id="btn-remove-logo" class="btn btn-outline text-danger hidden" style="padding: 8px 12px; font-size: 0.85rem; border-color: rgba(239, 68, 68, 0.2);">
+                      <i class="fa-solid fa-trash-can"></i> Remove
+                    </button>
+                  </div>
+                  <input type="hidden" id="settings-company-logo-base64">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 10px;">
+                  <i class="fa-solid fa-floppy-disk"></i> Save Configurations
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== MODALS & POPUPS ==================== -->
+
+  <!-- 1. ADD/EDIT PRODUCT MODAL -->
+  <div id="product-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="product-modal-title-container"><i class="fa-solid fa-box-open"></i> <span id="product-modal-title">Add New Product</span></h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="product-form">
+        <input type="hidden" id="product-id">
+        <div class="input-group">
+          <label for="prod-name">Product Name *</label>
+          <input type="text" id="prod-name" required placeholder="e.g. Wireless Mouse">
+        </div>
+        <div class="grid-2-col">
+          <div class="input-group">
+            <label for="prod-sku">SKU Code (Auto-generates if blank)</label>
+            <input type="text" id="prod-sku" placeholder="e.g. SKU-ELEC-001">
+          </div>
+          <div class="input-group">
+            <label>Category</label>
+            <div class="dropdown-wrapper w-full">
+              <div class="button-split-group">
+                <button type="button" class="split-btn-main" id="btn-category-indicator">
+                  <span id="active-category-label">-- No Category --</span>
+                </button>
+                <button type="button" class="split-btn-arrow" id="category-dropdown-toggle">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+              <input type="hidden" id="prod-category-id" value="">
+              <div class="dropdown-menu hidden" id="category-dropdown-menu" style="max-height: 180px; overflow-y: auto;">
+                <!-- Dynamic options -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2-col">
+          <div class="input-group">
+            <label for="prod-price">Price (₹) *</label>
+            <input type="number" id="prod-price" step="0.01" required min="0">
+          </div>
+          <div class="input-group">
+            <label for="prod-gst-rate">GST Rate (%) *</label>
+            <select id="prod-gst-rate" required>
+              <option value="0">0% (GST Exempt)</option>
+              <option value="5">5%</option>
+              <option value="12">12%</option>
+              <option value="18" selected>18% (Standard)</option>
+              <option value="28">28%</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2-col">
+          <div class="input-group">
+            <label for="prod-stock">Initial Stock *</label>
+            <input type="number" id="prod-stock" required min="0">
+          </div>
+          <div class="input-group">
+            <label for="prod-min-stock">Min Stock Alert</label>
+            <input type="number" id="prod-min-stock" value="5" min="0">
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="prod-desc">Description</label>
+          <textarea id="prod-desc" rows="3" placeholder="Brief technical details..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. ADD/EDIT CUSTOMER MODAL -->
+  <div id="customer-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="customer-modal-title-container"><i class="fa-solid fa-user-plus"></i> <span id="customer-modal-title">Register Customer</span></h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="customer-form">
+        <input type="hidden" id="customer-id">
+        <div class="input-group">
+          <label for="cust-name">Name</label>
+          <input type="text" id="cust-name" required placeholder="Full Name">
+        </div>
+        <div class="input-group">
+          <label for="cust-phone">Phone Number *</label>
+          <input type="tel" id="cust-phone" required placeholder="10-digit Mobile" pattern="[0-9]{10}">
+        </div>
+        <div class="input-group">
+          <label for="cust-email">Email Address</label>
+          <input type="email" id="cust-email" placeholder="example@mail.com">
+        </div>
+        <div class="input-group">
+          <label for="cust-address">Billing Address</label>
+          <textarea id="cust-address" rows="3" placeholder="Complete address detail..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT CATEGORY MODAL -->
+  <div id="category-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-tags"></i> <span id="category-modal-title">Edit Category</span></h3>
+        <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="category-edit-form">
+        <input type="hidden" id="edit-cat-id">
+        <div class="input-group">
+          <label for="edit-cat-name">Category Name</label>
+          <input type="text" id="edit-cat-name" required placeholder="e.g. Peripherals">
+        </div>
+        <div class="input-group">
+          <label for="edit-cat-desc">Description</label>
+          <textarea id="edit-cat-desc" rows="3" placeholder="Category details..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. DETAILED INVOICE MODAL (FOR VIEW & PRINTING) -->
+  <div id="invoice-modal" class="modal-overlay hidden">
+    <div class="modal-card invoice-print-modal">
+      <div class="modal-header no-print">
+        <h3><i class="fa-solid fa-file-invoice"></i> Invoice Details</h3>
+        <div>
+          <button id="btn-print-invoice" class="btn btn-primary btn-sm"><i class="fa-solid fa-print"></i> Print Invoice</button>
+          <button class="btn-close-modal btn btn-outline btn-sm"><i class="fa-solid fa-xmark"></i> Close</button>
+        </div>
+      </div>
+
+      <!-- Printable area start -->
+      <div class="print-area" id="printable-invoice-content">
+        <div class="print-header">
+          <div class="print-brand-wrapper">
+            <div id="print-logo-container" class="print-logo-box hidden"></div>
+            <div class="print-company">
+              <h2>INVOICEFLOW</h2>
+              <p>Billing and Inventory Management Solutions</p>
+              <p>Dehradun, Uttarakhand, India</p>
+            </div>
+          </div>
+          <div class="print-invoice-meta">
+            <h1>INVOICE</h1>
+            <p><strong>Invoice #:</strong> <span id="p-invoice-num">-</span></p>
+            <p><strong>Date:</strong> <span id="p-invoice-date">-</span></p>
+            <p><strong>Payment Status:</strong> <span id="p-invoice-status" class="status-badge">-</span></p>
+          </div>
+        </div>
+
+        <hr class="print-divider">
+
+        <div class="print-billing-details">
+          <div class="bill-to">
+            <h3>Billed To:</h3>
+            <p><strong>Name:</strong> <span id="p-customer-name">-</span></p>
+            <p><strong>Phone:</strong> <span id="p-customer-phone">-</span></p>
+            <p><strong>Email:</strong> <span id="p-customer-email">-</span></p>
+            <p><strong>Address:</strong> <span id="p-customer-address">-</span></p>
+          </div>
+          <div class="bill-from">
+            <h3>Issued By:</h3>
+            <p><strong>System Admin:</strong> <span id="p-billed-by">-</span></p>
+            <p><strong>Billing Terminal:</strong> Dehradun Main Store</p>
+          </div>
+        </div>
+
+        <table class="print-items-table">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Product / Description</th>
+              <th>Qty</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="p-items-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+
+        <div class="print-totals-box">
+          <div class="totals-col">
+            <p><strong>Payment Method:</strong> <span id="p-payment-method">-</span></p>
+            <p><strong>Ref / Transaction ID:</strong> <span id="p-payment-ref">-</span></p>
+          </div>
+          <div class="totals-col text-right">
+            <p>Subtotal: <span id="p-subtotal">₹0.00</span></p>
+            <p>Discount: <span id="p-discount">₹0.00</span></p>
+            <p>GST Amount: <span id="p-gst">₹0.00</span></p>
+            <hr>
+            <h2>Total: <span id="p-total">₹0.00</span></h2>
+          </div>
+        </div>
+
+        <div class="print-footer">
+          <p>Thank you for your business!</p>
+          <p>For support, contact support@invoiceflow.com</p>
+        </div>
+      </div>
+      <!-- Printable area end -->
+    </div>
+  </div>
+
+  <!-- 4. CUSTOMER HISTORY MODAL -->
+  <div id="customer-history-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-clock-rotate-left"></i> Customer Purchase History</h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <h4 id="history-customer-name">Customer: Loading...</h4>
+        <div class="table-container scrollable-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Date</th>
+                <th>Amount Paid</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Application Logic Loader -->
+  <script src="app.js"></script>
+</body>
+</html>

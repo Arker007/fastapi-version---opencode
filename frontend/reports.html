@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports Directory - InvoiceFlow</title>
+  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+  <div id="page-content" class="hidden">
+    <div class="card reports-filter-card">
+      <div class="card-header-actions">
+        <h3><i class="fa-solid fa-chart-column"></i> Select Report</h3>
+        <div class="reports-action-buttons">
+          <button id="btn-export-report" class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+          <button id="btn-print-report" class="btn btn-outline btn-sm"><i class="fa-solid fa-print"></i> Print Report</button>
+        </div>
+      </div>
+      
+      <div class="reports-selector-row">
+        <div class="input-group">
+          <label>Choose Report Type</label>
+          <div class="dropdown-wrapper w-full">
+            <div class="button-split-group">
+              <button type="button" class="split-btn-main" id="btn-reports-indicator">
+                <i class="fa-solid fa-chart-line"></i> <span id="active-report-label">1. Daily Sales Report</span>
+              </button>
+              <button type="button" class="split-btn-arrow" id="reports-dropdown-toggle">
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+            </div>
+
+            <div class="dropdown-menu hidden" id="reports-dropdown-menu">
+              <button type="button" class="dropdown-item active" data-report="daily_sales">1. Daily Sales Report</button>
+              <button type="button" class="dropdown-item" data-report="monthly_sales">2. Monthly Sales Report</button>
+              <button type="button" class="dropdown-item" data-report="gst_report">3. GST Report</button>
+              <button type="button" class="dropdown-item" data-report="stock_availability">4. Stock Availability Report</button>
+              <button type="button" class="dropdown-item" data-report="low_stock_alert">5. Low Stock Alert Report</button>
+              <button type="button" class="dropdown-item" data-report="invoice_report">6. Invoice Report</button>
+            </div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="report-search">Search/Filter Grid</label>
+          <search-bar input-id="report-search" placeholder="Type to filter rows..." style="width: 100%;"></search-bar>
+        </div>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <h3 id="report-table-title">Report Title</h3>
+      <div class="table-container scrollable-table large-viewport" id="report-print-area">
+        <table id="reports-table">
+          <thead id="reports-thead">
+            <!-- Dynamic Headers -->
+          </thead>
+          <tbody id="reports-tbody">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="common.js?v=2.0.6"></script>
+  <script src="reports.js?v=2.0.6"></script>
+</body>
+</html>

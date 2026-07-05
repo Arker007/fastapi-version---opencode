@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - InvoiceFlow</title>
+  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+  <div id="page-content" class="hidden">
+    <div class="admin-grid">
+      <!-- Left Side: User / Staff Accounts Administration -->
+      <div class="card admin-users-card">
+        <h3><i class="fa-solid fa-user-gear"></i> User Accounts (Staff)</h3>
+        
+        <div class="table-container" style="margin-bottom: 20px; overflow: visible;">
+          <table>
+            <thead>
+              <tr>
+                <th>Fullname</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-tbody">
+              <!-- Dynamic staff accounts -->
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="divider">
+
+        <h4>Create New User Account</h4>
+        <form id="admin-create-user-form" style="margin-top: 15px;">
+          <div class="input-group">
+            <label for="admin-user-fullname">Full Name</label>
+            <input type="text" id="admin-user-fullname" required placeholder="e.g. Ramesh Kumar">
+          </div>
+          <div class="grid-2-col">
+            <div class="input-group">
+              <label for="admin-user-username">Username</label>
+              <input type="text" id="admin-user-username" required placeholder="e.g. ramesh">
+            </div>
+            <div class="input-group">
+              <label>Role</label>
+              <div class="dropdown-wrapper w-full">
+                <div class="button-split-group">
+                  <button type="button" class="split-btn-main" id="btn-admin-role-indicator">
+                    <i class="fa-solid fa-user"></i> <span id="active-admin-role-label">Sales Staff</span>
+                  </button>
+                  <button type="button" class="split-btn-arrow" id="admin-role-dropdown-toggle">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </button>
+                </div>
+                <input type="hidden" id="admin-user-role-id" value="staff">
+                <div class="dropdown-menu hidden" id="admin-role-dropdown-menu">
+                  <button type="button" class="dropdown-item active" data-role="staff">
+                    <i class="fa-solid fa-user"></i> Sales Staff
+                  </button>
+                  <button type="button" class="dropdown-item" data-role="admin">
+                    <i class="fa-solid fa-user-shield"></i> System Administrator
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+           <div class="input-group">
+            <label for="admin-user-password">Password</label>
+            <div class="input-field">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="admin-user-password" required placeholder="Password" style="padding-right: 42px;">
+              <button type="button" id="toggle-create-password" class="input-field-action-btn" title="Show Password">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-secondary btn-block" style="margin-top: 15px;">Create Account</button>
+        </form>
+      </div>
+
+      <!-- Right Side: System Settings and Defaults -->
+      <div class="card admin-settings-card">
+        <h3><i class="fa-solid fa-sliders"></i> Global System Settings</h3>
+        
+        <form id="admin-settings-form">
+          <div class="input-group">
+            <label for="settings-company-name">Company / Store Name *</label>
+            <input type="text" id="settings-company-name" required placeholder="e.g. SuperMart Ltd">
+          </div>
+          <div class="input-group">
+            <label for="settings-company-address">Store Address *</label>
+            <textarea id="settings-company-address" rows="3" required placeholder="Full billing address..."></textarea>
+          </div>
+          <div class="grid-2-col">
+            <div class="input-group">
+              <label for="settings-company-phone">Contact Phone *</label>
+              <input type="text" id="settings-company-phone" required placeholder="e.g. +91 98765...">
+            </div>
+            <div class="input-group">
+              <label for="settings-company-email">Billing Email *</label>
+              <input type="email" id="settings-company-email" required placeholder="e.g. bill@shop.com">
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="settings-default-gst">Default GST Tax Rate (%) *</label>
+            <input type="number" id="settings-default-gst" min="0" required placeholder="e.g. 18">
+          </div>
+          <div class="input-group">
+            <label>Company Logo (Optional)</label>
+            <div style="display: flex; gap: 16px; align-items: center; margin-top: 8px;">
+              <input type="file" id="settings-company-logo-input" accept="image/*" style="display: none;">
+              
+              <!-- Square Logo Uploader Button -->
+              <button type="button" id="btn-upload-logo-trigger" class="logo-uploader-btn" title="Upload/Change Company Logo">
+                <div id="settings-logo-preview" class="logo-uploader-content">
+                  <i class="fa-solid fa-cloud-arrow-up uploader-icon"></i>
+                  <span class="uploader-text">Upload</span>
+                </div>
+              </button>
+              
+              <button type="button" id="btn-remove-logo" class="btn btn-outline text-danger hidden" style="padding: 8px 12px; font-size: 0.85rem; border-color: rgba(239, 68, 68, 0.2);">
+                <i class="fa-solid fa-trash-can"></i> Remove
+              </button>
+            </div>
+            <input type="hidden" id="settings-company-logo-base64">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 10px;">
+            <i class="fa-solid fa-floppy-disk"></i> Save Configurations
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="common.js?v=2.0.6"></script>
+  <script src="admin-panel.js?v=2.0.6"></script>
+</body>
+</html>

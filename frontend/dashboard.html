@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - InvoiceFlow</title>
+  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js loaded only for dashboard -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  
+  <div id="page-content" class="hidden">
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <kpi-card id="kpi-sales-card" variant="sales" icon="fa-indian-rupee-sign" label="Total Sales" value-id="kpi-sales"></kpi-card>
+      <kpi-card id="kpi-bills-card" variant="bills" icon="fa-file-invoice" label="Invoices" value-id="kpi-bills"></kpi-card>
+      <kpi-card id="kpi-products-card" variant="products" icon="fa-boxes-stacked" label="Products" value-id="kpi-products"></kpi-card>
+      <kpi-card id="kpi-low-stock-card" variant="warning-card" icon="fa-triangle-exclamation" label="Low Stock Items" value-id="kpi-low-stock"></kpi-card>
+    </div>
+
+    <!-- Row 1: Sales Chart & Recent Invoices -->
+    <div class="dashboard-grid">
+      <div class="card chart-card">
+        <h3><i class="fa-solid fa-chart-line"></i> Sales Performance (Last 7 Days)</h3>
+        <div class="chart-container">
+          <canvas id="salesChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card recent-card">
+        <div class="card-header-actions">
+          <h3><i class="fa-solid fa-receipt"></i> Recent Invoices</h3>
+          <a href="/invoices" class="btn btn-text">View All <i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+        <div class="table-container scrollable-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice No</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recent-invoices-tbody">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Category Breakdown & Top Selling Products -->
+    <div class="dashboard-grid second-row">
+      <div class="card chart-card">
+        <h3><i class="fa-solid fa-chart-pie"></i> Sales by Category</h3>
+        <div class="chart-container pie-container">
+          <canvas id="categoryChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card top-selling-card">
+        <div class="card-header-actions">
+          <h3><i class="fa-solid fa-fire"></i> Top Selling Products</h3>
+          <a href="/products" class="btn btn-text">View All <i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Sold Qty</th>
+                <th>Revenue</th>
+              </tr>
+            </thead>
+            <tbody id="top-products-tbody">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="common.js?v=2.0.6"></script>
+  <script src="dashboard.js?v=2.0.6"></script>
+</body>
+</html>
