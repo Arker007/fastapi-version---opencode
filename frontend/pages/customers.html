@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customers CRM - InvoiceFlow</title>
-  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <link rel="stylesheet" href="/css/style.css">
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,9 +17,12 @@
     <div class="card table-card">
       <div class="card-header-actions">
         <h3><i class="fa-solid fa-users"></i> Customers Registry</h3>
-        <button id="btn-add-customer-modal" class="btn btn-secondary">
-          <i class="fa-solid fa-user-plus"></i> Register Customer
-        </button>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <search-bar input-id="customer-search" placeholder="Search customers..." style="max-width: 300px;"></search-bar>
+          <button id="btn-add-customer-modal" class="btn btn-secondary">
+            <i class="fa-solid fa-user-plus"></i> Register Customer
+          </button>
+        </div>
       </div>
       <div class="table-container" style="overflow: visible;">
         <table>
@@ -91,7 +94,7 @@
     </modal-dialog>
   </div>
 
-  <script src="common.js?v=2.0.6"></script>
-  <script src="customers.js?v=2.0.6"></script>
+  <script src="/js/common.js?v=2.0.6"></script>
+  <script src="/js/views/customers.js?v=2.0.6"></script>
 </body>
 </html>

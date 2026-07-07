@@ -17,6 +17,8 @@
   }
 
   function bindCustomersEvents() {
+    window.APP.setupTableSearch('customer-search', 'customers-tbody');
+
     // Register Customer modal trigger
     const addCustomerBtn = document.getElementById('btn-add-customer-modal');
     if (addCustomerBtn) addCustomerBtn.addEventListener('click', () => openCustomerModal());
@@ -24,22 +26,6 @@
     // Customer Form Submit
     const customerForm = document.getElementById('customer-form');
     if (customerForm) customerForm.addEventListener('submit', handleSaveCustomer);
-
-    // Actions dropdown toggler helper
-    window._toggleActionsMenu = (btn) => {
-      document.querySelectorAll('.actions-dropdown-menu').forEach(m => {
-        if (m !== btn.nextElementSibling) m.classList.add('hidden');
-      });
-      const menu = btn.nextElementSibling;
-      if (menu) menu.classList.toggle('hidden');
-    };
-
-    // Close actions menus when clicking elsewhere
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.actions-dropdown-wrapper')) {
-        document.querySelectorAll('.actions-dropdown-menu').forEach(m => m.classList.add('hidden'));
-      }
-    });
 
     // Expose helpers globally for buttons
     window._editCustomer = (id) => editCustomer(id);

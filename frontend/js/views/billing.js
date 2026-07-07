@@ -26,6 +26,11 @@
       populateProductSelect();
       populateCustomerSelect();
       renderCart();
+
+      const taxLabel = document.getElementById('billing-tax-label');
+      if (taxLabel && window.APP.STATE.settings.tax_label) {
+        taxLabel.textContent = window.APP.STATE.settings.tax_label;
+      }
     } catch (err) {
       console.error('Billing load error:', err);
       showToast('Failed to load billing data', 'error');
@@ -47,26 +52,6 @@
         STATE.products.map(p =>
           `<button type="button" class="dropdown-item" data-product="${p.id}">${esc(p.name)} (${esc(p.sku)})</button>`
         ).join('');
-      
-      // Bind click events on custom dropdown items
-      menu.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', () => {
-          menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          menu.classList.add('hidden');
-
-          // Sync back to hidden native select
-          const productId = item.dataset.product;
-          prodSelect.value = productId;
-          
-          // Trigger change event programmatically so that billing.js event listener fires
-          prodSelect.dispatchEvent(new Event('change'));
-
-          // Update active dropdown label
-          const label = document.getElementById('active-product-label');
-          if (label) label.textContent = item.textContent.trim();
-        });
-      });
     }
   }
 
@@ -86,33 +71,30 @@
         STATE.customers.map(c =>
           `<button type="button" class="dropdown-item" data-customer="${c.id}">${esc(c.name)} (${esc(c.phone)})</button>`
         ).join('');
-      
-      // Bind click events on custom dropdown items
-      menu.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', () => {
-          menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          menu.classList.add('hidden');
-
-          // Sync back to hidden native select
-          const customerId = item.dataset.customer;
-          custSelect.value = customerId;
-          
-          // Trigger change event programmatically
-          custSelect.dispatchEvent(new Event('change'));
-
-          // Update active dropdown label
-          const label = document.getElementById('active-customer-label');
-          if (label) label.textContent = item.textContent.trim();
-        });
-      });
     }
   }
 
 
   function bindBillingEvents() {
-    setupLocalDropdown('billing-product-dropdown-toggle', 'billing-product-dropdown-menu');
-    setupLocalDropdown('billing-customer-dropdown-toggle', 'billing-customer-dropdown-menu');
+    setupLocalDropdown('billing-product-dropdown-toggle', 'billing-product-dropdown-menu', (item) => {
+      const select = document.getElementById('billing-product-select');
+      if (select) {
+        select.value = item.dataset.product || '';
+        select.dispatchEvent(new Event('change'));
+      }
+      const label = document.getElementById('active-product-label');
+      if (label) label.textContent = item.textContent.trim();
+    });
+
+    setupLocalDropdown('billing-customer-dropdown-toggle', 'billing-customer-dropdown-menu', (item) => {
+      const select = document.getElementById('billing-customer-select');
+      if (select) {
+        select.value = item.dataset.customer || '';
+        select.dispatchEvent(new Event('change'));
+      }
+      const label = document.getElementById('active-customer-label');
+      if (label) label.textContent = item.textContent.trim();
+    });
 
     const productSelect = document.getElementById('billing-product-select');
     if (productSelect) {
@@ -147,11 +129,16 @@
       if (refGroup) {
         refGroup.classList.toggle('hidden', ['cash', 'credit'].includes(STATE.currentPaymentMethod));
       }
-      const icons = { cash: 'fa-money-bill-wave', upi: 'fa-qrcode', card: 'fa-credit-card', credit: 'fa-handshake' };
+      const icons = { cash: 'fa-money-bill-wave', credit: 'fa-handshake' };
       const indicator = document.getElementById('btn-payment-indicator');
       if (indicator) {
         indicator.innerHTML = `<i class="fa-solid ${icons[STATE.currentPaymentMethod] || 'fa-circle-question'}"></i> <span id="active-payment-label">${item.textContent.trim()}</span>`;
       }
+    });
+
+    document.getElementById('btn-payment-indicator')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('payment-dropdown-toggle')?.click();
     });
 
   }

@@ -30,8 +30,7 @@
     });
 
 
-    const reportSearch = document.getElementById('report-search');
-    if (reportSearch) reportSearch.addEventListener('input', filterReportTable);
+    window.APP.setupTableSearch('report-search', 'reports-tbody');
 
     const exportCsvBtn = document.getElementById('btn-export-report');
     if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportReportCSV);
@@ -41,15 +40,23 @@
       printReportBtn.addEventListener('click', () => {
         const area = document.getElementById('report-print-area');
         if (!area) return;
-        const w = window.open('', '_blank');
-        w.document.write(`<html><head><title>Report</title>
-          <link rel="stylesheet" href="style.css">
-          <style>body{background:#fff;color:#000;padding:40px;font-family:'Inter',sans-serif}
-          table{width:100%;border-collapse:collapse}th,td{padding:8px 12px;border:1px solid #ddd;text-align:left;font-size:12px}
-          th{background:#f5f5f5} @media print{body{padding:0}}</style>
-          </head><body><h2>${document.getElementById('report-table-title')?.textContent || 'Report'}</h2>${area.outerHTML}
-          <script>setTimeout(()=>window.print(),400)<\/script></body></html>`);
-        w.document.close();
+        const titleText = document.getElementById('report-table-title')?.textContent || 'Report';
+        const w = window.open('/print-invoice', '_blank');
+        w.addEventListener('load', () => {
+          w.document.getElementById('invoice-slot').innerHTML = `
+            <div class="print-area">
+              <div class="print-header" style="margin-bottom: 20px;">
+                <div class="print-company">
+                  <h2>${titleText}</h2>
+                  <p>Generated on ${new Date().toLocaleDateString('en-IN')}</p>
+                </div>
+              </div>
+              <hr class="print-divider" style="margin: 20px 0;">
+              ${area.innerHTML}
+            </div>
+          `;
+          setTimeout(() => w.print(), 500);
+        });
       });
     }
   }
@@ -115,14 +122,6 @@
     }
   }
 
-  function filterReportTable() {
-    const query = document.getElementById('report-search')?.value.toLowerCase() || '';
-    const rows = document.querySelectorAll('#reports-tbody tr');
-    rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(query) ? '' : 'none';
-    });
-  }
 
   function exportReportCSV() {
     const report = STATE._lastReport;

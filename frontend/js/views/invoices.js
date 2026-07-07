@@ -16,7 +16,7 @@
   }
 
   function bindInvoicesEvents() {
-    document.getElementById('invoice-search')?.addEventListener('input', filterInvoiceList);
+    window.APP.setupTableSearch('invoice-search', 'invoices-list-tbody');
     document.getElementById('btn-print-invoice')?.addEventListener('click', printInvoice);
     document.getElementById('btn-collect-payment')?.addEventListener('click', handleCollectPayment);
     window._viewInvoice = (id) => viewInvoice(id);
@@ -29,12 +29,12 @@
     const invoiceId = btn.dataset.invoiceId;
     const total = parseFloat(btn.dataset.total) || 0;
 
-    const method = prompt(`Collect payment of ${formatCurrency(total)}. Enter payment method (cash, card, upi):`, "cash");
+    const method = prompt(`Collect payment of ${formatCurrency(total)}. Enter payment method (cash):`, "cash");
     if (!method) return;
 
     const cleanMethod = method.trim().toLowerCase();
-    if (!['cash', 'card', 'upi'].includes(cleanMethod)) {
-      alert("Invalid payment method! Please enter cash, card, or upi.");
+    if (!['cash'].includes(cleanMethod)) {
+      alert("Invalid payment method! Please enter cash.");
       return;
     }
 
@@ -95,14 +95,6 @@
     `).join('');
   }
 
-  function filterInvoiceList() {
-    const query = document.getElementById('invoice-search')?.value.toLowerCase() || '';
-    const rows = document.querySelectorAll('#invoices-list-tbody tr');
-    rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(query) ? '' : 'none';
-    });
-  }
 
   async function viewInvoice(invoiceId) {
     try {
@@ -139,6 +131,8 @@
       setText('p-customer-email', inv.customer_email || '-');
       setText('p-customer-address', inv.customer_address || '-');
       setText('p-billed-by', inv.billed_by);
+      setText('p-billing-terminal', settings.billing_terminal || 'Dehradun Main Store');
+      setText('p-tax-label', settings.tax_label || 'GST');
 
       const companyH2 = document.querySelector('.print-company h2');
       const companyPs = document.querySelectorAll('.print-company p');
@@ -177,6 +171,7 @@
       setText('p-total', formatCurrency(inv.total));
 
       const footerPs = document.querySelectorAll('.print-footer p');
+      if (footerPs[0]) footerPs[0].textContent = settings.invoice_terms || 'Thank you for your business!';
       if (footerPs[1]) footerPs[1].textContent = `For support, contact ${settings.company_email || 'support@invoiceflow.com'}`;
 
       document.getElementById('invoice-modal')?.classList.remove('hidden');
@@ -193,7 +188,7 @@
   function printInvoice() {
     const content = document.getElementById('printable-invoice-content');
     if (!content) return;
-    const w = window.open('print-invoice.html', '_blank');
+    const w = window.open('/print-invoice', '_blank');
     w.addEventListener('load', () => {
       w.document.getElementById('invoice-slot').innerHTML = content.outerHTML;
       setTimeout(() => w.print(), 500);

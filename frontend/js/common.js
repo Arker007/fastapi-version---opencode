@@ -24,6 +24,7 @@
     hideLoader,
     closeAllModals, // ← NEW helper to close all open modals
     setupLocalDropdown, // ← Unified reusable dropdown handler
+    setupTableSearch, // ← Centralized table search filter
   };
 
 
@@ -31,6 +32,21 @@
   applyTheme();
 
   document.addEventListener('DOMContentLoaded', bootstrap);
+  window.addEventListener('popstate', handlePopState);
+
+  function handlePopState() {
+    const path = window.location.pathname.toLowerCase();
+    let targetView = 'dashboard';
+    if (path.includes('billing')) targetView = 'billing';
+    else if (path.includes('invoices')) targetView = 'invoices';
+    else if (path.includes('products')) targetView = 'products';
+    else if (path.includes('customers')) targetView = 'customers';
+    else if (path.includes('reports')) targetView = 'reports';
+    else if (path.includes('admin-panel')) targetView = 'admin-panel';
+    else if (path.includes('logs')) targetView = 'logs';
+
+    switchView(targetView, window.location.pathname, false);
+  }
 
   function bootstrap() {
     const path = window.location.pathname.toLowerCase();
@@ -272,6 +288,17 @@
       });
     }
 
+    // Intercept sidebar navigation for SPA routing
+    document.addEventListener('click', (e) => {
+      const navLink = e.target.closest('.sidebar-nav .nav-item');
+      if (navLink) {
+        e.preventDefault();
+        const targetView = navLink.dataset.view;
+        const href = navLink.getAttribute('href');
+        switchView(targetView, href);
+      }
+    });
+
     // Modal close listeners – using closest() to handle nested clicks
     document.addEventListener('click', (e) => {
       const closeBtn = e.target.closest('.btn-close-modal');
@@ -284,6 +311,29 @@
       const overlay = e.target.closest('.modal-overlay');
       if (overlay && e.target === overlay) {
         overlay.classList.add('hidden');
+      }
+    });
+
+    // Global actions menu toggler helper
+    window._toggleActionsMenu = (btn) => {
+      document.querySelectorAll('.actions-dropdown-menu').forEach(m => {
+        if (m !== btn.nextElementSibling) m.classList.add('hidden');
+      });
+      const menu = btn.nextElementSibling;
+      if (menu) menu.classList.toggle('hidden');
+    };
+
+    // Close actions menus when clicking elsewhere
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.actions-dropdown-wrapper')) {
+        document.querySelectorAll('.actions-dropdown-menu').forEach(m => m.classList.add('hidden'));
+      }
+    });
+
+    // Close modals when pressing Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAllModals();
       }
     });
   }
@@ -314,21 +364,98 @@
   }
 
   // Loader Overlay
-  function showLoader() {
+  function showLoader(title = "Verifying Session...", subtitle = "Connecting to billing & inventory portal") {
     let loader = document.getElementById('app-loader');
     if (!loader) {
       loader = document.createElement('div');
       loader.id = 'app-loader';
       loader.className = 'login-wrapper';
       loader.style.zIndex = '9999';
-      loader.innerHTML = `
-        <div style="text-align: center; color: var(--text-main);">
-          <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 3rem; color: var(--primary); margin-bottom: 16px;"></i>
-          <h3 style="font-family: var(--font-header); font-weight: 600; font-size: 1.25rem;">Verifying Session...</h3>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">Connecting to billing & inventory portal</p>
-        </div>
-      `;
       document.body.appendChild(loader);
+    }
+    loader.innerHTML = `
+      <div style="text-align: center; color: var(--text-main);">
+        <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 3rem; color: var(--primary); margin-bottom: 16px;"></i>
+        <h3 style="font-family: var(--font-header); font-weight: 600; font-size: 1.25rem;">${esc(title)}</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">${esc(subtitle)}</p>
+      </div>
+    `;
+  }
+
+  // SPA Routing view switcher
+  async function switchView(targetView, href, pushToHistory = true) {
+    showLoader("Loading view...", "Preparing workspace");
+    try {
+      const res = await fetch(href);
+      if (!res.ok) throw new Error(`Failed to load page: ${res.statusText}`);
+      const htmlText = await res.text();
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const newContent = doc.getElementById('page-content');
+
+      const viewport = document.getElementById('main-content-viewport');
+      if (viewport && newContent) {
+        viewport.innerHTML = '';
+        newContent.classList.remove('hidden');
+        viewport.appendChild(newContent);
+      }
+
+      // Update active navigation item in sidebar
+      document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.view === targetView);
+      });
+
+      // Update header title
+      const viewTitles = {
+        dashboard: 'Dashboard',
+        billing: 'Create Invoice',
+        invoices: 'Invoices List',
+        products: 'Products & Stock',
+        customers: 'Customers',
+        reports: 'Reports Directory',
+        'admin-panel': 'Admin Panel',
+        logs: 'System Logs'
+      };
+      const titleEl = document.getElementById('view-title');
+      if (titleEl) titleEl.textContent = viewTitles[targetView] || 'Dashboard';
+
+      if (pushToHistory) {
+        window.history.pushState(null, '', href);
+      }
+
+      // Find and load the view script
+      const scripts = doc.querySelectorAll('script');
+      let viewScriptSrc = '';
+      scripts.forEach(script => {
+        const src = script.getAttribute('src');
+        if (src && src.includes('/js/views/')) {
+          viewScriptSrc = src;
+        }
+      });
+
+      if (viewScriptSrc) {
+        // Remove existing script tag to reload/re-run it cleanly
+        const cleanSrc = viewScriptSrc.split('?')[0];
+        const existingScript = document.querySelector(`script[src^="${cleanSrc}"]`);
+        if (existingScript) existingScript.remove();
+
+        const newScript = document.createElement('script');
+        newScript.src = viewScriptSrc;
+        newScript.onload = () => {
+          hideLoader();
+          document.dispatchEvent(new CustomEvent('page-ready'));
+        };
+        document.body.appendChild(newScript);
+      } else {
+        hideLoader();
+        document.dispatchEvent(new CustomEvent('page-ready'));
+      }
+    } catch (err) {
+      hideLoader();
+      console.error('SPA Navigation error:', err);
+      // Fallback: full reload if fetch/parsing fails
+      window.location.href = href;
     }
   }
 
@@ -428,9 +555,12 @@
   // Formatter helpers
   // ===========================================================================
   function formatCurrency(val) {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency', currency: 'INR',
-    }).format(val || 0);
+    const symbol = (window.APP && window.APP.STATE && window.APP.STATE.settings && window.APP.STATE.settings.currency_symbol) || '₹';
+    const num = parseFloat(val || 0).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    return `${symbol}${num}`;
   }
 
   function formatDate(isoStr) {
@@ -489,9 +619,21 @@
     const menu = document.getElementById(menuId);
     if (!toggle || !menu) return;
 
+    const wrapper = toggle.closest('.dropdown-wrapper');
+
     toggle.addEventListener('click', (e) => {
       e.stopPropagation();
-      menu.classList.toggle('hidden');
+      const isHidden = menu.classList.toggle('hidden');
+      if (wrapper) {
+        wrapper.classList.toggle('dropdown-open', !isHidden);
+      }
+      // Close all other dropdown wrappers
+      document.querySelectorAll('.dropdown-wrapper').forEach(w => {
+        if (w !== wrapper) {
+          w.classList.remove('dropdown-open');
+          w.querySelector('.dropdown-menu')?.classList.add('hidden');
+        }
+      });
     });
 
     menu.addEventListener('click', (e) => {
@@ -500,11 +642,33 @@
       menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
       item.classList.add('active');
       menu.classList.add('hidden');
+      if (wrapper) {
+        wrapper.classList.remove('dropdown-open');
+      }
       if (onSelect) onSelect(item);
     });
 
     document.addEventListener('click', () => {
       menu.classList.add('hidden');
+      if (wrapper) {
+        wrapper.classList.remove('dropdown-open');
+      }
+    });
+  }
+
+  // Helper: setup client-side search filtering on any table tbody
+  function setupTableSearch(inputId, tbodyId) {
+    const input = document.getElementById(inputId);
+    const tbody = document.getElementById(tbodyId);
+    if (!input || !tbody) return;
+
+    input.addEventListener('input', () => {
+      const query = input.value.toLowerCase();
+      const rows = tbody.querySelectorAll('tr');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
     });
   }
 

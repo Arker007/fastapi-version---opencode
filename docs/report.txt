@@ -1,0 +1,2414 @@
+Project Report
+On
+ 
+“Billing and Inventory Management System”
+ 
+Submitted to the Uttaranchal University in partial fulfilment of the requirements for the award of the Degree of 
+BACHELOR OF COMPUTER APPLIC ATIONS
+ 
+Submitted by 
+ 
+VISHAL SHARMA
+(Learner ID: 2313020604)
+ 
+ 
+Under the Guidance of 
+ 
+Kartik Kala, Web developer
+ 
+ 
+
+ 
+ 
+ 
+ 
+UTTARANCHAL UNIVERSITY, DEHRADUN
+
+
+Acknowledgement
+I am deeply grateful to all those who have contributed to the successful completion of this project. 
+First and foremost, I would like to express my sincere gratitude to my guide, Kartik Kala, for their invaluable guidance, constant support, and encouragement throughout the duration of this project. Their expertise and constructive feedback have significantly contributed to shaping the direction of this research, and I am truly thankful for their patience and insights. 
+I would also like to extend my heartfelt thanks to Centre for Distance and Online Education (CDOE), Uttaranchal University for providing a conducive environment for learning and research. The resources and knowledge imparted have been instrumental in the successful completion of this project.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Declaration
+ 
+I, Vishal Sharma, declare that the project titled 'Billing and Inventory Management System' is an original work carried out by me under the guidance of Kartik Kala. The work is not copied from any source, and no part of the project has been submitted elsewhere for any other degree.
+ 
+ 
+ 
+ 
+
+           Signature of Learner: 
+Name of Learner: Vishal Sharma
+           Learner -Id: 2313020604
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+Certificate of Originality 
+ 
+This is to certify that the project titled Billing and Inventory Management System submitted by Vishal Sharma, 2313020604, in partial fulfillment of the requirements for the degree of Bachelor of Computer Applications, is an original work carried out under my supervision.
+ 
+ 
+ 
+ 
+ 
+Kartik Kala
+Web Developer
+Web Development Team
+Digiq Infotech Private Limited
+26/01/2026
+
+
+
+
+
+
+
+Acknowledgement	2
+Declaration	2
+Certificate of Originality	4
+CHAPTER 1: INTRODUCTION	6
+1.1 GENERAL OVERVIEW	6
+1.2 RATIONALE	7
+1.3 EXISTING SYSTEM AND DRAWBACKS	7
+1.4 PROPOSED SYSTEM	9
+1.5 PROBLEM STATEMENT	11
+1.6 SCOPE OF THE PROJECT	11
+1.7 ADVANTAGES OF THE PROPOSED SYSTEM	12
+1.8 LIMITATIONS	12
+1.9 INDUSTRY BACKGROUND	13
+1.10 SOCIAL AND ECONOMIC IMPACT	14
+1.11 RELEVANCE TO BCA CURRICULUM	15
+CHAPTER 2: OBJECTIVE	16
+2.1 PRIMARY OBJECTIVE	16
+2.2 FUNCTIONAL OBJECTIVES	16
+2.3 SECURITY AND ACCESS OBJECTIVES	18
+2.4 DATA MANAGEMENT OBJECTIVES	18
+2.5 USER EXPERIENCE OBJECTIVES	19
+2.6 ADMINISTRATIVE OBJECTIVES	19
+2.7 TECHNICAL OBJECTIVES	20
+2.8 ACADEMIC OBJECTIVES	20
+2.9 BUSINESS OBJECTIVES	21
+2.10 QUALITY OBJECTIVES	21
+CHAPTER 3: SYSTEM ANALYSIS	23
+3.1 IDENTIFICATION OF NEED	23
+3.2 PRELIMINARY INVESTIGATION	24
+3.3 FEASIBILITY STUDY	26
+3.3.1 TECHNICAL FEASIBILITY	26
+3.3.2 OPERATIONAL FEASIBILITY	27
+3.3.3 ECONOMIC FEASIBILITY	27
+3.4 PROJECT PLANNING	28
+3.5. PROJECT SCHEDULING	29
+3.5.1 Overview	29
+3.5.2 GANTT CHART	30
+3.5.3 PERT CHART	30
+3.6 SOFTWARE REQUIREMENT SPECIFICATION (SRS)	31
+3.6.1 FUNCTIONAL REQUIREMENTS	31
+3.6.2 NON-FUNCTIONAL REQUIREMENTS	34
+1. Performance Requirements	34
+2. Security Requirements	34
+3. Reliability Requirements	35
+4. Future Growth Requirements	35
+5. Usability Requirements	35
+6. Compatibility Requirements	36
+3.7 SYSTEM SPECIFICATION	36
+Software Requirements	36
+Hardware Requirements	37
+3.8 DATA MODELS	38
+3.8.1 CLASS DIAGRAM	38
+3.8.2 ACTIVITY DIAGRAM	42
+3.8.3 SEQUENCE DIAGRAM	43
+3.8.4 ENTITY RELATIONSHIP DIAGRAM (ER DIAGRAM)	44
+3.8.5 USE CASE DIAGRAM	48
+3.9. Risk Analysis	49
+Technical Risks	49
+Operational Risks	50
+Security Risks	50
+3.10 Assumptions and Dependencies	50
+3.11 Constraints Analysis	51
+CHAPTER 4: SYSTEM DESIGN	52
+4.1 MODULARIZATION DETAILS	52
+4.2 SYSTEM ARCHITECTURE	53
+4.3 DATA INTEGRITY AND CONSTRAINTS	54
+4.4 DATABASE DESIGN	56
+4.5 UI/UX DESIGN PRINCIPLES	58
+4.6 NAVIGATION FLOW EXPLANATION	60
+4.7 DESIGN DECISIONS AND JUSTIFICATION	61
+4.8 CORE BILLING CALCULATION MODEL	61
+CHAPTER 5: TESTING	62
+5.1. UNIT TESTING	62
+5.1.1. Test Cases Table	63
+5.2. INTEGRATION TESTING	64
+5.3. SYSTEM TESTING	64
+5.3.1. Sample Inputs & Outputs	65
+5.3.2. Error Handling Testing	65
+5.4. USER ACCEPTANCE TESTING (UAT)	66
+5.5. SECURITY TESTING	66
+5.6 Test Environment	66
+CHAPTER 6: SYSTEM SECURITY MEASURES	67
+6.1 USER AUTHENTICATION	67
+6.2 JWT TOKEN AUTHENTICATION	67
+6.3 PASSWORD SECURITY	67
+6.4 ROLE-BASED ACCESS CONTROL (RBAC)	68
+6.5 SESSION MANAGEMENT	68
+6.6 INPUT VALIDATION	68
+6.7 SQL INJECTION PREVENTION	68
+6.8 API SECURITY	68
+6.9 ACTIVITY LOGGING	68
+6.10 ERROR HANDLING AND EXCEPTION MANAGEMENT	68
+6.11 BACKUP AND DATA PROTECTION	69
+6.12 SYSTEM SECURITY ARCHITECTURE	69
+CHAPTER 7: COST ESTIMATION	69
+7.1 HARDWARE COST ESTIMATION	70
+7.2 SOFTWARE COST ESTIMATION	70
+7.3 HUMAN RESOURCE COST	70
+7.4 DEVELOPMENT COST	71
+7.5 MAINTENANCE COST	71
+7.6 COST BENEFIT ANALYSIS	71
+7.7 TOTAL PROJECT COST ESTIMATION	71
+CHAPTER 8: REPORT	72
+8.1 LOGIN PAGE	73
+8.2 DASHBOARD PAGE	73
+8.3 PRODUCT MANAGEMENT MODULE	73
+8.4 CUSTOMER MANAGEMENT MODULE	74
+8.5 INVOICE GENERATION MODULE	74
+8.6 GENERATED INVOICE REPORT	75
+8.7 INVENTORY MANAGEMENT MODULE	75
+8.8 REPORT GENERATION MODULE	76
+8.9 ACTIVITY LOG MODULE	76
+8.10 ADMINISTRATIVE MODULE	77
+8.11 API DOCUMENTATION (SWAGGER UI)	77
+SUMMARY OF GENERATED REPORTS	77
+CHAPTER 9: FUTURE SCOPE	78
+9.1 MOBILE APPLICATION SUPPORT	78
+9.2 CLOUD DEPLOYMENT	79
+9.3 BARCODE AND QR CODE INTEGRATION	79
+9.4 GST PORTAL INTEGRATION	80
+9.5 PAYMENT GATEWAY INTEGRATION	80
+9.6 MULTI-BRANCH MANAGEMENT	80
+9.7 ADVANCED INVENTORY MANAGEMENT	81
+9.8 OPTIONAL FUTURE RESEARCH: AI-BASED BUSINESS ANALYTICS	81
+9.9 NOTIFICATION SYSTEM	81
+9.10 ADVANCED REPORTING SYSTEM	82
+9.11 SECURITY ENHANCEMENTS	82
+CHAPTER 10: APPENDICES	83
+10.1. CODING (Logic Snippets)	83
+1. Staff Registration	83
+2. Login & Session Management	84
+3. Search Products	85
+4. Add to Bill / Process Sale	85
+5. Generate Invoice	86
+10.2. BIBLIOGRAPHY	86
+CHAPTER 11: CONCLUSION	88
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CHAPTER 1: INTRODUCTION
+1.1 GENERAL OVERVIEW
+In today's digital world, businesses are rapidly adopting computerized systems to manage their daily operations efficiently. However, many small and medium-sized businesses still rely on traditional methods such as handwritten bills, registers, or spreadsheet software for managing billing and inventory records. These methods are time-consuming, difficult to maintain, and often result in human errors, incorrect calculations, stock mismatches, and inefficient record management.
+The "Billing and Inventory Management System" is a web-based business management application developed to solve these problems by automating billing and inventory-related operations. The main purpose of this project is to provide a simple, secure, and efficient platform that helps businesses manage products, customers, invoices, inventory, and reports from a centralized system.
+The system is developed using FastAPI for the backend, with a frontend powered by HTML, CSS, and JavaScript. Data persistence is managed via an SQLite database. The application architecture maintains a clear separation between business logic, the presentation layer, and database operations, ensuring a modular and maintainable codebase.
+The system allows users to perform various business operations such as product management, customer management, invoice generation, payment tracking, inventory monitoring, report generation, and administrative management. The billing process becomes faster and more accurate because the system automatically calculates totals, taxes, and updates stock quantities after every transaction.
+One of the important features of this system is that it maintains a proper relationship between billing and inventory modules. Whenever an invoice is generated, the corresponding stock quantity is automatically reduced, which helps maintain accurate inventory records. The system also provides reporting features that help business owners analyze their sales and business performance.
+From an academic perspective, this project provides practical experience in software development, database design, web technologies, authentication mechanisms, and business process automation. The project combines various concepts studied during the Bachelor of Computer Applications program and demonstrates their implementation in a real-world business application.
+
+1.2 RATIONALE
+The idea of developing the Billing and Inventory Management System came from observing the problems faced by small businesses while managing their daily operations. Many local shops, retailers, wholesalers, and service providers still depend on manual record keeping methods. These methods create several challenges such as maintaining customer records, calculating bills manually, managing stock quantities, and generating reports.
+Manual billing systems require significant time and effort. Even a small mistake in calculation can affect business records and financial reports. Similarly, inventory management becomes difficult when stock updates are performed manually, which may lead to overstocking or stock shortages.
+Although many commercial billing software applications are available in the market, they are often expensive and contain features that may not be necessary for small businesses. Some software also requires specialized training and technical knowledge.
+The main objective behind developing this project was to create a simple, affordable, and user-friendly billing solution that can automate business operations while remaining easy to understand and operate. This system helps reduce manual effort, improves accuracy, and provides better control over business activities.
+In addition to solving a practical business problem, this project also provides an opportunity to apply programming concepts, database management techniques, software engineering principles, and web development technologies learned during the BCA course.
+1.3 EXISTING SYSTEM AND DRAWBACKS
+Before the implementation of computerized billing systems, businesses traditionally relied on manual methods for maintaining sales and inventory records. Even today, many small businesses continue to use these methods due to lack of technical knowledge or financial resources.
+The existing systems used by businesses can generally be divided into three categories:
+Manual Billing System
+In manual billing systems, all transactions are recorded using registers, notebooks, or printed bills. Inventory records are also maintained separately by employees. This method has several disadvantages:
+High chances of human error
+Time-consuming billing process
+Difficulty in maintaining records
+No automatic inventory updates
+Increased paperwork
+Difficulty in generating reports
+Spreadsheet-Based System
+Many businesses use spreadsheet applications such as Microsoft Excel for billing and inventory management. Although spreadsheets provide some level of automation, they still have several limitations:
+No centralized database management
+Difficult to maintain large amounts of data
+Higher probability of duplicate records
+Lack of security features
+No role-based access control
+Limited reporting capabilities
+Standalone Billing Software
+Various standalone billing software applications are available commercially. These systems provide billing functionality but often suffer from the following drawbacks:
+High software licensing costs
+Complex user interfaces
+Limited customization options
+Difficult integration with inventory systems
+Vendor dependency
+Additional maintenance costs
+Due to these limitations, there is a need for an integrated system that can efficiently manage billing, inventory, customers, products, and business reports through a single platform.
+1.4 PROPOSED SYSTEM
+The proposed Billing and Inventory Management System is a web-based application designed to automate and simplify business operations. The system integrates billing management, inventory management, customer management, payment processing, reporting, and administration into a single centralized platform.
+The system provides secure login functionality and role-based access control to ensure that only authorized users can access business data. It allows users to manage products, customers, invoices, payments, and inventory efficiently.
+The major features of the proposed system include:
+User Authentication Module
+Secure user registration and login
+Authentication using access tokens
+User session management
+Role-based authorization
+Product Management Module
+Add products
+Update product information
+Delete products
+Manage product categories
+Maintain pricing information
+Customer Management Module
+Add customer details
+Update customer records
+Store customer contact information
+Track customer transactions
+Billing Module
+Create invoices
+Automatic GST calculation
+Calculate discounts
+Generate printable invoices
+Maintain billing history
+Inventory Management Module
+Manage stock quantities
+Automatic stock updates
+Low stock notifications
+Inventory monitoring
+Report Management Module
+Daily sales reports
+Monthly sales reports
+Product reports
+Customer reports
+GST reports
+Administrative Module
+User management
+Activity monitoring
+System logs
+Dashboard summary metrics
+The proposed system helps businesses reduce manual work, improve accuracy, save time, and increase operational efficiency.
+1.5 PROBLEM STATEMENT
+Many small and medium businesses face problems while managing billing and inventory records due to the use of manual methods or disconnected software systems. These problems include incorrect billing calculations, stock management issues, duplicate records, delayed report generation, and poor business monitoring.
+There is a requirement for an integrated and automated system that can manage billing operations, inventory records, customer data, and business reports through a centralized platform.
+The Billing and Inventory Management System has been developed to solve these problems by providing a reliable, secure, and efficient business management solution.
+1.6 SCOPE OF THE PROJECT
+The scope of this project is limited to the development of a web-based Billing and Inventory Management System for small and medium businesses.
+The project includes the following functionalities:
+User authentication and authorization
+Product management
+Customer management
+Invoice generation
+GST calculation
+Inventory management
+Payment management
+Sales reporting
+User activity logs
+Administrative management
+Dashboard summary metrics
+The system is designed to support daily business operations and can be further expanded in future versions.
+1.7 ADVANTAGES OF THE PROPOSED SYSTEM
+The Billing and Inventory Management System provides several advantages:
+Reduces manual work
+Minimizes human errors
+Generates invoices automatically
+Maintains accurate inventory records
+Improves business efficiency
+Provides secure access control
+Generates business reports quickly
+Reduces paperwork
+Saves operational costs
+Provides centralized data management
+Supports business analysis and decision making
+These advantages make the system suitable for modern business requirements.
+1.8 LIMITATIONS
+Although the Billing and Inventory Management System provides many useful features for managing business operations, there are still some limitations in the current version of the project.
+One of the major limitations is that the system is developed as a web application and currently does not provide a dedicated mobile application. Users need internet access and a web browser to access the system.
+The project utilizes SQLite for data management, which provides an efficient, serverless solution for small to medium-sized enterprises. While suitable for the current scope, very large organizations with massive concurrent transactions may require migration to a client-server database in future iterations.
+The current version of the project also does not support barcode scanning and barcode printing features. Product entries and invoice creation are performed manually through the user interface.
+Another limitation is that the system does not currently provide direct integration with GST filing portals, accounting software, or third-party payment gateways. These features can be implemented in future versions.
+The project also supports a limited number of user roles and does not include advanced enterprise-level features such as multi-branch management, warehouse management, supplier management, or cloud synchronization.
+Despite these limitations, the current system successfully fulfills the primary objective of automating billing and inventory operations for small and medium businesses.
+1.9 INDUSTRY BACKGROUND
+The business management software industry has experienced significant growth over the last decade due to rapid digital transformation across various sectors. Businesses are increasingly adopting software solutions to automate their daily operations, improve productivity, and reduce operational costs.
+Billing and inventory management systems have become essential tools for retailers, wholesalers, distributors, manufacturers, and service providers. These systems help organizations maintain accurate business records, manage stock levels, generate invoices, and analyze business performance.
+In India, the implementation of the Goods and Services Tax (GST) has further increased the demand for computerized billing systems. Businesses are now required to maintain accurate tax records, generate GST-compliant invoices, and produce financial reports efficiently.
+Small and medium enterprises (SMEs) represent a major portion of the Indian economy, and many of these businesses are gradually shifting from manual systems to digital business management platforms. However, many commercial software solutions available in the market are expensive and complex for small businesses.
+The Billing and Inventory Management System developed in this project addresses this gap by providing a simple, affordable, and easy-to-use business management solution. The system supports essential business operations while maintaining flexibility for future expansion and feature enhancement.
+1.10 SOCIAL AND ECONOMIC IMPACT
+The implementation of digital business management systems can create positive social and economic impacts for businesses and society.
+From a social perspective, the Billing and Inventory Management System encourages the adoption of digital technologies among small businesses. It reduces dependency on manual paperwork and improves transparency in business transactions. The system also helps business owners and employees perform their work more efficiently and accurately.
+The project contributes to digital transformation by encouraging businesses to adopt computerized systems for managing their daily operations. This helps improve the technological awareness and digital literacy of business users.
+From an economic perspective, the system helps reduce operational costs by minimizing manual work and reducing errors. Faster billing processes improve customer satisfaction and increase business productivity. Accurate inventory management helps businesses avoid stock shortages and unnecessary inventory expenses.
+The system also supports better business decision-making through reporting features. Business owners can monitor sales performance, analyze customer behavior, and plan inventory requirements more effectively.
+Overall, the Billing and Inventory Management System contributes to improving business efficiency, reducing operational costs, and supporting digital business growth.
+1.11 RELEVANCE TO BCA CURRICULUM
+The Billing and Inventory Management System project is highly relevant to the Bachelor of Computer Applications curriculum because it combines concepts from multiple subjects studied during the course.
+The project applies knowledge gained from Database Management Systems (DBMS) by implementing relational database design, normalization, SQL queries, and data relationships.
+The project also utilizes concepts of Web Technologies through the implementation of HTML, CSS, JavaScript, and modern web application development techniques.
+Software Engineering concepts such as requirement analysis, system design, modular programming, testing, and documentation have been applied throughout the project development process.
+Programming concepts learned through Python programming and application development have been used extensively in the implementation of backend business logic and API development using FastAPI.
+The project also incorporates Information Security concepts through user authentication, authorization, access control, password protection, and activity logging mechanisms.
+Additionally, the project provides practical experience in:
+Database Design and Management
+Web Application Development
+Software Development Life Cycle (SDLC)
+System Analysis and Design
+Authentication and Authorization
+Business Process Automation
+Testing and Debugging
+Project Documentation
+The practical experience gained through this project helps bridge the gap between theoretical concepts and real-world software development practices. It also improves problem-solving skills, programming abilities, and software development knowledge required in the IT industry.
+This practical implementation bridges the gap between theoretical software engineering principles and real-world development practices. It demonstrates the proficiency in FastAPI, SQLite, and secure authentication required in the modern IT industry.
+CHAPTER 2: OBJECTIVE
+2.1 PRIMARY OBJECTIVE
+The primary objective of the Billing and Inventory Management System is to develop a web-based application that helps businesses manage their billing and inventory operations in an efficient and organized manner. The system is designed to automate various business processes such as product management, customer management, invoice generation, inventory tracking, payment management, and report generation.
+The project aims to replace traditional manual methods with a digital platform that reduces paperwork, minimizes human errors, and improves business productivity. The system provides a centralized environment where all business information can be stored, managed, and accessed securely.
+Another important objective of this project is to apply the concepts learned during the Bachelor of Computer Applications course to develop a practical software solution for solving real-world business problems.
+2.2 FUNCTIONAL OBJECTIVES
+The functional objectives define the operations and services that the system is expected to perform during normal business activities.
+The Billing and Inventory Management System has been designed to achieve the following functional objectives:
+User Management
+Allow users to register and login securely.
+Maintain user profiles and access permissions.
+Support role-based access control.
+Product Management
+Add new products to the inventory.
+Update product information.
+Delete products when required.
+Manage product categories and pricing.
+Customer Management
+Add and manage customer records.
+Store customer contact details.
+Maintain customer purchase history.
+Billing Management
+Generate invoices automatically.
+Calculate GST and discounts.
+Generate printable bills.
+Store invoice history.
+Inventory Management
+Maintain stock records.
+Update stock automatically after sales.
+Monitor low stock levels.
+Prevent inventory mismatches.
+Report Management
+Generate sales reports.
+Generate inventory reports.
+Generate GST reports.
+Generate customer transaction reports.
+These functionalities help automate daily business operations and improve overall efficiency.
+2.3 SECURITY AND ACCESS OBJECTIVES
+Security is one of the most important aspects of any business management system because it handles sensitive customer and business information.
+The security objectives of this project include:
+Providing secure user authentication.
+Protecting user credentials from unauthorized access.
+Implementing role-based authorization.
+Restricting access to sensitive business data.
+Maintaining activity logs for monitoring purposes.
+Preventing unauthorized modifications.
+Protecting business records from accidental deletion.
+The system ensures that only authorized users can access specific modules according to their assigned roles.
+2.4 DATA MANAGEMENT OBJECTIVES
+The Billing and Inventory Management System handles large amounts of business information such as customer records, product information, invoices, payments, and inventory data.
+The objectives of data management include:
+Maintaining accurate business records.
+Reducing duplicate entries.
+Ensuring data consistency.
+Providing efficient data retrieval.
+Maintaining relationships between different entities.
+Supporting report generation.
+Preventing data loss and corruption.
+A relational database structure has been implemented to maintain proper data organization and improve system performance.
+2.5 USER EXPERIENCE OBJECTIVES
+The system has been designed with a focus on simplicity and ease of use.
+The user experience objectives include:
+Providing a simple and attractive interface.
+Reducing the complexity of business operations.
+Making navigation easy and intuitive.
+Providing meaningful error messages.
+Reducing the learning curve for users.
+Supporting responsive design principles.
+Improving overall user satisfaction.
+The user interface has been developed in such a way that users with basic computer knowledge can operate the system without difficulty.
+2.6 ADMINISTRATIVE OBJECTIVES
+Administrative management plays an important role in maintaining system security and business operations.
+The administrative objectives of the project are:
+Managing system users.
+Monitoring business activities.
+Controlling user permissions.
+Maintaining activity logs.
+Monitoring inventory status.
+Viewing business reports.
+Managing system configurations.
+The administrative module helps maintain discipline, security, and operational efficiency within the system.
+2.7 TECHNICAL OBJECTIVES
+The technical objective of this project is to architect a secure, extendable, and maintainable web application utilizing modern backend and frontend technologies.
+The major technical objectives include:
+Engineering RESTful APIs using the FastAPI framework.
+Implementing stateless security through JWT (JSON Web Tokens).
+Designing an well-structured relational database with SQLite.
+Maintaining modular code architecture.
+Supporting future growth and new features.
+Implementing business logic efficiently.
+Providing high performance and reliability.
+Following software engineering principles.
+The project also aims to provide practical experience in modern backend development technologies.
+2.8 ACADEMIC OBJECTIVES
+The project serves as an academic exercise that helps apply theoretical concepts learned during the BCA program.
+The academic objectives include:
+Understanding software development life cycle.
+Applying database management concepts.
+Implementing web application development.
+Learning authentication and authorization mechanisms.
+Understanding system analysis and design.
+Practicing software testing techniques.
+Improving programming skills.
+Learning project documentation standards.
+The project helps bridge the gap between theoretical learning and practical implementation.
+2.9 BUSINESS OBJECTIVES
+The Billing and Inventory Management System has been designed to support the operational requirements of small and medium businesses.
+The business objectives include:
+Reducing operational costs.
+Increasing business productivity.
+Improving billing accuracy.
+Maintaining inventory efficiency.
+Improving customer management.
+Supporting business decision-making.
+Increasing profitability.
+Supporting business growth.
+The system helps businesses improve their performance by automating repetitive tasks and reducing manual effort.
+2.10 QUALITY OBJECTIVES
+Quality objectives focus on developing a reliable, maintainable, and secure software system.
+The quality objectives of this project are:
+Providing accurate calculations.
+Ensuring system reliability.
+Maintaining data integrity.
+Improving system performance.
+Supporting future growth and new features.
+Providing better security.
+Maintaining code quality.
+Reducing system failures.
+Improving maintainability.
+Ensuring user satisfaction.
+By achieving these objectives, the Billing and Inventory Management System provides a stable and efficient business management solution.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CHAPTER 3: SYSTEM ANALYSIS
+3.1 IDENTIFICATION OF NEED
+The development of the Billing and Inventory Management System started with identifying the problems faced by small and medium-sized businesses while managing their daily operations. During observation and discussion with local business owners, it was found that many businesses still rely on manual methods for maintaining billing records and inventory information.
+Problems Faced by Business Owners
+Many businesses maintain their sales records using registers, notebooks, or spreadsheet applications. These methods create several challenges such as:
+Manual calculation errors during billing.
+Difficulty in maintaining customer records.
+Problems in tracking product inventory.
+Delay in generating reports.
+Duplicate data entries.
+Loss of important business records.
+Difficulty in monitoring business performance.
+Increased paperwork and operational costs.
+
+Problems in Inventory Management
+Inventory management is one of the most important parts of any business. In manual systems, stock updates are often delayed or forgotten, which causes:
+Stock shortages.
+Overstocking of products.
+Incorrect stock information.
+Loss of sales opportunities.
+Difficulty in inventory analysis.
+
+Need for Automation
+The increasing use of digital technologies has created the need for a business management system that can automate billing and inventory operations. Businesses require a system that can:
+Generate invoices automatically.
+Calculate GST accurately.
+Update inventory in real time.
+Maintain customer records.
+Generate business reports.
+Provide secure access control.
+Reduce manual effort.
+The Billing and Inventory Management System was developed to fulfill these requirements and provide a simple, efficient, and secure business management solution.
+3.2 PRELIMINARY INVESTIGATION
+Before starting the development process, a preliminary investigation was conducted to understand the existing business processes and identify the requirements of the proposed system.
+Study of Existing Systems
+Various billing and inventory management solutions available in the market were studied. These included:
+Manual billing systems.
+Spreadsheet-based systems.
+Standalone billing software.
+Cloud-based business management applications.
+It was observed that most existing systems either lacked inventory integration or were too expensive for small businesses.
+Requirement Analysis
+The requirements collected during the investigation phase included:
+User authentication.
+Product management.
+Customer management.
+Invoice generation.
+GST calculation.
+Inventory tracking.
+Payment management.
+Report generation.
+Administrative monitoring.
+These requirements formed the basis for the development of the proposed system.
+Scope Limitation
+Since this project was developed as part of the Bachelor of Computer Applications program, the project scope was limited to a web-based application.
+The following advanced features were excluded from the current implementation:
+Mobile applications.
+Barcode scanner integration.
+Cloud synchronization.
+GST portal integration.
+Multi-branch management.
+AI-based analytics.
+The preliminary investigation confirmed that the project was practical, useful, and feasible for implementation.
+
+3.3 FEASIBILITY STUDY
+A feasibility study was performed before starting the project development to determine whether the project could be completed successfully using the available resources, technologies, and time constraints.
+The feasibility analysis was divided into three major categories:
+Technical Feasibility
+Operational Feasibility
+Economic Feasibility
+
+3.3.1 TECHNICAL FEASIBILITY
+Technical feasibility determines whether the required technologies, tools, and technical resources are available for project development.
+The Billing and Inventory Management System uses the following technologies:
+FastAPI framework for backend development.
+HTML, CSS, and JavaScript for frontend development.
+SQLite database for data storage.
+JWT authentication for security.
+REST API architecture.
+All of these technologies are open-source, well-documented, and widely used in software development.
+The development environment required:
+Python programming language.
+Visual Studio Code editor.
+SQLite database.
+Web browser.
+Local server environment.
+Since all necessary tools and technologies were available and suitable for the project requirements, the project was considered technically feasible.
+
+3.3.2 OPERATIONAL FEASIBILITY
+Operational feasibility determines whether the system can be operated successfully by its intended users.
+The Billing and Inventory Management System has been designed with a simple and user-friendly interface. Users can perform operations such as product management, billing, inventory management, and report generation without requiring advanced technical knowledge.
+The system provides:
+Simple navigation.
+Easy-to-use forms.
+Clear error messages.
+Organized dashboard.
+Fast response times.
+The application can be operated by business owners and employees having basic computer knowledge.
+Therefore, the project is operationally feasible.
+
+3.3.3 ECONOMIC FEASIBILITY
+Economic feasibility determines whether the project can be developed within reasonable financial constraints.
+The Billing and Inventory Management System was developed using free and open-source software technologies including:
+Python
+FastAPI
+SQLite
+HTML/CSS/JavaScript
+Visual Studio Code
+GitHub
+No commercial software licenses were required during development.
+The major investment involved was the development time and effort rather than financial expenditure.
+Therefore, the project is economically feasible.
+
+3.4 PROJECT PLANNING
+Proper project planning was performed to ensure successful completion of the project within the specified timeline.
+The entire development process was divided into multiple phases:
+Requirement Analysis
+System Analysis
+System Design
+Database Design
+Frontend Development
+Backend Development
+Testing
+Documentation
+Final Deployment
+This approach helped manage development activities efficiently and reduced project risks.
+The project planning process ensured:
+Proper resource utilization.
+Effective time management.
+Reduced development complexity.
+Better coordination between modules.
+Improved project quality.
+3.5. PROJECT SCHEDULING
+3.5.1 Overview
+Project scheduling is an important activity in software development because it helps in organizing tasks, managing time, and ensuring that the project is completed within the specified duration. For the Billing and Inventory Management System, the entire development process was divided into multiple phases based on their complexity and dependencies. Each phase was assigned a specific time period to maintain proper workflow and monitor development progress. The project was developed using a step-by-step approach where requirement analysis was performed first, followed by system design, database implementation, frontend development, backend development, testing, and documentation. The major activities included during project scheduling are:
+Requirement Analysis
+System Analysis
+System Design
+Database Design
+Frontend Development
+Backend Development
+Testing and Debugging
+Documentation
+Final Deployment
+Proper project scheduling helped in reducing delays and ensured that every phase of the project was completed systematically.
+3.5.2 GANTT CHART
+A Gantt Chart was prepared to visualize the development schedule of the Billing and Inventory Management System. The chart helped in assigning time duration to each activity and monitoring the progress of project development. The project was planned over a period of ten weeks, where each phase was completed before moving to the next phase. This approach helped maintain development quality and proper task management. The following activities were included in the Gantt Chart:
+Requirement Analysis
+System Analysis
+System Design
+Database Design
+Frontend Development
+Backend Development
+Testing and Debugging
+Documentation
+Final Submission
+The Gantt Chart provided a clear representation of project activities and their respective timelines.
+Figure 3.1: Gantt Chart of Billing and Inventory Management System
+3.5.3 PERT CHART
+Program Evaluation and Review Technique (PERT) Chart was used to identify the sequence of activities involved during project development. It helped in understanding task dependencies and project workflow. The PERT Chart for the Billing and Inventory Management System follows the logical flow of software development activities.
+Logical Flow:
+Start↓Requirement Analysis↓System Analysis↓System Design↓Database Design↓Frontend Development↓Backend Development↓Testing↓Documentation↓Deployment↓End
+The PERT Chart helped in identifying the critical path and ensuring that all project activities were completed in the correct order.
+Figure 3.2: PERT Chart of Billing and Inventory Management System
+3.6 SOFTWARE REQUIREMENT SPECIFICATION (SRS)
+The Software Requirement Specification (SRS) document defines the functional and non-functional requirements of the Billing and Inventory Management System. It acts as a blueprint for system development and ensures that all project requirements are properly documented before implementation. The SRS document helps developers understand the system requirements clearly and reduces the possibility of errors during development. The Billing and Inventory Management System includes multiple modules such as authentication, product management, customer management, billing, inventory management, payment processing, report generation, and administrative monitoring. The software requirements have been divided into two categories:
+Functional Requirements
+Non-Functional Requirements
+3.6.1 FUNCTIONAL REQUIREMENTS
+Functional requirements describe the operations and services that the system must perform.
+Authentication Module
+The authentication module is responsible for managing user access and security. The system must:
+Allow users to login securely.
+Validate user credentials.
+Generate authentication tokens.
+Maintain user sessions.
+Support role-based access control.
+Allow user logout.
+Product Management Module
+The product management module allows businesses to manage their products. The system must:
+Add new products.
+Update product information.
+Delete products.
+Manage product categories.
+Maintain product pricing.
+Manage GST rates.
+Maintain stock quantities.
+Customer Management Module
+The customer management module is responsible for maintaining customer information. The system must:
+Add customer records.
+Update customer information.
+Delete customer records.
+Store contact information.
+Maintain customer transaction history.
+Billing Module
+The billing module is the core component of the system. The system must:
+Generate invoices.
+Calculate GST automatically.
+Calculate discounts.
+Generate invoice numbers.
+Store invoice records.
+Generate printable invoices.
+Maintain billing history.
+Inventory Module
+The inventory module manages stock records. The system must:
+Track stock quantities.
+Update inventory automatically.
+Monitor low stock levels.
+Prevent negative stock values.
+Generate inventory reports.
+Payment Module
+The payment management module handles transaction information. The system must:
+Record payment details.
+Store transaction information.
+Maintain payment history.
+Support multiple payment methods.
+Reporting Module
+The reporting module generates business reports. The system must:
+Generate sales reports.
+Generate inventory reports.
+Generate GST reports.
+Generate customer reports.
+Generate transaction reports.
+Administrative Module
+The administrative module controls system operations. The system must:
+Manage users.
+Monitor activities.
+View audit logs.
+Manage system settings.
+Generate administrative reports.
+3.6.2 NON-FUNCTIONAL REQUIREMENTS
+Non-functional requirements describe how the system should perform rather than what the system should do. These requirements focus on performance, reliability, security, usability, and maintainability.
+1. Performance Requirements
+The Billing and Inventory Management System should provide fast and efficient performance during business operations.
+The system should:
+Generate invoices quickly.
+Process database queries efficiently.
+Support multiple transactions without performance degradation.
+Provide fast report generation.
+Load pages within an acceptable response time.
+2. Security Requirements
+Since the system handles sensitive business information, security is one of the most important requirements.
+The system should:
+Provide secure authentication.
+Implement role-based authorization.
+Protect user credentials.
+Prevent unauthorized access.
+Maintain activity logs.
+Secure business data.
+Validate user inputs.
+3. Reliability Requirements
+The system should operate continuously without major failures.
+The system should:
+Maintain accurate records.
+Prevent data corruption.
+Recover from unexpected failures.
+Handle errors properly.
+Maintain database consistency.
+4. Future Growth Requirements
+The system should support future enhancements and business growth.
+The system should:
+Support additional modules.
+Handle increased business transactions.
+Support larger databases.
+Allow future technology integration.
+Support migration to enterprise databases.
+5. Usability Requirements
+The system should be easy to use and understand.
+The system architecture prioritizes accessibility and user efficiency.
+Simple navigation.
+User-friendly interfaces.
+Clear instructions.
+Easy form handling.
+Meaningful error messages.
+6. Compatibility Requirements
+The system should operate properly on various platforms.
+The system should support:
+Windows operating system.
+Linux operating system.
+Chrome browser.
+Firefox browser.
+Microsoft Edge browser.
+Desktop and laptop devices.
+3.7 SYSTEM SPECIFICATION
+The Billing and Inventory Management System requires both software and hardware resources for proper execution.
+Software Requirements
+Component
+Technology Used
+Operating System
+Windows / Linux
+Frontend
+HTML5, CSS3, JavaScript
+Backend
+FastAPI (Python)
+Database
+SQLite
+Authentication
+JWT Authentication
+API Documentation
+Swagger UI
+IDE
+Visual Studio Code
+Version Control
+GitHub
+Browser
+Chrome, Firefox, Edge
+
+Table 3.1: Software Requirements
+Hardware Requirements
+Client Side
+Component
+Specification
+Processor
+Dual Core or Higher
+RAM
+Minimum 2 GB
+Storage
+20 GB Available Space
+Device
+Desktop/Laptop
+Browser
+Modern Web Browser
+
+Server Side
+Component
+Specification
+Processor
+Quad Core Processor
+RAM
+Minimum 8 GB
+Storage
+SSD Storage
+Operating System
+Windows/Linux Server
+Database Storage
+100 GB or Above
+
+Table 3.2: Hardware Requirements
+3.8 DATA MODELS
+Data models are used to represent the structure, relationships, and flow of information within the Billing and Inventory Management System. The system contains multiple entities such as users, products, customers, invoices, invoice items, payments, inventory records, and reports. Various diagrams have been prepared to represent these relationships and processes.
+The following diagrams have been used in this project:
+Class Diagram
+Activity Diagram
+Sequence Diagram
+Entity Relationship Diagram
+Use Case Diagram
+3.8.1 CLASS DIAGRAM
+The Class Diagram represents the static structure of the Billing and Inventory Management System. It shows various classes, their attributes, methods, and relationships.
+The major classes included in the system are:
+
+User Class
+Attribute	Data Type	Description
+id	Integer	Unique user identifier
+username	String	User login name
+password_salt	String	Salt value used for password hashing
+password_hash	String	HMAC SHA-256 password digest
+password_plaintext	String	Plaintext password (for project defense)
+fullname	String	User's full display name
+role	String	User role ('admin' or 'staff')
+created_at	DateTime	Account creation timestamp
+
+Methods:
+login()
+me()
+
+Category Class
+Attribute	Data Type	Description
+id	Integer	Unique category identifier
+name	String	Category name
+description	String	Category details
+
+Product Class
+Attribute	Data Type	Description
+id	Integer	Product identifier
+name	String	Product name
+sku	String	Stock Keeping Unit (unique identifier)
+category_id	Integer	Reference to category ID
+price	Decimal	Product price per unit
+stock	Integer	Synced stock quantity in inventory
+min_stock	Integer	Safety stock threshold level
+gst_rate	Decimal	GST rate percentage (e.g., 5.0, 12.0, 18.0)
+location	String	Physical location ('storefront' or 'warehouse')
+description	String	Detailed product description
+created_at	DateTime	Product creation timestamp
+
+Methods:
+list_products()
+create_product()
+update_product()
+delete_product()
+
+Customer Class
+Attribute	Data Type	Description
+id	Integer	Customer identifier
+name	String	Customer name
+phone	String	Unique 10-digit contact number
+email	String	Email address
+address	String	Billing address
+created_at	DateTime	Registration timestamp
+
+Methods:
+list_customers()
+create_customer()
+update_customer()
+delete_customer()
+customer_history()
+
+Invoice Class
+Attribute	Data Type	Description
+id	Integer	Unique invoice identifier
+invoice_number	String	Auto-generated billing sequence number
+customer_id	Integer	Reference to customer ID (nullable for guests)
+user_id	Integer	Reference to billing staff ID
+subtotal	Decimal	Sum of item prices before discount and tax
+discount	Decimal	Global flat discount applied to invoice
+gst	Decimal	Total computed GST tax amount (CGST + SGST)
+total	Decimal	Net payable amount
+payment_status	String	Invoice payment status ('paid', 'pending', 'unpaid')
+created_at	DateTime	Invoice creation timestamp
+
+Methods:
+list_invoices()
+create_invoice()
+get_invoice()
+record_late_payment()
+
+InvoiceItem Class
+Attribute	Data Type	Description
+id	Integer	Line item identifier
+invoice_id	Integer	Reference to invoice ID
+product_id	Integer	Reference to product ID
+product_name	String	Denormalized product name at sale time
+product_sku	String	Denormalized SKU at sale time
+quantity	Integer	Sold quantity
+unit_price	Decimal	Sold price per unit
+total_price	Decimal	Calculated line item price before tax
+gst_rate	Decimal	GST rate applied to this item
+
+Payment Class
+Attribute	Data Type	Description
+id	Integer	Payment transaction identifier
+invoice_id	Integer	Reference to invoice ID
+amount	Decimal	Amount collected
+payment_method	String	Payment mode ('cash', 'card', 'upi')
+transaction_reference	String	Optional transaction reference number
+created_at	DateTime	Payment timestamp
+
+Logs Class
+Attribute	Data Type	Description
+id	Integer	Audit log entry identifier
+user_id	Integer	Reference to the user who performed action
+action	String	Action code (e.g., 'LOGIN', 'PRODUCT_CREATE')
+details	String	Text description of the action
+created_at	DateTime	Log timestamp
+
+Settings Class
+Attribute	Data Type	Description
+key	String	Unique system configuration parameter key
+value	String	Configuration value
+
+Inventory Class
+Attribute	Data Type	Description
+id	Integer	Inventory row identifier
+product_id	Integer	Unique reference to product ID
+stock	Integer	Current stock level
+min_stock	Integer	Alert threshold stock level
+location	String	Storage zone ('storefront' or 'warehouse')
+last_updated	DateTime	Timestamp of last stock update
+
+StockTransaction Class
+Attribute	Data Type	Description
+id	Integer	Transaction entry identifier
+product_id	Integer	Reference to product ID
+quantity	Integer	Change quantity (positive/negative)
+transaction_type	String	Type of event ('restock', 'sale', 'adjustment')
+user_id	Integer	Reference to operating staff/admin
+created_at	DateTime	Timestamp of stock event
+notes	String	Audit notes/references
+
+
+
+3.8.2 ACTIVITY DIAGRAM
+The Activity Diagram represents the flow of activities performed by users and the system during the execution of business operations. It shows how different processes interact with each other and how control flows from one activity to another.
+For the Billing and Inventory Management System, the activity flow begins with user authentication. After successful login, the user can perform various operations such as product management, customer management, invoice generation, inventory updates, and report generation.
+The billing process involves selecting a customer, choosing products, calculating GST and discounts, generating the invoice, updating stock quantities, and storing transaction records in the database.
+The Activity Diagram helps in understanding the workflow of the system and provides a clear representation of business operations.
+Activity Flow
+User Login
+Authentication Verification
+Dashboard Access
+Product Selection
+Customer Selection
+Invoice Creation
+GST Calculation
+Payment Processing
+Inventory Update
+Invoice Generation
+Report Storage
+Logout
+Figure 3.4: Activity Diagram of Billing and Inventory Management System
+3.8.3 SEQUENCE DIAGRAM
+The Sequence Diagram represents the interaction between different objects and modules in the system over time. It illustrates how messages are exchanged between users, application components, and the database during business operations.
+The following sequence describes the invoice generation process:
+Invoice Generation Sequence
+User logs into the system.
+System verifies user credentials.
+User selects customer details.
+User selects products.
+System retrieves product information.
+System calculates GST and totals.
+User confirms invoice.
+System stores invoice details.
+Inventory quantity is updated.
+Payment information is recorded.
+Invoice is generated successfully.
+The Sequence Diagram helps understand communication between various components of the application.
+Figure 3.5: Sequence Diagram of Billing and Inventory Management System
+3.8.4 ENTITY RELATIONSHIP DIAGRAM (ER DIAGRAM)
+The Entity Relationship Diagram (ER Diagram) represents the database structure of the Billing and Inventory Management System. It shows how different entities are related to each other and how data flows within the database.
+The database has been designed using relational database concepts to ensure data consistency, integrity, and efficient retrieval.
+
+User Table (users)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+username	TEXT	Unique, Not Null
+password_salt	TEXT	Not Null
+password_hash	TEXT	Not Null
+password_plaintext	TEXT	Nullable
+fullname	TEXT	Not Null
+role	TEXT	Not Null, CHECK (role IN ('admin', 'staff'))
+created_at	DATETIME	Default CURRENT_TIMESTAMP
+
+Category Table (categories)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+name	TEXT	Unique, Not Null
+description	TEXT	Nullable
+
+Product Table (products)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+sku	TEXT	Unique, Not Null
+name	TEXT	Not Null
+category_id	INTEGER	Foreign Key references categories(id) ON DELETE SET NULL
+price	REAL	Not Null
+stock	INTEGER	Not Null, Default 0
+min_stock	INTEGER	Not Null, Default 5
+gst_rate	REAL	Not Null, Default 18.0
+location	TEXT	Not Null, CHECK (location IN ('storefront', 'warehouse')), Default 'storefront'
+description	TEXT	Nullable
+created_at	DATETIME	Default CURRENT_TIMESTAMP
+
+Customer Table (customers)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+name	TEXT	Not Null
+phone	TEXT	Unique, Not Null
+email	TEXT	Nullable
+address	TEXT	Nullable
+created_at	DATETIME	Default CURRENT_TIMESTAMP
+
+Invoice Table (invoices)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+invoice_number	TEXT	Unique, Not Null
+customer_id	INTEGER	Foreign Key references customers(id) ON DELETE SET NULL
+user_id	INTEGER	Foreign Key references users(id) ON DELETE SET NULL
+subtotal	REAL	Not Null
+discount	REAL	Default 0
+gst	REAL	Default 0
+total	REAL	Not Null
+payment_status	TEXT	Not Null, CHECK (payment_status IN ('paid','pending','unpaid')), Default 'paid'
+created_at	DATETIME	Default CURRENT_TIMESTAMP
+
+Invoice Item Table (invoice_items)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+invoice_id	INTEGER	Foreign Key references invoices(id) ON DELETE CASCADE, Not Null
+product_id	INTEGER	Foreign Key references products(id) ON DELETE SET NULL
+product_name	TEXT	Nullable
+product_sku	TEXT	Nullable
+quantity	INTEGER	Not Null
+unit_price	REAL	Not Null
+total_price	REAL	Not Null
+gst_rate	REAL	Not Null, Default 18.0
+
+Payment Table (payments)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+invoice_id	INTEGER	Foreign Key references invoices(id) ON DELETE CASCADE, Not Null
+amount	REAL	Not Null
+payment_method	TEXT	Not Null, CHECK (payment_method IN ('cash','card','upi'))
+transaction_reference	TEXT	Nullable
+created_at	DATETIME	Default CURRENT_TIMESTAMP
+
+Activity Log Table (logs)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+user_id	INTEGER	Foreign Key references users(id) ON DELETE SET NULL
+action	TEXT	Not Null
+details	TEXT	Nullable
+created_at	DATETIME	Default CURRENT_TIMESTAMP
+
+Settings Table (settings)
+Field Name	Data Type	Constraints
+key	TEXT	Primary Key, Unique, Not Null
+value	TEXT	Not Null
+
+Inventory Table (inventory)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+product_id	INTEGER	Unique, Foreign Key references products(id) ON DELETE CASCADE, Not Null
+stock	INTEGER	Not Null, Default 0
+min_stock	INTEGER	Not Null, Default 5
+location	TEXT	Not Null, CHECK (location IN ('storefront', 'warehouse')), Default 'storefront'
+last_updated	DATETIME	Default CURRENT_TIMESTAMP
+
+Stock Transaction Table (stock_transactions)
+Field Name	Data Type	Constraints
+id	INTEGER	Primary Key, AutoIncrement
+product_id	INTEGER	Foreign Key references products(id) ON DELETE CASCADE, Not Null
+quantity	INTEGER	Not Null
+transaction_type	TEXT	Not Null, CHECK (transaction_type IN ('restock', 'sale', 'adjustment'))
+user_id	INTEGER	Foreign Key references users(id) ON DELETE SET NULL
+created_at	DATETIME	Default CURRENT_TIMESTAMP
+notes	TEXT	Nullable
+
+Relationships
+- One User creates multiple Invoices (1:N)
+- One Customer purchases multiple Invoices (1:N) (nullable to support guest checkout)
+- One User generates multiple Activity Logs (1:N)
+- One User audits/performs multiple Stock Transactions (1:N)
+- One Category groups multiple Products (1:N)
+- One Product maps to one Inventory row (1:1)
+- One Product appears in multiple Invoice Items (1:N)
+- One Product records multiple Stock Transactions (1:N)
+- One Invoice contains multiple Invoice Line Items (1:N)
+- One Invoice tracks multiple Payments (1:N) (typically 1:1, or 1:N for partial payments)
+
+The ER Diagram provides a visual representation of the database structure and relationships.
+
+
+
+3.8.5 USE CASE DIAGRAM
+The Use Case Diagram represents the interaction between system users and the various functionalities provided by the Billing and Inventory Management System.
+The system contains three primary actors:
+Administrator
+Staff/User
+Customer (Indirect Entity)
+Administrator Use Cases
+The administrator can perform the following operations:
+Login
+Manage Users
+Manage Products
+Manage Customers
+View Reports
+Monitor Activity Logs
+Manage Inventory
+Configure System Settings
+Figure 3.7: Administrator Use Case Diagram
+Staff/User Use Cases
+The staff member can perform the following operations:
+Login
+Manage Products
+Manage Customers
+Create Invoice
+Generate Bill
+Process Payments
+View Reports
+Update Inventory
+Figure 3.8: Staff/User Use Case Diagram
+Customer Use Cases
+The customer interacts indirectly with the system through billing operations.
+Customer-related activities include:
+Purchase Products
+Receive Invoice
+Make Payment
+View Purchase History
+Figure 3.9: Customer Use Case Diagram
+3.9. Risk Analysis
+Risk analysis identifies potential problems such as database loss of product records or incorrect billing calculations.
+Technical Risks
+Server downtime
+Database corruption
+Security vulnerabilities
+Mitigation: Regular backups, input validation, secure sessions.
+Operational Risks
+Stock-out scenarios due to late updates
+Incorrect pricing during checkout
+Mitigation: Admin verification and monitoring.
+Security Risks
+Unauthorized access
+Data leakage
+Mitigation: Role-based access control and secure authentication.
+3.10 Assumptions and Dependencies
+The system assumes:
+Product data is entered accurately by admins
+Staff follows standard checkout procedures
+Admin actively monitors activities
+Dependencies include:
+Web browser compatibility
+Availability of hosting environment
+Proper functioning of database services
+
+3.11 Constraints Analysis
+Constraints faced during development include:
+Limited development time
+Academic scope restrictions
+No real payment gateway integration
+Limited testing with real users
+These constraints were managed through careful planning.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CHAPTER 4: SYSTEM DESIGN
+4.1 MODULARIZATION DETAILS
+System design is one of the most important phases of software development because it defines how different components of the application interact with each other. The Billing and Inventory Management System has been designed using a modular approach, where the complete application is divided into separate modules based on their functionality. This modular design approach makes the system easier to develop, maintain, test, and extend in the future.
+The application follows a layered architecture consisting of frontend, backend, API services, business logic, and database components. The major modules of the system are described below.
+Authentication Module: Responsible for user login, logout, token generation, session validation, password verification, user role management, and access control.
+Dashboard Module: Provides an overview of business activities, including total products, customers, invoices, sales statistics, inventory status, and revenue information.
+Product Management Module: Handles adding, updating, deleting products, categorization, pricing, GST configuration, search, and filtering.
+Customer Management Module: Manages customer registration, information updates, search, history, and transaction tracking.
+Invoice Management Module: Performs invoice generation, editing, GST calculation, discount calculation, printing, and history management.
+Inventory Management Module: Responsible for stock management, updates, low stock monitoring, alerts, reports, and availability checking.
+Payment Management Module: Manages payment recording, verification, transaction history, status tracking, and report generation.
+Reporting Module: Generates daily/monthly sales, inventory, GST, customer, product, and revenue reports.
+Activity Log Module: Records login history, modifications, invoice generation, transactions, and administrative actions.
+Administrative Module: Controls user management, role management, system monitoring, activity monitoring, and configuration.
+Project Structure Overview
+Backend: FastAPI application, API routes, authentication services, business logic, database models, middleware, utility functions.
+Frontend: HTML templates, CSS stylesheets, JavaScript files, dashboard pages, forms, reports.
+Database: Tables, relationships, constraints, migrations.
+Security: JWT authentication, password hashing, session management, authorization controls.
+4.2 SYSTEM ARCHITECTURE
+The Billing and Inventory Management System follows a Three-Tier Architecture model.
+Presentation Layer: HTML pages, CSS styling, JavaScript functionality, dashboard interfaces, forms, and reports.
+Application Layer: Implemented using FastAPI; performs authentication, product management, customer management, invoice generation, inventory updates, payment processing, and report generation.
+Data Layer: Stores users, customers, products, invoices, invoice items, payments, inventory, reports, and activity logs.
+Figure 4.1: Three-Tier Architecture of Billing and Inventory Management System
+
+4.3 DATA INTEGRITY AND CONSTRAINTS
+Data integrity is an important aspect of database design because it ensures that the information stored in the database remains accurate, consistent, and reliable. The Billing and Inventory Management System uses various database constraints and validation mechanisms to maintain data integrity. The following constraints have been implemented in the system:
+
+Primary Key Constraints
+Every table contains a primary key that uniquely identifies each record. Examples include:
+- id in the users table
+- id in the categories table
+- id in the products table
+- id in the customers table
+- id in the invoices table
+- id in the invoice_items table
+- id in the payments table
+- id in the logs table
+- key in the settings table (text-based primary key)
+- id in the inventory table
+- id in the stock_transactions table
+Primary keys prevent duplicate records and ensure uniqueness of each row.
+
+Foreign Key Constraints
+Foreign keys are used to establish relationships between different tables and maintain referential integrity:
+- category_id in the products table references id in the categories table.
+- customer_id and user_id in the invoices table reference id in the customers table and id in the users table, respectively.
+- invoice_id and product_id in the invoice_items table reference id in the invoices table and id in the products table, respectively.
+- invoice_id in the payments table references id in the invoices table.
+- product_id in the inventory table references id in the products table.
+- product_id and user_id in the stock_transactions table reference id in the products table and id in the users table, respectively.
+SQLite foreign key enforcement is enabled programmatically on every connection handle via "PRAGMA foreign_keys = ON;".
+
+Unique Constraints
+Certain fields require unique values to avoid duplicate data:
+- username in the users table.
+- name in the categories table.
+- sku in the products table.
+- phone in the customers table.
+- invoice_number in the invoices table.
+- product_id in the inventory table.
+- key in the settings table.
+
+Not Null Constraints
+Mandatory fields are marked as NOT NULL to prevent incomplete data:
+- username, fullname, password_salt, password_hash, and role in the users table.
+- name in the categories table.
+- name, sku, price, stock, min_stock, and gst_rate in the products table.
+- name and phone in the customers table.
+- invoice_number, subtotal, total, and payment_status in the invoices table.
+- invoice_id, quantity, unit_price, and total_price in the invoice_items table.
+- invoice_id, amount, and payment_method in the payments table.
+- action in the logs table.
+- value in the settings table.
+
+Validation Constraints
+Business rules are validated both at the Pydantic schema layer on the server and at the database constraint level:
+- Product price must be greater than zero.
+- Product stock and min_stock must be greater than or equal to zero.
+- Product GST rate must be greater than or equal to zero.
+- Customer phone number must be exactly 10 digits.
+- Invoice subtotal, gst, discount, and total must be greater than or equal to zero.
+- Invoice items quantity must be greater than zero.
+- Payment amount must be greater than zero.
+- User role must be restricted to 'admin' or 'staff'.
+- Product location and inventory location must be restricted to 'storefront' or 'warehouse'.
+- Payment method must be restricted to 'cash', 'card', 'upi', or 'credit' for invoices, and 'cash', 'card', or 'upi' for payment collections.
+- Stock transaction type must be restricted to 'restock', 'sale', or 'adjustment'.
+
+Data Integrity Measures
+To improve data consistency, the system implements:
+- Client-side input validation via HTML5 attributes and JavaScript.
+- Server-side validation using Pydantic schemas.
+- Database transaction blocks to ensure atomic checkout operations.
+- Detailed activity and audit logging.
+- Parameterized SQL queries via the sqlite3 library to prevent SQL injection.
+- Database cascading deletes on dependent tables (e.g. deleting an invoice deletes its items and payments).
+
+
+
+4.4 DATABASE DESIGN
+The Billing and Inventory Management System uses a relational database design to manage business data efficiently. The database has been normalized to reduce redundancy and improve data consistency. The database consists of the following 11 tables and triggers:
+
+1. Users Table (users)
+Stores the credentials and roles of application users.
+- id: Primary Key, unique user identifier.
+- username: Unique alphanumeric login name.
+- password_salt: Random salt generated during account creation.
+- password_hash: PBKDF2 HMAC SHA-256 digest of password.
+- password_plaintext: Stored plaintext password (strictly for viva defense/testing verification).
+- fullname: User's full display name.
+- role: Authorization level ('admin' or 'staff').
+- created_at: Timestamp of account creation.
+
+2. Categories Table (categories)
+Stores product categories to classify products.
+- id: Primary Key, unique category identifier.
+- name: Unique category name (e.g., Electronics, Groceries).
+- description: Text details about the category.
+
+3. Products Table (products)
+Maintains the catalog of products sold in the store.
+- id: Primary Key, unique product identifier.
+- sku: Unique Stock Keeping Unit for barcode scanning / code identifier.
+- category_id: Foreign key referencing categories(id).
+- name: Product display name.
+- price: Unit price of product (excluding tax).
+- stock: Current stock quantity (synchronized with inventory.stock).
+- min_stock: Minimum stock alert threshold level.
+- gst_rate: Standard tax rate applied to product (e.g., 18.0%).
+- location: Current physical location of stock ('storefront' or 'warehouse').
+- description: Details or specifications.
+- created_at: Product entry creation timestamp.
+
+4. Customers Table (customers)
+Stores CRM customer profiles.
+- id: Primary Key, unique customer identifier.
+- name: Customer name.
+- phone: Unique 10-digit customer mobile number.
+- email: Customer email address.
+- address: Customer physical shipping address.
+- created_at: Customer registration timestamp.
+
+5. Invoices Table (invoices)
+Represents billing transactions.
+- id: Primary Key, unique invoice transaction ID.
+- invoice_number: Formatted unique invoice number (e.g., INV-20260706-0001).
+- customer_id: Foreign key referencing customers(id) (nullable for guest checkout).
+- user_id: Foreign key referencing users(id) of the cashier staff.
+- subtotal: Cumulative pre-tax total of all items.
+- discount: Flat discount amount deducted from subtotal.
+- gst: Calculated tax amount (CGST + SGST).
+- total: Net grand total of the transaction.
+- payment_status: Billing state ('paid', 'pending', or 'unpaid').
+- created_at: Transaction execution date.
+
+6. Invoice Items Table (invoice_items)
+Line items of individual sales invoices.
+- id: Primary Key.
+- invoice_id: Foreign key referencing invoices(id) with Cascade Delete.
+- product_id: Foreign key referencing products(id) with Set Null.
+- product_name: Snapshot of product name at transaction time.
+- product_sku: Snapshot of product SKU at transaction time.
+- quantity: Number of units purchased.
+- unit_price: Price per unit at transaction time.
+- total_price: Line item subtotal before tax.
+- gst_rate: Percentage tax rate applied to this specific line item.
+
+7. Payments Table (payments)
+Tracks transaction payment history.
+- id: Primary Key.
+- invoice_id: Foreign key referencing invoices(id) with Cascade Delete.
+- amount: Numeric amount collected.
+- payment_method: Payment option chosen ('cash', 'card', or 'upi').
+- transaction_reference: Bank or payment reference numbers.
+- created_at: Payment logging date.
+
+8. Activity Logs Table (logs)
+Internal system audit ledger.
+- id: Primary Key.
+- user_id: Foreign key referencing users(id) who executed the action.
+- action: String event code (e.g., 'LOGIN', 'PRODUCT_CREATE').
+- details: Human readable details about the audit event.
+- created_at: Audit event timestamp.
+
+9. System Settings Table (settings)
+System-wide configuration flags.
+- key: Unique setting parameter name (e.g., company_name, default_gst).
+- value: Configuration value string.
+
+10. Inventory Table (inventory)
+Advanced inventory control tracking real-time stock levels.
+- id: Primary Key.
+- product_id: Unique foreign key referencing products(id) with Cascade Delete.
+- stock: Current stock count available.
+- min_stock: Minimum stock threshold.
+- location: Current physical location of inventory ('storefront' or 'warehouse').
+- last_updated: Timestamp of the most recent stock alteration.
+
+11. Stock Transactions Table (stock_transactions)
+Detailed stock flow ledger logging all entries and exits.
+- id: Primary Key.
+- product_id: Foreign key referencing products(id) with Cascade Delete.
+- quantity: Difference quantity (+ve for restocks, -ve for sales/adjustments).
+- transaction_type: Event category ('restock', 'sale', 'adjustment').
+- user_id: Foreign key referencing users(id) of staff performing the operation.
+- created_at: Transaction timestamp.
+- notes: Audit remarks (e.g., "Initial stock import", "Invoice INV-20260706-0001").
+
+Database Triggers
+The SQLite database implements two automatic execution triggers to enforce business data synchronization:
+- auto_create_inventory_row: Triggered AFTER INSERT ON products. It automatically creates a corresponding inventory tracking row in the inventory table with the product's default stock, min_stock, and location details.
+- sync_product_stock_after_update: Triggered AFTER UPDATE OF stock, min_stock, location ON inventory. It automatically synchronizes and propagates the changes back to the products table to maintain denormalized data consistency.
+
+
+
+4.5 UI/UX DESIGN PRINCIPLES
+The user interface of the Billing and Inventory Management System has been designed with simplicity, usability, and accessibility in mind. The following design principles were followed during development:
+Simplicity
+The interface has been kept simple so that users with basic computer knowledge can use the application easily.
+Consistency
+The design maintains consistency in:
+Colors
+Buttons
+Navigation menus
+Forms
+Tables
+Reports
+User Friendliness
+The application provides:
+Clear labels
+Simple forms
+Proper navigation
+Validation messages
+Error notifications
+Responsiveness
+The system interface adapts to different screen sizes and resolutions to improve usability.
+Accessibility
+Special attention has been given to:
+Readable fonts
+Proper spacing
+Clear color contrast
+Easy navigation
+These principles improve user experience and reduce the learning curve.
+This ensures a smooth user experience.
+
+4.6 NAVIGATION FLOW EXPLANATION
+The Billing and Inventory Management System follows a structured navigation flow.
+User Flow
+Login -> Dashboard -> Select Module -> Perform Operation -> Save Data -> Generate Output -> Logout
+Product Management Flow
+Login -> Dashboard -> Product Management -> Add/Edit/Delete Product -> Save Product -> Update Inventory
+Billing Flow
+Login -> Dashboard -> Select Customer -> Select Products -> Calculate GST -> Generate Invoice -> Process Payment -> Update Inventory -> Generate Bill
+Administrative Flow
+Login -> Admin Dashboard -> Manage Users -> Monitor Activities -> Generate Reports -> Logout
+The navigation flow ensures that users can perform operations efficiently and without confusion.
+Staff Flow:
+Login → Search Product → Add to Cart → Select/Register Customer → Select Payment Method → Process Billing → Generate Invoice
+Admin Flow:
+Login → Manage Users → Manage Products & Categories → Adjust Stock Levels → View System Logs & Reports → Configure Settings
+4.7 DESIGN DECISIONS AND JUSTIFICATION
+Several design decisions were taken during the development of the Billing and Inventory Management System.
+SQLite Database
+SQLite was selected because:
+It is lightweight.
+It requires no separate server installation.
+It is suitable for small and medium businesses.
+It is easy to maintain.
+JWT Authentication
+JWT authentication was implemented because:
+It provides secure authentication.
+It supports stateless sessions.
+It improves application security.
+Modular Architecture
+A modular architecture was adopted because:
+It improves maintainability.
+It supports future growth.
+It simplifies debugging.
+It improves code organization.
+REST API Design
+REST APIs were implemented because:
+They provide flexibility.
+They support frontend-backend separation.
+They allow future mobile application integration.
+These design decisions helped create a secure, extendable, maintainable, and efficient business management system.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4.8 CORE BILLING CALCULATION MODEL
+The Billing and Inventory Management System performs all financial and tax calculations on the server side using the following formulas:
+
+1. Pre-Tax Line Subtotal
+For each product item selected in the invoice:
+Line Subtotal = Quantity * Unit Price
+
+2. Cumulative Subtotal
+The sum of all pre-tax line subtotals:
+Subtotal = Sum of all Line Subtotals
+
+3. GST Tax Calculation
+Tax is calculated on the pre-tax line subtotal based on the product's assigned GST rate:
+Line GST = Line Subtotal * (GST Rate / 100)
+Total GST = Sum of all Line GSTs
+
+For financial and tax reporting, the total GST is split equally into Central GST (CGST) and State GST (SGST) per line item:
+CGST = Line GST / 2
+SGST = Line GST / 2
+
+4. Discount Capping
+To prevent a negative grand total, the requested flat discount is capped against the sum of the subtotal and total GST:
+Actual Discount = Minimum(Requested Discount, Subtotal + Total GST)
+
+5. Grand Total Calculation
+The final net payable amount is computed by:
+Grand Total = Subtotal + Total GST - Actual Discount
+
+
+
+CHAPTER 5: TESTING
+Testing is a critical phase of the Software Development Life Cycle (SDLC). For the Billing and Inventory Management System project, testing was performed to identify errors, gaps, or missing requirements in contrast to the actual requirements.
+5.1. UNIT TESTING
+Unit testing involves testing individual components of the software.
+5.1.1. Test Cases Table
+
+Test Case ID
+Test Description
+Input
+Expected Output
+Actual Output
+Status
+TC01
+User Registration
+Valid user details
+User registered successfully
+As expected
+Pass
+TC02
+User Login
+Valid credentials
+Login successful
+As expected
+Pass
+TC03
+Invalid Login
+Wrong credentials
+Error message shown
+As expected
+Pass
+TC04
+Add Product Details
+Valid product data
+Product added to inventory
+As expected
+Pass
+TC05
+Search Product / Inventory
+Product name / SKU
+Search results displayed
+As expected
+Pass
+TC06
+Process Sale / Checkout
+Cart items & quantity
+Transaction processed
+As expected
+Pass
+TC07
+Inventory Update / Stock Deduction
+Completed sale
+Stock quantity deducted
+As expected
+Pass
+TC08
+Payment Process
+Total amount & mode
+Payment recorded
+As expected
+Pass
+TC09
+Invoice Generation
+Transaction ID
+PDF Invoice generated
+As expected
+Pass
+TC10
+Logout
+Logout request
+User session ended
+As expected
+Pass
+
+
+Table 5.1: Test Cases of All Components
+5.2. INTEGRATION TESTING
+Integration testing checks if different modules work together correctly.
+Sales-Database Integration: When a staff member processes a sale, the system verifies that data is correctly inserted into the SQLite database and that inventory stock levels are automatically decremented.
+Frontend-Backend Connection: Verified that data submitted via HTML5 forms is correctly received by FastAPI endpoints and persisted via the database connection layer.
+5.3. SYSTEM TESTING
+System testing evaluates the complete, integrated system's compliance with the requirements.
+Performed a full retail walkthrough
+Register as a new user.
+Login.
+Search for a product.
+Process a sale.
+Log out.
+Log in as Admin to check updated inventory stock.
+Browser Compatibility: The website was tested on Google Chrome, Mozilla Firefox, and Microsoft Edge to ensure consistent layout and functionality.
+5.3.1. Sample Inputs & Outputs
+Sample Input
+Product: Apples
+Quantity: 2
+Price: 50
+Sample Output
+Sale processed
+Stock updated
+Invoice generated
+These sample inputs and outputs confirm that the system processes user actions correctly.
+5.3.2. Error Handling Testing
+Error handling testing was performed to ensure that the system responds properly to invalid inputs and unexpected situations.
+Examples include:
+Invalid login credentials
+Missing mandatory fields during product entry
+Insufficient stock for sale
+Payment failure
+The system displays clear and user-friendly error messages without crashing. This improves usability and prevents data inconsistency
+5.4. USER ACCEPTANCE TESTING (UAT)
+Since this is an academic project, UAT was performed by peer reviews (freinds).
+Feedback: Initially, users found the manual SKU input for billing confusing.
+Correction: Based on this feedback, added an autocomplete search feature to the billing interface to improve usability.
+5.5. SECURITY TESTING
+Basic security checks were performed:
+SQL Injection: The implementation utilizes standard parameterized SQL queries via the sqlite3 library to prevent SQL injection attacks. Dynamic parameters are bound securely, ensuring that user input is never concatenated directly into SQL command strings.
+Endpoint Protection: Verified that unauthorized users cannot access restricted routes like /inventory without a valid JWT bearer token.
+5.6 Test Environment
+Testing was performed on:
+Windows OS
+Chrome, Firefox browsers
+Localhost server
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CHAPTER 6: SYSTEM SECURITY MEASURES
+Security is a fundamental requirement for the Billing and Inventory Management System. Multiple security layers have been implemented to protect business data, ensure user privacy, and maintain system integrity.
+6.1 USER AUTHENTICATION
+The system provides a secure login mechanism to verify user identity. Users must provide valid credentials (username and password) to access the system modules.
+6.2 JWT TOKEN AUTHENTICATION
+The application utilizes JSON Web Tokens (JWT) for secure communication between the frontend and backend. Tokens are generated upon successful login and are required for all subsequent API requests.
+6.3 PASSWORD SECURITY
+Passwords are never stored in plain text. The system uses the PBKDF2 HMAC SHA-256 password hashing algorithm (with 120,000 iterations and a cryptographically secure random salt) to hash passwords before storing them in the database.
+6.4 ROLE-BASED ACCESS CONTROL (RBAC)
+Access to various modules is restricted based on user roles (Admin, Staff). Each role has specific permissions to ensure that users can only perform authorized actions.
+6.5 SESSION MANAGEMENT
+Secure session management ensures that user sessions are handled safely. Sessions are designed to expire after a period of inactivity to prevent unauthorized access.
+6.6 INPUT VALIDATION
+All user inputs are validated on the server side to ensure they meet the expected format, type, and length, preventing malicious data entry.
+6.7 SQL INJECTION PREVENTION
+The system uses parameterized queries via the standard sqlite3 library to interact with the database, effectively neutralizing SQL injection threats.
+6.8 API SECURITY
+REST APIs are protected using authentication headers to ensure that only authorized clients can access system services.
+6.9 ACTIVITY LOGGING
+The system maintains detailed logs of user activities, including login attempts, data modifications, and sensitive transactions, for auditing and monitoring.
+6.10 ERROR HANDLING AND EXCEPTION MANAGEMENT
+Robust error handling mechanisms prevent the disclosure of sensitive system information in error messages while ensuring system stability.
+6.11 BACKUP AND DATA PROTECTION
+Database backups are managed manually by copying the single-file SQLite database. Data integrity constraints are also implemented within the database schema to ensure relational security.
+6.12 SYSTEM SECURITY ARCHITECTURE
+The overall architecture follows standard practices for security, including secure client-side token storage and server-side request authorization.
+
+
+
+
+
+
+
+
+
+
+
+CHAPTER 7: COST ESTIMATION
+Cost estimation is an important part of software project management because it helps determine the approximate expenses involved in the development and maintenance of a software system. The Billing and Inventory Management System was developed using open-source technologies, which significantly reduced the overall development cost. The cost estimation of this project includes hardware costs, software costs, development effort, maintenance expenses, and other operational costs.
+7.1 HARDWARE COST ESTIMATION
+The hardware used during the development of the project included a personal computer or laptop with sufficient processing power and storage capacity.
+Laptop/Desktop (Ryzen 5 / Core i5 Processor): ₹55,000
+RAM (8 GB): Included
+Storage (SSD 512 GB): Included
+Internet Connection: ₹1,000
+Electricity Cost: ₹1,500
+Total Hardware Cost = ₹57,500
+7.2 SOFTWARE COST ESTIMATION
+The Billing and Inventory Management System was developed using open-source software technologies. Therefore, no software licensing cost was incurred.
+Python, FastAPI, SQLite, HTML/CSS/JavaScript, Visual Studio Code, GitHub, Google Chrome: All Open Source/Free.
+Total Software Cost = ₹0
+7.3 HUMAN RESOURCE COST
+The approximate development effort is estimated as follows:
+Requirement Analysis: 5 Days (₹2,500)
+System Design: 5 Days (₹2,500)
+Database Design: 4 Days (₹2,000)
+Frontend Development: 10 Days (₹5,000)
+Backend Development: 15 Days (₹7,500)
+Testing: 5 Days (₹2,500)
+Documentation: 7 Days (₹3,500)
+Total Human Resource Cost = ₹25,500
+7.4 DEVELOPMENT COST
+Hardware Usage: ₹57,500
+Software: ₹0
+Human Resource: ₹25,500
+Internet & Utilities: ₹2,500
+Total Development Cost = ₹85,500
+7.5 MAINTENANCE COST
+Bug Fixes: ₹3,000
+Feature Updates: ₹5,000
+Database Maintenance: ₹2,000
+Security Updates: ₹2,500
+Server Maintenance: ₹5,000
+Total Annual Maintenance Cost = ₹17,500
+7.6 COST BENEFIT ANALYSIS
+The Billing and Inventory Management System provides significant benefits:
+Economic Benefits: Reduced paperwork, lower error rates, better tracked inventory, and increased productivity.
+Intangible Benefits: Improved customer satisfaction, better data security, and data-driven decision-making.
+7.7 TOTAL PROJECT COST ESTIMATION
+Hardware Cost: ₹57,500
+Software Cost: ₹0
+Human Resource Cost: ₹25,500
+Internet & Utilities: ₹2,500
+Total Estimated Project Cost = ₹85,500
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CHAPTER 8: REPORT
+The Billing and Inventory Management System generates various outputs that help users manage business operations efficiently. The system provides graphical interfaces, reports, invoices, inventory details, and administrative information. The following screenshots represent the major modules of the application.
+8.1 LOGIN PAGE
+The Login Page is the entry point of the application. Users must enter their valid credentials to access the system. Authentication is performed using secure login mechanisms. The login page provides:
+Username field
+Password field
+Login button
+Error validation messages
+The system verifies user credentials before granting access.
+Figure 8.1: Login Page of Billing and Inventory Management System
+8.2 DASHBOARD PAGE
+The Dashboard provides a summary of business activities and important statistics. It acts as the central control panel of the application. The dashboard displays:
+Total products
+Total customers
+Total invoices
+Total sales
+Inventory status
+Revenue information
+Recent activities
+The dashboard helps business owners quickly monitor their business performance.
+Figure 8.2: Dashboard Interface
+8.3 PRODUCT MANAGEMENT MODULE
+The Product Management page allows users to manage product information and inventory details. The module provides:
+Add product functionality
+Edit product information
+Delete products
+Product search
+Product categories
+Product pricing
+GST configuration
+The system maintains all product records in the database.
+Figure 8.3: Product Management Module
+8.4 CUSTOMER MANAGEMENT MODULE
+The Customer Management page allows users to maintain customer information. The module includes:
+Customer registration
+Customer update
+Customer search
+Customer records
+Customer transaction history
+This module helps businesses maintain customer relationships effectively.
+Figure 8.4: Customer Management Module
+8.5 INVOICE GENERATION MODULE
+The Invoice Generation module is one of the most important features of the system. The invoice module performs:
+Customer selection
+Product selection
+GST calculation
+Discount calculation
+Invoice generation
+Payment processing
+The system automatically calculates invoice totals and generates bills.
+Figure 8.5: Invoice Generation Module
+8.6 GENERATED INVOICE REPORT
+After invoice generation, the system creates a printable invoice containing complete billing information. The invoice includes:
+Invoice number
+Customer details
+Product information
+Quantity
+GST amount
+Payment details
+Total amount
+This report can be printed and shared with customers.
+Figure 8.6: Generated Invoice
+8.7 INVENTORY MANAGEMENT MODULE
+The Inventory Management page helps businesses maintain stock records and monitor product availability. The module provides:
+Product stock quantity
+Inventory updates
+Low stock alerts
+Inventory history
+Product availability status
+The inventory is automatically updated whenever a sale occurs.
+Figure 8.7: Inventory Management Module
+8.8 REPORT GENERATION MODULE
+The Reporting Module provides various business reports to help analyze business performance. The reports generated include:
+Daily sales report
+Monthly sales report
+Product report
+Customer report
+GST report
+Revenue report
+These reports assist in decision-making and business analysis.
+Figure 8.8: Reports Dashboard
+8.9 ACTIVITY LOG MODULE
+The Activity Log module records important user actions performed within the system. The activity logs include:
+Login history
+Product modifications
+Invoice generation
+Payment processing
+Inventory updates
+Administrative activities
+The activity logs improve security and monitoring.
+Figure 8.9: Activity Log Module
+8.10 ADMINISTRATIVE MODULE
+The Administrative Module provides system administration and monitoring functionalities. The administrator can:
+Manage users
+Monitor activities
+Generate reports
+Manage inventory
+Configure system settings
+View system statistics
+This module helps maintain overall control of the application.
+Figure 8.10: Administrative Dashboard
+8.11 API DOCUMENTATION (SWAGGER UI)
+Since the backend of the project is developed using FastAPI, automatic interactive API documentation is generated using Swagger UI. This documentation allows developers and evaluators to test all server endpoints directly from a web browser interface.
+
+The application implements the following FastAPI REST routes:
+
+1. Authentication Module (/api/auth)
+- Login (POST /api/auth/login):
+  * Request Body: username, password (Pydantic model LoginRequest)
+  * Response: token (JWT access token), user object (containing id, username, fullname, role)
+  * Authentication: None required.
+  * Error: 400 Bad Request if invalid username or password.
+- Get Current Profile (GET /api/auth/me):
+  * Response: Currently logged-in user profile details.
+  * Authentication: Bearer JWT Token required.
+
+2. User Administration (/api/admin)
+- List Users (GET /api/admin/users):
+  * Response: Array of user profiles (excluding salt/hash).
+  * Authentication: Bearer JWT Token (Admin role check required).
+- Create User (POST /api/admin/users):
+  * Request Body: fullname, username, password, role (Pydantic model UserCreate)
+  * Response: Success message, new user ID.
+  * Authentication: Bearer JWT Token (Admin role check required).
+  * Error: 400 Bad Request if username exists or role is invalid.
+- Delete User (DELETE /api/admin/users/{user_id}):
+  * Response: Confirmation message.
+  * Authentication: Bearer JWT Token (Admin role check required).
+  * Error: 400 Bad Request if deleting own account; 404 Not Found if user does not exist.
+- Reset Password (POST /api/admin/users/{user_id}/reset-password):
+  * Request Body: new_password (Pydantic model PasswordResetRequest)
+  * Response: Confirmation message.
+  * Authentication: Bearer JWT Token (Admin role check required).
+  * Error: 404 Not Found if user does not exist.
+- Audit Logs (GET /api/admin/logs):
+  * Response: Last 200 system log entries joined with username.
+  * Authentication: Bearer JWT Token (Admin role check required).
+
+3. Settings Management (/api/settings)
+- Get Configurations (GET /api/settings):
+  * Response: Key-value map of system configurations (e.g. company details, default GST rate).
+  * Authentication: Bearer JWT Token required.
+- Update Configurations (PUT /api/settings):
+  * Request Body: Dictionary of settings to update (Pydantic model SettingsUpdate)
+  * Response: Success message.
+  * Authentication: Bearer JWT Token (Admin role check required).
+
+4. Product Catalog (/api/products & /api/categories)
+- List Products (GET /api/products):
+  * Response: Array of products joined with category details and current inventory levels.
+  * Authentication: Bearer JWT Token required.
+- Create Product (POST /api/products):
+  * Request Body: name, sku (optional), category_id, price, stock, min_stock, gst_rate, location, description (Pydantic model ProductCreate)
+  * Response: Confirmation, new product ID.
+  * Authentication: Bearer JWT Token (Admin role check required).
+  * Error: 400 Bad Request if SKU duplicate.
+- Update Product (PUT /api/products/{product_id}):
+  * Request Body: Fields to update (Pydantic model ProductUpdate)
+  * Response: Confirmation message.
+  * Authentication: Bearer JWT Token (Admin role check required).
+  * Error: 404 Not Found if product does not exist; 400 Bad Request if SKU duplicate.
+- Delete Product (DELETE /api/products/{product_id}):
+  * Response: Confirmation message.
+  * Authentication: Bearer JWT Token (Admin role check required).
+  * Error: 404 Not Found if product does not exist.
+- List Categories (GET /api/categories):
+  * Response: List of all product categories.
+  * Authentication: Bearer JWT Token required.
+- Create Category (POST /api/categories):
+  * Request Body: name, description (Pydantic model CategoryCreate)
+  * Response: Confirmation, new category ID.
+  * Authentication: Bearer JWT Token (Admin role check required).
+- Update Category (PUT /api/categories/{category_id}):
+  * Request Body: name, description (Pydantic model CategoryUpdate)
+  * Response: Confirmation message.
+  * Authentication: Bearer JWT Token (Admin role check required).
+- Delete Category (DELETE /api/categories/{category_id}):
+  * Response: Confirmation message.
+  * Authentication: Bearer JWT Token (Admin role check required).
+
+5. Customer Relationship Management (/api/customers)
+- List Customers (GET /api/customers):
+  * Response: Array of registered customer records.
+  * Authentication: Bearer JWT Token required.
+- Register Customer (POST /api/customers):
+  * Request Body: name, phone, email, address (Pydantic model CustomerCreate)
+  * Response: Confirmation, new customer ID.
+  * Authentication: Bearer JWT Token required.
+  * Error: 400 Bad Request if phone number registered.
+- Update Customer (PUT /api/customers/{customer_id}):
+  * Request Body: Fields to update (Pydantic model CustomerUpdate)
+  * Response: Confirmation.
+  * Authentication: Bearer JWT Token required.
+- Delete Customer (DELETE /api/customers/{customer_id}):
+  * Response: Confirmation.
+  * Authentication: Bearer JWT Token (Admin role check required).
+- Purchase History (GET /api/customers/{customer_id}/history):
+  * Response: Customer profile and list of all invoices billed to this customer.
+  * Authentication: Bearer JWT Token required.
+
+6. Invoicing and Payments (/api/invoices)
+- List Invoices (GET /api/invoices):
+  * Response: List of all generated invoices.
+  * Authentication: Bearer JWT Token required.
+- Create Invoice (POST /api/invoices):
+  * Request Body: customer_id (nullable), items list (product ID, quantity, unit price, gst rate), discount, payment_method ('cash', 'card', 'upi', 'credit'), transaction_reference (Pydantic model InvoiceCreate)
+  * Response: Confirmation, invoice number, invoice ID, and grand total.
+  * Authentication: Bearer JWT Token required.
+  * Error: 400 Bad Request if payment method invalid, product not found, or stock insufficient.
+- Get Invoice Details (GET /api/invoices/{invoice_id}):
+  * Response: Invoice record, line items list, and payment details.
+  * Authentication: Bearer JWT Token required.
+- Record Late Payment (POST /api/invoices/{invoice_id}/pay):
+  * Request Body: amount, payment_method, transaction_reference (Pydantic model RecordPaymentRequest)
+  * Response: Success message, invoice number.
+  * Authentication: Bearer JWT Token required.
+  * Error: 400 Bad Request if invoice paid or payment method invalid; 404 Not Found if invoice does not exist.
+
+7. Dashboard Reports (/api/reports & /api/dashboard)
+- Get Report (GET /api/reports/{report_type}):
+  * Parameters: report_type (can be: daily_sales, monthly_sales, gst_report, stock_availability, low_stock_alert, invoice_report)
+  * Response: Report title, list of header columns, and rows of database results.
+  * Authentication: Bearer JWT Token required.
+- Get Summary Metrics (GET /api/dashboard/summary):
+  * Response: Count of total sales, invoices count, products count, and low stock alert count.
+  * Authentication: Bearer JWT Token required.
+- Get Sales Chart Data (GET /api/dashboard/sales-chart):
+  * Response: Daily sales total for the last 7 days.
+  * Authentication: Bearer JWT Token required.
+- Get Category Distribution (GET /api/dashboard/category-chart):
+  * Response: Total revenue segmented by product categories.
+  * Authentication: Bearer JWT Token required.
+- Get Top Products (GET /api/dashboard/top-products):
+  * Response: Top 5 best selling products by quantity and revenue.
+  * Authentication: Bearer JWT Token required.
+- Get Recent Invoices (GET /api/dashboard/recent-invoices):
+  * Response: Last 5 generated invoices.
+  * Authentication: Bearer JWT Token required.
+
+8. Health Check
+- Health check (GET /api/health):
+  * Response: Server status, service name, and active database filename.
+  * Authentication: None required.
+
+Figure 8.11: FastAPI Swagger Documentation
+
+
+
+SUMMARY OF GENERATED REPORTS
+The Billing and Inventory Management System generates various reports that help businesses monitor and analyze their operations. The reports generated by the system include:
+Product Reports
+Customer Reports
+Sales Reports
+Inventory Reports
+GST Reports
+Payment Reports
+Revenue Reports
+Activity Reports
+These reports improve business management and support effective decision-making.
+CHAPTER 9: FUTURE SCOPE
+The Billing and Inventory Management System developed in this project successfully fulfills the basic requirements of billing, inventory management, customer management, and report generation. However, due to time constraints and project limitations, several advanced features could not be implemented in the current version. The future scope of this project is very broad, and many enhancements can be added to improve the functionality, performance, and usability of the system.
+9.1 MOBILE APPLICATION SUPPORT
+Currently, the system is available only as a web application. In future versions, dedicated mobile applications can be developed for Android and iOS platforms. The mobile application can provide:
+Mobile billing
+Inventory management
+Customer management
+Invoice generation
+Report viewing
+Push notifications
+This will allow business owners to access their business information anytime and anywhere.
+9.2 CLOUD DEPLOYMENT
+The current version of the system can be deployed locally or on a private server. In the future, cloud deployment can be implemented using platforms such as:
+AWS
+Microsoft Azure
+Google Cloud Platform
+DigitalOcean
+Cloud deployment will provide:
+Better options for future growth
+Higher availability
+Automatic backups
+Improved performance
+Remote accessibility
+9.3 BARCODE AND QR CODE INTEGRATION
+Barcode and QR code technology can be integrated into the system to improve inventory management. Future features may include:
+Barcode scanning
+Barcode printing
+QR code invoices
+Product identification
+Fast inventory updates
+This will help reduce manual data entry and improve operational efficiency.
+9.4 GST PORTAL INTEGRATION
+The current system performs GST calculations but does not support direct GST filing. Future improvements may include:
+GST return filing
+GST invoice verification
+GST portal integration
+E-invoice generation
+Tax compliance reporting
+This feature will simplify tax management for businesses.
+9.5 PAYMENT GATEWAY INTEGRATION
+Payment gateway integration can be added to support digital payment processing. Possible payment methods include:
+UPI payments
+Credit cards
+Debit cards
+Net banking
+Wallet payments
+This feature will improve payment management and customer convenience.
+9.6 MULTI-BRANCH MANAGEMENT
+The current system supports a single business location. Future versions can provide:
+Multi-branch support
+Branch-wise inventory
+Branch-wise billing
+Branch performance reports
+Centralized management
+This feature will help medium and large businesses manage multiple locations efficiently.
+9.7 ADVANCED INVENTORY MANAGEMENT
+Additional inventory features can be implemented in future versions. These features include:
+Warehouse management
+Supplier management
+Purchase order management
+Inventory forecasting
+Automatic stock alerts
+Product expiry management
+This will improve inventory control and business operations.
+9.8 OPTIONAL FUTURE RESEARCH: AI-BASED BUSINESS ANALYTICS
+Artificial Intelligence and Machine Learning techniques can be integrated to provide dashboard analysis. Future AI features may include:
+Sales prediction
+Demand forecasting
+Customer behavior analysis
+Product recommendation
+Profit analysis
+Inventory optimization
+These features will support better business decision-making.
+9.9 NOTIFICATION SYSTEM
+A notification system can be implemented to provide real-time alerts. Notifications may include:
+Low stock alerts
+Payment reminders
+Invoice notifications
+User activity alerts
+Security notifications
+This feature will improve business monitoring and management.
+9.10 ADVANCED REPORTING SYSTEM
+The reporting module can be enhanced further by providing:
+Graphical reports
+Interactive dashboards
+Business performance charts
+Financial analysis reports
+Export to PDF and Excel
+Real-time business statistics
+These reports will help businesses analyze their performance more effectively.
+9.11 SECURITY ENHANCEMENTS
+Additional security features can also be implemented in future versions. Examples include:
+Two-factor authentication (2FA)
+Biometric authentication
+Advanced encryption
+Intrusion detection
+Security monitoring
+Audit analysis
+These enhancements will improve the overall security of the system.
+CONCLUSION OF FUTURE SCOPE
+The Billing and Inventory Management System provides a strong foundation for future development and expansion. With the addition of advanced technologies such as cloud computing, artificial intelligence, mobile applications, and automation, the system can evolve into a complete business management application. The future enhancements discussed above will increase the usability, extendability, security, and efficiency of the system and make it suitable for larger business environments.
+CHAPTER 10: APPENDICES
+The appendices section contains additional information that supports the project but is not included in the main body of the report. These details are provided for reference and better understanding of the system implementation.
+For the Billing and Inventory Management System, the appendices include program code, configuration details, and reference materials used during project development. This section helps evaluators and readers to understand the technical implementation in more detail.
+The appendices are organized into the following parts:
+10.1. Coding – Contains the source code snippets developed for the system, including backend logic for staff and sales management.
+10.2. Bibliography – Lists books, websites, and online resources referred to during project development.
+The appendices provide supplementary material that enhances the completeness and credibility of the project report.
+10.1. CODING (Logic Snippets)
+1. Staff and Admin User Creation
+```python
+@router.post("/api/admin/users")
+def create_user(payload: UserCreate, current_user: dict[str, Any] = Depends(require_admin)) -> dict[str, Any]:
+    if payload.role not in ("admin", "staff"):
+        raise HTTPException(status_code=400, detail="Role must be 'admin' or 'staff'")
+    existing = fetch_one("SELECT id FROM users WHERE username = ?", (payload.username.strip(),))
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Username '{payload.username}' already exists")
+    salt, digest = hash_password(payload.password)
+    user_id = execute_write(
+        "INSERT INTO users (username, password_salt, password_hash, password_plaintext, fullname, role) VALUES (?, ?, ?, ?, ?, ?)",
+        (payload.username.strip(), salt, digest, payload.password, payload.fullname.strip(), payload.role),
+    )
+    add_log(current_user["id"], "USER_CREATE", f"Created user '{payload.username}' ({payload.role})")
+    return {"message": "User created", "id": user_id}
+```
+
+2. Login & Token generation
+```python
+@router.post("/api/auth/login")
+def login(payload: LoginRequest) -> dict[str, Any]:
+    user = fetch_one("SELECT * FROM users WHERE username = ?", (payload.username.strip(),))
+    if user is None or not verify_password(payload.password, user["password_salt"], user["password_hash"]):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid username or password")
+
+    token = create_access_token(user)
+    add_log(user["id"], "LOGIN", f"User '{user['username']}' logged in")
+    return {
+        "token": token,
+        "user": {
+            "id": user["id"],
+            "username": user["username"],
+            "fullname": user["fullname"],
+            "role": user["role"],
+        },
+    }
+```
+
+3. Search and Listing Products
+```python
+@router.get("/api/products")
+def list_products(current_user: dict[str, Any] = Depends(get_current_user)) -> list[dict[str, Any]]:
+    return fetch_all(
+        """
+        SELECT p.id, p.name, p.sku, p.price, p.gst_rate, p.description, p.created_at,
+               c.name AS category_name, p.category_id,
+               i.stock, i.min_stock, i.location
+        FROM products p
+        LEFT JOIN categories c ON c.id = p.category_id
+        LEFT JOIN inventory i ON i.product_id = p.id
+        ORDER BY p.name ASC
+        """
+    )
+```
+
+4. Process Invoice Creation & Stock Deductions
+```python
+@router.post("/api/invoices")
+def create_invoice(payload: InvoiceCreate, current_user: dict[str, Any] = Depends(get_current_user)) -> dict[str, Any]:
+    invoice_number = generate_invoice_number()
+
+    if payload.payment_method not in ("cash", "card", "upi", "credit"):
+        raise HTTPException(status_code=400, detail="Invalid payment method")
+
+    with connect_db() as conn:
+        subtotal = 0.0
+        total_gst = 0.0
+        items_data = []
+
+        for item in payload.items:
+            product_row = conn.execute(
+                """
+                SELECT p.id, p.name, p.sku, p.price, i.stock, i.min_stock, i.location
+                FROM products p
+                LEFT JOIN inventory i ON i.product_id = p.id
+                WHERE p.id = ?
+                """,
+                (item.product_id,)
+            ).fetchone()
+            if not product_row:
+                raise HTTPException(status_code=400, detail=f"Product ID {item.product_id} not found")
+            product = dict(product_row)
+
+            if product["stock"] < item.quantity:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Insufficient stock for '{product['name']}'. Available: {product['stock']}, Requested: {item.quantity}",
+                )
+
+            item_total = item.unit_price * item.quantity
+            item_gst = item_total * (item.gst_rate / 100.0)
+            subtotal += item_total
+            total_gst += item_gst
+
+            items_data.append({
+                "product_id": item.product_id,
+                "product_name": product["name"],
+                "product_sku": product["sku"],
+                "quantity": item.quantity,
+                "unit_price": item.unit_price,
+                "total_price": item_total,
+                "gst_rate": item.gst_rate,
+            })
+
+        discount = min(payload.discount, round(subtotal + total_gst, 2))
+        grand_total = round(subtotal + total_gst - discount, 2)
+        
+        is_credit = (payload.payment_method == "credit")
+        payment_status = "unpaid" if is_credit else "paid"
+
+        invoice_id = execute_write_conn(
+            conn,
+            """INSERT INTO invoices (invoice_number, customer_id, user_id, subtotal, discount, gst, total, payment_status)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (invoice_number, payload.customer_id, current_user["id"], round(subtotal, 2), round(discount, 2), round(total_gst, 2), grand_total, payment_status),
+        )
+
+        for item_data in items_data:
+            execute_write_conn(
+                conn,
+                """INSERT INTO invoice_items (invoice_id, product_id, product_name, product_sku, quantity, unit_price, total_price, gst_rate)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                (invoice_id, item_data["product_id"], item_data["product_name"], item_data["product_sku"],
+                 item_data["quantity"], item_data["unit_price"], item_data["total_price"], item_data["gst_rate"]),
+            )
+            
+            conn.execute(
+                "UPDATE inventory SET stock = stock - ?, last_updated = CURRENT_TIMESTAMP WHERE product_id = ?",
+                (item_data["quantity"], item_data["product_id"]),
+            )
+
+            conn.execute(
+                """INSERT INTO stock_transactions (product_id, quantity, transaction_type, user_id, notes)
+                   VALUES (?, ?, 'sale', ?, ?)""",
+                (item_data["product_id"], -item_data["quantity"], current_user["id"], f"Invoice {invoice_number}")
+            )
+
+        if not is_credit:
+            execute_write_conn(
+                conn,
+                "INSERT INTO payments (invoice_id, amount, payment_method, transaction_reference) VALUES (?, ?, ?, ?)",
+                (invoice_id, grand_total, payload.payment_method, payload.transaction_reference or ""),
+            )
+
+        conn.commit()
+
+    add_log(current_user["id"], "INVOICE_CREATE", f"Generated invoice {invoice_number} — ₹{grand_total} ({payment_status.upper()})")
+    return {"message": "Invoice created", "invoice_number": invoice_number, "id": invoice_id, "total": grand_total}
+```
+
+5. Retrieve Report Data
+```python
+@router.get("/api/reports/{report_type}")
+def get_report(report_type: str, current_user: dict[str, Any] = Depends(get_current_user)) -> dict[str, Any]:
+    if report_type == "daily_sales":
+        rows = fetch_all(
+            """
+            SELECT i.invoice_number, COALESCE(c.name, 'Guest') as customer_name,
+                   DATE(i.created_at) as date, i.total as total_amount, i.gst, i.payment_status
+            FROM invoices i
+            LEFT JOIN customers c ON c.id = i.customer_id
+            ORDER BY i.created_at DESC
+            """
+        )
+        return {"title": "Daily Sales Report", "headers": ["Invoice No.", "Customer Name", "Date", "Total Amount", "GST", "Payment Status"], "rows": rows}
+```
+10.2. BIBLIOGRAPHY
+The following sources were referenced during the requirement analysis, system design, and technical development of the Billing and Inventory Management System:
+Sommerville, I. (2019) Software Engineering. 10th edn. Harlow: Pearson Education.
+Pressman, R.S. and Maxim, B.R. (2020) Software Engineering: A Practitioner's Approach. 9th edn. New York: McGraw-Hill Education.
+Silberschatz, A., Korth, H.F. and Sudarshan, S. (2019) Database System Concepts. 7th edn. New York: McGraw-Hill Education.
+Elmasri, R. and Navathe, S.B. (2016) Fundamentals of Database Systems. 7th edn. Boston: Pearson Education.
+Flanagan, D. (2020) JavaScript: The Definitive Guide. 7th edn. Sebastopol: O'Reilly Media.
+Duckett, J. (2014) HTML and CSS: Design and Build Websites. Indianapolis: John Wiley & Sons.
+Matthes, E. (2023) Python Crash Course. 3rd edn. San Francisco: No Starch Press.
+Chacon, S. and Straub, B. (2014) Pro Git. 2nd edn. New York: Apress.
+Fielding, R.T. (2000) Architectural Styles and the Design of Network-Based Software Architectures. Doctoral Dissertation. University of California, Irvine.
+Jones, M., Bradley, J. and Sakimura, N. (2015) JSON Web Token (JWT) RFC 7519. Internet Engineering Task Force. Available at: https://www.rfc-editor.org/rfc/rfc7519
+Ramírez, S. (2026) FastAPI Official Documentation. Available at: https://fastapi.tiangolo.com/ (Accessed: 6 July 2026).
+Hipp, D.R. (2026) SQLite Documentation. Available at: https://www.sqlite.org/docs.html (Accessed: 6 July 2026).
+Mozilla Foundation (2026) MDN Web Docs: HTML, CSS and JavaScript Documentation. Available at: https://developer.mozilla.org/ (Accessed: 6 July 2026).
+GitHub, Inc. (2026) GitHub Documentation. Available at: https://docs.github.com/ (Accessed: 6 July 2026).
+World Wide Web Consortium (W3C) (2026) HTML Standard and Web Technologies Documentation. Available at: https://www.w3.org/ (Accessed: 6 July 2026).
+
+
+
+
+
+CHAPTER 11: CONCLUSION
+The Billing and Inventory Management System successfully fulfilled its primary objectives of automating business operations and reducing manual errors. By utilizing a technology stack comprising FastAPI for a backend developed using FastAPI and SQLite for lightweight, efficient data storage, the project implemented key features such as secure JWT authentication, real-time inventory tracking, and automated GST-compliant invoicing. The system provides significant benefits including increased operational productivity and centralized data management. Academically, this project provided invaluable hands-on experience in the Full-Stack Software Development Life Cycle, relational database normalization, and RESTful API architecture, bridging the gap between theoretical BCA curriculum and real-world software development practices.
+

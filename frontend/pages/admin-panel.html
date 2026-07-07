@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - InvoiceFlow</title>
-  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <link rel="stylesheet" href="/css/style.css">
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -133,6 +133,31 @@
             </div>
           </div>
 
+          <div class="grid-2-col">
+            <div class="input-group">
+              <label for="settings-invoice-prefix">Invoice Number Prefix *</label>
+              <input type="text" id="settings-invoice-prefix" required placeholder="e.g. INV">
+            </div>
+            <div class="input-group">
+              <label for="settings-invoice-terms">Invoice Terms & Notes *</label>
+              <input type="text" id="settings-invoice-terms" required placeholder="e.g. Thank you for your business!">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 16px;">
+            <div class="input-group">
+              <label for="settings-currency-symbol">Currency Symbol *</label>
+              <input type="text" id="settings-currency-symbol" required placeholder="e.g. ₹ or $">
+            </div>
+            <div class="input-group">
+              <label for="settings-tax-label">Tax Label / Name *</label>
+              <input type="text" id="settings-tax-label" required placeholder="e.g. GST or VAT">
+            </div>
+            <div class="input-group">
+              <label for="settings-billing-terminal">Billing Terminal Name *</label>
+              <input type="text" id="settings-billing-terminal" required placeholder="e.g. Dehradun Main Store">
+            </div>
+          </div>
 
           <div class="input-group">
             <label>Company Logo (Optional)</label>
@@ -162,7 +187,7 @@
     </div>
   </div>
 
-  <script src="common.js?v=2.0.6"></script>
-  <script src="admin-panel.js?v=2.0.6"></script>
+  <script src="/js/common.js?v=2.0.6"></script>
+  <script src="/js/views/admin-panel.js?v=2.0.6"></script>
 </body>
 </html>

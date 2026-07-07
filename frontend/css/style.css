@@ -3,56 +3,56 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-header: 'Outfit', sans-serif;
 
-  /* HSL Color Palette - Dark Mode (Shadcn Zinc/Slate) */
+  /* HSL Color Palette - Dark Mode (Obsidian Purple Theme) */
   --bg-primary: #09090b;
   --bg-secondary: #09090b;
-  --glass-bg: #18181b; /* Card background (zinc-900) */
-  --glass-border: #27272a; /* Border color (zinc-800) */
-  --glass-border-focus: #a1a1aa; /* Border color on focus (zinc-400) */
+  --glass-bg: #121214; /* Card background (charcoal jet black with purple hint) */
+  --glass-border: #242427; /* Definitive card border */
+  --glass-border-focus: #a855f7; /* Vibrant purple focus border */
   
-  --text-main: #fafafa; /* Foreground text (zinc-50) */
-  --text-muted: #a1a1aa; /* Muted text (zinc-400) */
+  --text-main: #f5f5f7; /* Foreground text */
+  --text-muted: #a1a1aa; /* High contrast muted text */
   --text-dark: #09090b;
 
   --radial-1: transparent;
   --radial-2: transparent;
-  --sidebar-bg: #09090b;
+  --sidebar-bg: #0c0c0e;
 
   /* Element variables */
-  --input-bg: #27272a; /* Raised inputs background (lighter than card background #18181b) */
-  --input-border: #3f3f46; /* High contrast input border (zinc-700) */
-  --info-badge-bg: #27272a;
-  --info-badge-text: #fafafa;
-  --user-details-text: #fafafa;
-  --nav-active-bg: #27272a;
-  --nav-active-text: #fafafa;
-  --th-bg: #18181b;
+  --input-bg: #161619; /* Lighter background than cards for high field visibility */
+  --input-border: #2e2e33; /* Distinct border for input fields */
+  --info-badge-bg: #242427;
+  --info-badge-text: #f5f5f7;
+  --user-details-text: #f5f5f7;
+  --nav-active-bg: #242427;
+  --nav-active-text: #a855f7; /* Highlight active nav text in purple */
+  --th-bg: #0c0c0e;
   --th-text: #a1a1aa;
-  --highlight: #0ea5e9; /* Sky-500 vibrant highlight */
+  --highlight: #a855f7; /* Vibrant Purple brand highlight */
   
-  --scrollbar-thumb: #27272a;
-  --scrollbar-thumb-hover: #3f3f46;
-  --row-hover: #18181b;
+  --scrollbar-thumb: #242427;
+  --scrollbar-thumb-hover: #2e2e33;
+  --row-hover: #1b1921; /* Subtle purple-tinted row hover */
 
   /* Badges */
-  --status-paid-text: #4ade80;
-  --status-paid-bg: #052e16;
+  --status-paid-text: #c084fc; /* Light purple for paid status in purple theme */
+  --status-paid-bg: #2e1065;
   --status-pending-text: #fbbf24;
   --status-pending-bg: #451a03;
   --status-unpaid-text: #f87171;
   --status-unpaid-bg: #450a0a;
 
-  /* Primary Button (White in Dark Mode) */
-  --primary: #fafafa;       
-  --primary-foreground: #18181b;
-  --primary-hover: #e4e4e7;
-  --primary-glow: rgba(250, 250, 250, 0.1);
+  /* Primary Button (Purple in Dark Mode) */
+  --primary: #a855f7;       
+  --primary-foreground: #ffffff;
+  --primary-hover: #9333ea;
+  --primary-glow: rgba(168, 85, 247, 0.2);
 
-  /* Secondary Button (Zinc-800) */
-  --secondary: #27272a;     
-  --secondary-foreground: #fafafa;
-  --secondary-hover: #3f3f46;
-  --secondary-glow: rgba(39, 39, 42, 0.1);
+  /* Secondary Button (Charcoal-800) */
+  --secondary: #242427;     
+  --secondary-foreground: #f5f5f7;
+  --secondary-hover: #2e2e33;
+  --secondary-glow: rgba(36, 36, 39, 0.1);
 
   --success: #22c55e;       
   --success-glow: rgba(34, 197, 94, 0.1);
@@ -63,7 +63,7 @@
   --danger: #ef4444;        
   --danger-glow: rgba(239, 68, 68, 0.1);
 
-  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
   --border-radius-lg: 8px;
   --border-radius-md: 6px;
   --border-radius-sm: 4px;
@@ -98,7 +98,7 @@
   --nav-active-text: #09090b;
   --th-bg: #fafafa;
   --th-text: #71717a;
-  --highlight: #0284c7; /* Sky-600 vibrant highlight */
+  --highlight: #7c3aed; /* Vibrant purple highlight */
 
   --scrollbar-thumb: #e4e4e7;
   --scrollbar-thumb-hover: #d4d4d8;
@@ -112,11 +112,11 @@
   --status-unpaid-text: #dc2626;
   --status-unpaid-bg: #fee2e2;
 
-  /* Primary Button (Black in Light Mode) */
-  --primary: #18181b;
-  --primary-foreground: #fafafa;
-  --primary-hover: #27272a;
-  --primary-glow: rgba(24, 24, 27, 0.05);
+  /* Primary Button (Purple in Light Mode) */
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --primary-hover: #6d28d9;
+  --primary-glow: rgba(124, 58, 237, 0.05);
 
   /* Secondary Button (Zinc-100) */
   --secondary: #f4f4f5;
@@ -411,7 +411,7 @@ textarea {
   width: 100%;
   padding: 8px 12px; /* standard Shadcn padding */
   background: var(--input-bg);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--input-border);
   border-radius: var(--border-radius-md);
   color: var(--text-main);
   font-family: var(--font-sans);
@@ -424,7 +424,7 @@ select {
   width: 100%;
   padding: 10px 16px;
   background: var(--input-bg);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--input-border);
   border-radius: var(--border-radius-md);
   color: var(--text-main);
   font-family: var(--font-sans);
@@ -1634,14 +1634,16 @@ form#category-edit-form {
   z-index: 50;
 }
 
+.dropdown-wrapper.dropdown-open {
+  z-index: 200;
+}
+
 .button-split-group {
   display: inline-flex;
   border-radius: var(--border-radius-md);
   border: 1px solid var(--glass-border);
   overflow: hidden;
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--card-shadow);
   transition: var(--transition);
 }
@@ -1694,8 +1696,6 @@ form#category-edit-form {
   border: 1px solid var(--glass-border);
   border-radius: var(--border-radius-md);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -2160,8 +2160,8 @@ form#category-edit-form {
   align-items: center;
   width: 100%;
   padding: 10px 16px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: var(--border-radius-md);
   color: var(--text-main);
   font-family: var(--font-sans);

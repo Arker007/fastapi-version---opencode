@@ -18,6 +18,8 @@
   }
 
   function bindProductsEvents() {
+    window.APP.setupTableSearch('product-search', 'products-tbody');
+
     // Tab switching inside products view
     document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -61,21 +63,16 @@
       document.getElementById('prod-category-id').value = item.dataset.catId || '';
     });
 
-    // Actions dropdown toggler helper
-    window._toggleActionsMenu = (btn) => {
-      document.querySelectorAll('.actions-dropdown-menu').forEach(m => {
-        if (m !== btn.nextElementSibling) m.classList.add('hidden');
-      });
-      const menu = btn.nextElementSibling;
-      if (menu) menu.classList.toggle('hidden');
-    };
-
-    // Close actions menus when clicking elsewhere
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.actions-dropdown-wrapper')) {
-        document.querySelectorAll('.actions-dropdown-menu').forEach(m => m.classList.add('hidden'));
+    // GST Rate selection dropdown
+    setupLocalDropdown('gst-rate-dropdown-toggle', 'gst-rate-dropdown-menu', (item) => {
+      document.getElementById('active-gst-rate-label').textContent = item.textContent.trim();
+      const select = document.getElementById('prod-gst-rate');
+      if (select) {
+        select.value = item.dataset.gstRate;
+        select.dispatchEvent(new Event('change'));
       }
     });
+
 
     // Expose helpers globally for buttons
     window._editProduct = (id) => editProduct(id);
@@ -214,8 +211,37 @@
       ).join('');
   }
 
-  function openProductModal(product = null) {
+  function syncGstRateUI(rate) {
+    const select = document.getElementById('prod-gst-rate');
+    if (select) select.value = rate;
 
+    const menu = document.getElementById('gst-rate-dropdown-menu');
+    if (menu) {
+      menu.querySelectorAll('.dropdown-item').forEach(item => {
+        const isActive = item.dataset.gstRate == rate;
+        item.classList.toggle('active', isActive);
+        if (isActive) {
+          document.getElementById('active-gst-rate-label').textContent = item.textContent.trim();
+        }
+      });
+    }
+  }
+
+  function syncCategoryUI(catId) {
+    document.getElementById('prod-category-id').value = catId || '';
+    const cat = STATE.categories.find(c => c.id === parseInt(catId));
+    document.getElementById('active-category-label').textContent = cat ? cat.name : '-- No Category --';
+
+    const menu = document.getElementById('category-dropdown-menu');
+    if (menu) {
+      menu.querySelectorAll('.dropdown-item').forEach(item => {
+        const isActive = item.dataset.catId == (catId || '');
+        item.classList.toggle('active', isActive);
+      });
+    }
+  }
+
+  function openProductModal(product = null) {
     const modal = document.getElementById('product-modal');
     const title = document.getElementById('product-modal-title');
     if (!modal) return;
@@ -226,22 +252,21 @@
       document.getElementById('prod-name').value = product.name;
       document.getElementById('prod-sku').value = product.sku;
       document.getElementById('prod-price').value = product.price;
-      document.getElementById('prod-gst-rate').value = product.gst_rate;
       document.getElementById('prod-stock').value = product.stock;
       document.getElementById('prod-min-stock').value = product.min_stock;
       document.getElementById('prod-location').value = product.location || 'storefront';
       document.getElementById('prod-desc').value = product.description || '';
 
-      const cat = STATE.categories.find(c => c.id === product.category_id);
-      document.getElementById('active-category-label').textContent = cat ? cat.name : '-- No Category --';
-      document.getElementById('prod-category-id').value = product.category_id || '';
+      syncCategoryUI(product.category_id);
+      syncGstRateUI(product.gst_rate);
     } else {
       title.textContent = 'Add New Product';
       document.getElementById('product-form').reset();
       document.getElementById('product-id').value = '';
-      document.getElementById('active-category-label').textContent = '-- No Category --';
-      document.getElementById('prod-category-id').value = '';
       document.getElementById('prod-location').value = 'storefront';
+
+      syncCategoryUI('');
+      syncGstRateUI(18);
     }
 
     modal.classList.remove('hidden');

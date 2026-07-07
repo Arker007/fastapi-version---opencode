@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Invoice - InvoiceFlow</title>
-  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <link rel="stylesheet" href="/css/style.css">
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,7 +122,7 @@
             <input type="number" id="bill-discount" value="0" min="0">
           </div>
           <div class="summary-line inline-input">
-            <span>GST Tax (Computed)</span>
+            <span><span id="billing-tax-label">GST</span> Tax (Computed)</span>
             <input type="text" id="bill-gst" readonly value="₹0.00" style="text-align: right; background: transparent; border: none; box-shadow: none; pointer-events: none; width: 120px; font-weight: 500; color: var(--text-main);">
           </div>
           <hr class="summary-divider">
@@ -148,12 +148,6 @@
               <div class="dropdown-menu hidden" id="payment-dropdown-menu">
                 <button type="button" class="dropdown-item active" data-payment="cash">
                   <i class="fa-solid fa-money-bill-wave"></i> Cash
-                </button>
-                <button type="button" class="dropdown-item" data-payment="upi">
-                  <i class="fa-solid fa-qrcode"></i> UPI / QR Code
-                </button>
-                <button type="button" class="dropdown-item" data-payment="card">
-                  <i class="fa-solid fa-credit-card"></i> Debit/Credit Card
                 </button>
                 <button type="button" class="dropdown-item" data-payment="credit">
                   <i class="fa-solid fa-handshake"></i> Credit (Pay Later)
@@ -202,7 +196,7 @@
     </modal-dialog>
   </div>
 
-  <script src="common.js?v=2.0.6"></script>
-  <script src="billing.js?v=2.0.6"></script>
+  <script src="/js/common.js?v=2.0.6"></script>
+  <script src="/js/views/billing.js?v=2.0.6"></script>
 </body>
 </html>

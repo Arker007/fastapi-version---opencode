@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invoices List - InvoiceFlow</title>
-  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <link rel="stylesheet" href="/css/style.css">
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,7 +82,7 @@
           <div class="bill-from">
             <h3>Issued By:</h3>
             <p><strong>System Admin:</strong> <span id="p-billed-by">-</span></p>
-            <p><strong>Billing Terminal:</strong> Dehradun Main Store</p>
+            <p><strong>Billing Terminal:</strong> <span id="p-billing-terminal">Dehradun Main Store</span></p>
           </div>
         </div>
 
@@ -109,7 +109,7 @@
           <div class="totals-col text-right">
             <p>Subtotal: <span id="p-subtotal">₹0.00</span></p>
             <p>Discount: <span id="p-discount">₹0.00</span></p>
-            <p>GST Amount: <span id="p-gst">₹0.00</span></p>
+            <p><span id="p-tax-label">GST</span> Amount: <span id="p-gst">₹0.00</span></p>
             <hr>
             <h2>Total: <span id="p-total">₹0.00</span></h2>
           </div>
@@ -124,7 +124,7 @@
     </modal-dialog>
   </div>
 
-  <script src="common.js?v=2.0.6"></script>
-  <script src="invoices.js?v=2.0.6"></script>
+  <script src="/js/common.js?v=2.0.6"></script>
+  <script src="/js/views/invoices.js?v=2.0.6"></script>
 </body>
 </html>

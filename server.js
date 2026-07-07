@@ -76,12 +76,16 @@ app.use('/api', async (req, res) => {
  */
 app.get('*', (req, res) => {
   // Strip leading slash to look up file
-  const route = req.path.replace(/^\//, '') || 'index';
-  const filePath = path.join(__dirname, 'frontend', route + '.html');
+  const route = req.path.replace(/^\//, '');
   
+  if (!route) {
+    return res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+  }
+  
+  const filePath = path.join(__dirname, 'frontend', 'pages', route + '.html');
   res.sendFile(filePath, (err) => {
     if (err) {
-      // Fallback: If route.html is not found, return index.html (SPA fallback behavior)
+      // Fallback: serve index.html (SPA fallback behavior)
       res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
     }
   });

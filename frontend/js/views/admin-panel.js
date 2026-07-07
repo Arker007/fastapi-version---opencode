@@ -170,6 +170,11 @@
     setVal('settings-company-address', 'company_address');
     setVal('settings-company-phone', 'company_phone');
     setVal('settings-company-email', 'company_email');
+    setVal('settings-invoice-prefix', 'invoice_prefix');
+    setVal('settings-invoice-terms', 'invoice_terms');
+    setVal('settings-currency-symbol', 'currency_symbol');
+    setVal('settings-tax-label', 'tax_label');
+    setVal('settings-billing-terminal', 'billing_terminal');
     
     const defaultGst = settings.default_gst || '18';
     setVal('settings-default-gst', 'default_gst');
@@ -206,6 +211,11 @@
       company_email: document.getElementById('settings-company-email')?.value.trim() || '',
       default_gst: document.getElementById('settings-default-gst')?.value || '18',
       company_logo: document.getElementById('settings-company-logo-base64')?.value || '',
+      invoice_prefix: document.getElementById('settings-invoice-prefix')?.value.trim() || 'INV',
+      invoice_terms: document.getElementById('settings-invoice-terms')?.value.trim() || 'Thank you for your business!',
+      currency_symbol: document.getElementById('settings-currency-symbol')?.value.trim() || '₹',
+      tax_label: document.getElementById('settings-tax-label')?.value.trim() || 'GST',
+      billing_terminal: document.getElementById('settings-billing-terminal')?.value.trim() || 'Dehradun Main Store',
     };
 
     try {

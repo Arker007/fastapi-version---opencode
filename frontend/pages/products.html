@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products & Stock - InvoiceFlow</title>
-  <link rel="stylesheet" href="style.css?v=2.0.6">
+  <link rel="stylesheet" href="/css/style.css">
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,6 +28,7 @@
         <div class="card-header-actions">
           <h3><i class="fa-solid fa-boxes-stacked"></i> Products Directory</h3>
           <div class="header-buttons" style="display: flex; gap: 12px; align-items: center;">
+            <search-bar input-id="product-search" placeholder="Search products..." style="max-width: 250px;"></search-bar>
             <!-- Dropdown category filter component -->
             <div class="dropdown-wrapper" style="min-width: 180px;">
               <button type="button" class="dropdown-select-btn" id="category-filter-dropdown-toggle">
@@ -126,20 +127,20 @@
           <div class="input-group">
             <label>Category</label>
             <div class="dropdown-wrapper w-full">
-              <div class="button-split-group">
-                <button type="button" class="split-btn-main" id="btn-category-indicator">
-                  <span id="active-category-label">-- No Category --</span>
-                </button>
-                <button type="button" class="split-btn-arrow" id="category-dropdown-toggle">
-                  <i class="fa-solid fa-chevron-down"></i>
-                </button>
-              </div>
               <input type="hidden" id="prod-category-id" value="">
-              <div class="dropdown-menu hidden" id="category-dropdown-menu" style="max-height: 180px; overflow-y: auto;">
+              <button type="button" class="dropdown-select-btn" id="category-dropdown-toggle">
+                <div class="select-btn-left">
+                  <i class="fa-solid fa-tags"></i>
+                  <span id="active-category-label">-- No Category --</span>
+                </div>
+                <i class="fa-solid fa-chevron-down select-btn-arrow"></i>
+              </button>
+              <div class="dropdown-menu hidden" id="category-dropdown-menu" style="max-height: 180px; overflow-y: auto; width: 100%;">
                 <!-- Dynamic options -->
               </div>
             </div>
           </div>
+
         </div>
         <div class="grid-2-col">
           <div class="input-group">
@@ -148,14 +149,31 @@
           </div>
           <div class="input-group">
             <label for="prod-gst-rate">GST Rate (%) *</label>
-            <select id="prod-gst-rate" required>
-              <option value="0">0% (GST Exempt)</option>
-              <option value="5">5%</option>
-              <option value="12">12%</option>
-              <option value="18" selected>18% (Standard)</option>
-              <option value="28">28%</option>
-            </select>
+            <div class="dropdown-wrapper w-full">
+              <select id="prod-gst-rate" class="hidden" required>
+                <option value="0">0% (GST Exempt)</option>
+                <option value="5">5%</option>
+                <option value="12">12%</option>
+                <option value="18" selected>18% (Standard)</option>
+                <option value="28">28%</option>
+              </select>
+              <button type="button" class="dropdown-select-btn" id="gst-rate-dropdown-toggle">
+                <div class="select-btn-left">
+                  <i class="fa-solid fa-percent"></i>
+                  <span id="active-gst-rate-label">18% (Standard)</span>
+                </div>
+                <i class="fa-solid fa-chevron-down select-btn-arrow"></i>
+              </button>
+              <div class="dropdown-menu hidden" id="gst-rate-dropdown-menu" style="width: 100%;">
+                <button type="button" class="dropdown-item" data-gst-rate="0">0% (GST Exempt)</button>
+                <button type="button" class="dropdown-item" data-gst-rate="5">5%</button>
+                <button type="button" class="dropdown-item" data-gst-rate="12">12%</button>
+                <button type="button" class="dropdown-item active" data-gst-rate="18">18% (Standard)</button>
+                <button type="button" class="dropdown-item" data-gst-rate="28">28%</button>
+              </div>
+            </div>
           </div>
+
         </div>
         <div class="grid-2-col">
           <div class="input-group">
@@ -207,7 +225,7 @@
   </div>
 
 
-  <script src="common.js?v=2.0.6"></script>
-  <script src="products.js?v=2.0.6"></script>
+  <script src="/js/common.js?v=2.0.6"></script>
+  <script src="/js/views/products.js?v=2.0.6"></script>
 </body>
 </html>

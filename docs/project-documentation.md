@@ -12,7 +12,7 @@ InvoiceFlow is structured around a backend API server communicating with a local
 
 *   **FastAPI REST Engine (Python)**:
     *   Implements the core business logic, Pydantic data schemas, security checks, and database connection pooling.
-    *   Exposes endpoints to process invoices, adjust stock, manage users, and generate report records.
+    *   Exposes endpoints to process invoices, manage users, and generate report records.
 *   **Relational Database (SQLite3)**:
     *   Local relational file database.
     *   Enforces relational integrity via `PRAGMA foreign_keys = ON`.
@@ -194,11 +194,11 @@ The system manages credit sales through a two-stage transaction lifecycle:
 
 ### B. Inventory Auditing Layer
 *   **Double-Write Syncing**: Changes to stock levels in the modern `inventory` table automatically trigger synchronizing queries updating the legacy `products` table stock columns.
-*   **Transaction Logging**: Every stock modification (whether by sales checkout, restock, or manual adjustment) generates a ledger log in the `stock_transactions` table capturing:
+*   **Transaction Logging**: Every stock modification (whether by sales checkout or initial restock) generates a ledger log in the `stock_transactions` table capturing:
     *   Adjusted Quantity (positive/negative)
-    *   Transaction Type (`sale`, `restock`, `adjustment`)
+    *   Transaction Type (`sale`, `restock`)
     *   Author (User ID of the cashier/admin)
-    *   Audit Notes (e.g., "Sold via invoice #INV-1002" or "Manual adjustment for damaged units")
+    *   Audit Notes (e.g., "Sold via invoice #INV-1002" or "Initial stock seeding")
 
 ---
 
